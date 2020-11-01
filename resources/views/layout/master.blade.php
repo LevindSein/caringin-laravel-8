@@ -12,9 +12,11 @@ $username = Session::get('username');
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="">
+        <meta name="description" content="Aplikasi PT. Pengelola Pusat Perdagangan Caringin di Kota Bandung">
         <meta name="author" content="">
-
+        
+        <script src="{{asset('vendor/jquery/jquery.min.js')}}"></script>
+        
         <!-- Custom fonts for this template -->
         <link
             href="{{asset('vendor/fontawesome-free/css/all.min.css')}}"
@@ -25,7 +27,7 @@ $username = Session::get('username');
             rel="stylesheet">
 
         <!-- Custom styles for this template -->
-        <link href="{{asset('css/sb-admin-2.min.css')}}" rel="stylesheet">
+        <link href="{{asset('css/sb-admin-2-copy.min.css')}}" rel="stylesheet">
 
         <link href="{{asset('css/fixed-columns.min.css')}}" rel="stylesheet">
 
@@ -35,10 +37,12 @@ $username = Session::get('username');
             rel="stylesheet">
 
         <link rel="icon" href="{{asset('img/logo.png')}}">
-        @yield('head')
 
         <script src="{{asset('js/animate.min.js')}}"></script>
-
+        
+        <link rel="stylesheet" href="{{asset('vendor/select2/select2.min.css')}}"/>
+        <script src="{{asset('vendor/select2/select2.min.js')}}"></script>
+        
     </head>
 
     <body id="page-top">
@@ -431,7 +435,6 @@ $username = Session::get('username');
         </script>
 
         <!-- Bootstrap core JavaScript-->
-        <script src="{{asset('vendor/jquery/jquery.min.js')}}"></script>
         <script src="{{asset('vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
         <script src="{{asset('vendor/bootstrap/js/bootstrap.min.js')}}"></script>
 
@@ -479,7 +482,8 @@ $username = Session::get('username');
                     });
                 });
         </script>
-
+        
         @yield('js')
+        
     </body>
 </html>

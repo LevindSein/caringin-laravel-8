@@ -8,8 +8,16 @@ use App\Models\TempatUsaha;
 
 class TempatController extends Controller
 {
-    public function add(Request $request){
+    public function index(){
+        // TempatUsaha::check();
+        return view('tempat.index',[
+            'dataset'=>TempatUsaha::data(),
+            'airAvailable'=>TempatUsaha::airAvailable(),
+        ]);
+    }
 
+    public function add(Request $request){
+        var_dump($request->get('blok'));
     }
 
     public function update($id){

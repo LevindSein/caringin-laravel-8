@@ -10,13 +10,13 @@ use App\Http\Controllers\NasabahController;
 
 use App\Http\Controllers\PedagangController;
 use App\Http\Controllers\TempatController;
+use App\Http\Controllers\SearchController;
 
 use App\Http\Controllers\Auth\LoginController;
 
 use Illuminate\Support\Facades\Session;
 use App\Models\Pedagang;
 use App\Models\TempatUsaha;
-use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,7 +54,7 @@ Route::get('keuangan/index',[KeuanganController::class, 'index'])->name('keuanga
 Route::get('kasir/index',[KasirController::class, 'index'])->name('kasirindex')->middleware('cekkasir');
 Route::get('nasabah/index',[NasabahController::class, 'index'])->name('nasabahindex')->middleware('ceknasabah');
 
-Route::get('pedagang/data',function(){
+Route::get('pedagang/data',function(){;
     return view('pedagang.index',['dataset'=>Pedagang::data()]);
 })->name('pedagangindex');
 Route::post('pedagang/add',[PedagangController::class, 'add']);
@@ -63,14 +63,15 @@ Route::post('pedagang/store/{id}',[PedagangController::class, 'store']);
 Route::get('pedagang/delete/{id}',[PedagangController::class, 'delete']);
 Route::get('pedagang/details/{id}',[PedagangController::class, 'details']);
 
-Route::get('tempatusaha/data',function(){
-    return view('tempat.index',['dataset'=>TempatUsaha::data()]);
-})->name('tempatindex');
+Route::get('tempatusaha/data',[TempatController::class, 'index'])->name('tempatindex');
 Route::post('tempatusaha/add',[TempatController::class, 'add']);
 Route::get('tempatusaha/update/{id}',[TempatController::class, 'update']);
 Route::post('tempatusaha/store/{id}',[TempatController::class, 'store']);
 Route::get('tempatusaha/delete/{id}',[TempatController::class, 'delete']);
 Route::get('tempatusaha/details/{id}',[TempatController::class, 'details']);
+
+Route::get('cari/blok',[SearchController::class, 'cariBlok']);
+Route::get('cari/nasabah',[SearchController::class, 'cariNasabah']);
 
 Route::middleware(['masteradmin'])->group(function () {
     

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use Exception;
 
 class TempatUsaha extends Model
 {
@@ -111,5 +113,13 @@ class TempatUsaha extends Model
         ->where([['id_tempat',$id],['stt_lunas',0]])
         ->select('bln_tagihan','sel_tagihan')
         ->get();
+    }
+
+    public static function check(){
+
+    }
+
+    public static function airAvailable(){
+        return DB::table('meteran_air')->where('status',0)->get();
     }
 }

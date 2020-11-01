@@ -5,6 +5,7 @@ $role = Session::get('role');
 @extends( $role == 'master' ? 'layout.master' : 'layout.admin')
 @section('head')
 <!-- Tambah Content Pada Head -->
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" /> -->
 @endsection
 
 @section('content')
@@ -185,7 +186,6 @@ $role = Session::get('role');
 <div
     class="modal fade"
     id="myModal"
-    tabindex="-1"
     role="dialog"
     aria-labelledby="exampleModalLabel"
     aria-hidden="true">
@@ -202,16 +202,16 @@ $role = Session::get('role');
                     @csrf
                     <div class="form-group col-lg-12">
                         <label for="blok">Blok <span style="color:red;">*</span></label>
-                        <select class="form-control" name="blok" id="blok" required>
-                            <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Blok</option>
-                            <option value="Fahni"></option>
-                        </select>
+                        <div class="form-group">
+                            <select class="blok" name="blok" id="blok" required></select>
+                        </div>
                     </div>
                     <div class="form-group col-lg-12">
                         <label for="los">Nomor Los <span style="color:red;">*</span></label>
                         <input
                             required
                             type="text"
+                            autocomplete="off"
                             name="los"
                             id="los"
                             class="form-control"
@@ -222,6 +222,7 @@ $role = Session::get('role');
                         <input
                             type="text"
                             name="lokasi"
+                            autocomplete="off"
                             id="lokasi"
                             maxLength="50"
                             class="form-control"
@@ -233,6 +234,7 @@ $role = Session::get('role');
                             required
                             type="text"
                             name="usaha"
+                            autocomplete="off"
                             id="usaha"
                             maxLength="30"
                             class="form-control"
@@ -240,98 +242,18 @@ $role = Session::get('role');
                     </div>
 
                     <!-- Pemilik -->
-                    <div class="form-group row col-lg-12">
-                        <div class="col-sm-2">Pemilik</div>
-                        <div class="col-sm-10">
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="identitas"
-                                    id="myRadioKTP"
-                                    value="k"
-                                    checked="checked">
-                                <label class="form-check-label" for="myRadioKTP">
-                                    KTP
-                                </label>
-                            </div>
-                            <div class="autocomplete form-group" style="display:none" id="myDivKTP">
-                                <input
-                                    type="text"
-                                    name="ktp"
-                                    id="ktp"
-                                    class="form-control"
-                                    placeholder="325xxxx">
-                            </div>
-
-
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="identitas"
-                                    id="myRadioAnggota"
-                                    value="a">
-                                <label class="form-check-label" for="myRadioAnggota">
-                                    No.Anggota
-                                </label>
-                            </div>
-                            <div class="autocomplete form-group" style="display:none" id="myDivAnggota">
-                                <input
-                                    type="text"
-                                    name="anggota"
-                                    id="anggota"
-                                    class="form-control"
-                                    placeholder="BP3C325xxxx">
-                            </div>
+                    <div class="form-group col-lg-12">
+                        <label for="pemilik">Pemilik Tempat</label>
+                        <div class="form-group">
+                            <select class="pemilik" name="pemilik" id="pemilik"></select>
                         </div>
                     </div>
 
                     <!-- Pengguna -->
-                    <div class="form-group row col-lg-12">
-                        <div class="col-sm-2">Pengguna</div>
-                        <div class="col-sm-10">
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="identitas1"
-                                    id="myRadioKTP1"
-                                    value="k1"
-                                    checked="checked">
-                                <label class="form-check-label" for="myRadioKTP1">
-                                    KTP
-                                </label>
-                            </div>
-                            <div class="autocomplete form-group" style="display:none" id="myDivKTP1">
-                                <input
-                                    type="text"
-                                    name="ktp1"
-                                    id="ktp1"
-                                    class="form-control"
-                                    placeholder="325xxxx">
-                            </div>
-
-
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="identitas1"
-                                    id="myRadioAnggota1"
-                                    value="a1">
-                                <label class="form-check-label" for="myRadioAnggota1">
-                                    No.Anggota
-                                </label>
-                            </div>
-                            <div class="autocomplete form-group" style="display:none" id="myDivAnggota1">
-                                <input
-                                    type="text"
-                                    name="anggota1"
-                                    id="anggota1"
-                                    class="form-control"
-                                    placeholder="BP3C325xxxx">
-                            </div>
+                    <div class="form-group col-lg-12">
+                        <label for="pengguna">Pengguna Tempat</label>
+                        <div class="form-group">
+                            <select class="pengguna" name="pengguna" id="pengguna"></select>
                         </div>
                     </div>
 
@@ -351,11 +273,13 @@ $role = Session::get('role');
                                     Air Bersih
                                 </label>
                             </div>
-                            <div class="autocomplete form-group" style="display:none">
+                            <div class="form-group" style="display:none">
                                 <label for="myDiv1">Meteran Air <span style="color:red;">*</span></label>
                                 <select class="form-control" name="meterAir" id="myDiv1">
                                     <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Alat</option>
-                                    <option value="Fahni"></option>
+                                    @foreach($airAvailable as $air)
+                                    <option value="{{$air->id}}">{{$air->kode}} - {{$air->nomor}} ({{$air->akhir}})</option>
+                                    @endforeach
                                 </select>
                             </div>
 
@@ -372,7 +296,7 @@ $role = Session::get('role');
                                     Listrik
                                 </label>
                             </div>
-                            <div class="autocomplete form-group" style="display:none">
+                            <div class="form-group" style="display:none">
                                 <label for="myDiv2">Meteran Listrik <span style="color:red;">*</span></label>
                                 <select class="form-control" name="meterListrik" id="myDiv2">
                                     <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Alat</option>
@@ -392,11 +316,11 @@ $role = Session::get('role');
                                     Keamanan & IPK
                                 </label>
                             </div>
-                            <div class="autocomplete form-group" style="display:none">
+                            <div class="form-group" style="display:none">
                                 <label for="myDiv3">Kategori Tarif <span style="color:red;">*</span></label>
                                 <select class="form-control" name="trfKeamananIpk" id="myDiv3">
                                     <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Tarif</option>
-                                    <option value="Fahni"></option>
+                                    <option value="Fahni">Fahni</option>
                                 </select>
                             </div>
 
@@ -412,7 +336,7 @@ $role = Session::get('role');
                                     Kebersihan
                                 </label>
                             </div>
-                            <div class="autocomplete form-group" style="display:none">
+                            <div class="form-group" style="display:none">
                                 <label for="myDiv4">Kategori Tarif <span style="color:red;">*</span></label>
                                 <select class="form-control" name="trfKebersihan" id="myDiv4">
                                     <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Tarif</option>
@@ -432,7 +356,7 @@ $role = Session::get('role');
                                     Air Kotor
                                 </label>
                             </div>
-                            <div class="autocomplete form-group" style="display:none">
+                            <div class="form-group" style="display:none">
                                 <label for="myDiv5">Kategori Tarif <span style="color:red;">*</span></label>
                                 <select class="form-control" name="trfAirKotor" id="myDiv5">
                                     <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Tarif</option>
@@ -452,7 +376,7 @@ $role = Session::get('role');
                                     Lain - Lain
                                 </label>
                             </div>
-                            <div class="autocomplete form-group" style="display:none">
+                            <div class="form-group" style="display:none">
                                 <label for="myDiv6">Kategori Tarif <span style="color:red;">*</span></label>
                                 <select class="form-control" name="trfLain" id="myDiv6">
                                     <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Tarif</option>
@@ -500,7 +424,7 @@ $role = Session::get('role');
                                     Diskon / Bebas Bayar
                                 </label>
                             </div> 
-                            <div class="autocomplete form-group" style="display:none" id="diskon">
+                            <div class="form-group" style="display:none" id="diskon">
                                 <label for="myDiv7">Kategori Tarif <span style="color:red;">*</span></label>
                                 <select class="form-control" name="trfDiskon" id="myDiv7">
                                     <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Tarif</option>
@@ -537,7 +461,7 @@ $role = Session::get('role');
                                     Non-Aktif
                                 </label>
                             </div>
-                            <div class="autocomplete form-group" style="display:none" id="ketStatus">
+                            <div class="form-group" style="display:none" id="ketStatus">
                                 <input
                                     type="text"
                                     name="status"
@@ -561,6 +485,52 @@ $role = Session::get('role');
 
 @section('js')
 <!-- Tambah Content pada Body JS -->
+<script type="text/javascript">
+$(document).ready(function () {
+    $('.blok').select2({
+        placeholder: '--- Pilih Blok ---',
+        ajax: {
+            url: "/cari/blok",
+            dataType: 'json',
+            delay: 250,
+            processResults: function (blok) {
+                return {
+                results:  $.map(blok, function (bl) {
+                    return {
+                    text: bl.nama,
+                    id: bl.nama
+                    }
+                })
+                };
+            },
+            cache: true
+        }
+    });
+});
+
+$(document).ready(function () {
+    $('.pemilik, .pengguna').select2({
+        placeholder: '--- Cari Nasabah ---',
+        ajax: {
+            url: "/cari/nasabah",
+            dataType: 'json',
+            delay: 250,
+            processResults: function (nasabah) {
+                return {
+                results:  $.map(nasabah, function (nas) {
+                    return {
+                    text: nas.nama + " - " + nas.ktp,
+                    id: nas.id
+                    }
+                })
+                };
+            },
+            cache: true
+        }
+    }); 
+});
+</script>
+
 <script>
     $(document).ready(function () {
         $(
@@ -599,83 +569,6 @@ $role = Session::get('role');
             "order": [ 0, "asc" ]
         });
     });
-</script>
-
-<!-- Pemilik Pengguna Radio Button -->
-<script>
-    function radioKTP() {
-        if ($('#myRadioKTP').is(':checked')) {
-            document
-                .getElementById('myDivKTP')
-                .style
-                .display = 'block';
-            document
-                .getElementById('myDivAnggota')
-                .style
-                .display = 'none';
-            document
-                .getElementById('ktp')
-                .required = true;
-            document
-                .getElementById('anggota')
-                .required = false;
-        } else {
-            document
-                .getElementById('myDivKTP')
-                .style
-                .display = 'none';
-            document
-                .getElementById('myDivAnggota')
-                .style
-                .display = 'block';
-            document
-                .getElementById('ktp')
-                .required = false;
-            document
-                .getElementById('anggota')
-                .required = true;
-        }
-    }
-    $('input[type="radio"]')
-        .click(radioKTP)
-        .each(radioKTP);
-
-    function radioKTP1() {
-        if ($('#myRadioKTP1').is(':checked')) {
-            document
-                .getElementById('myDivKTP1')
-                .style
-                .display = 'block';
-            document
-                .getElementById('myDivAnggota1')
-                .style
-                .display = 'none';
-            document
-                .getElementById('ktp1')
-                .required = true;
-            document
-                .getElementById('anggota1')
-                .required = false;
-        } else {
-            document
-                .getElementById('myDivKTP1')
-                .style
-                .display = 'none';
-            document
-                .getElementById('myDivAnggota1')
-                .style
-                .display = 'block';
-            document
-                .getElementById('ktp1')
-                .required = false;
-            document
-                .getElementById('anggota1')
-                .required = true;
-        }
-    }
-    $('input[type="radio"]')
-        .click(radioKTP1)
-        .each(radioKTP1);
 </script>
 
 <!-- Fasilitas Button -->

@@ -1783,6 +1783,10 @@ pre code {
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
+.select2{
+  width: 100% !important;
+}
+
 .form-control {
   display: block;
   width: 100%;
@@ -1819,27 +1823,27 @@ pre code {
 }
 
 .form-control::-webkit-input-placeholder {
-  color: #dcdde0;
+  color: #999;
   opacity: 1;
 }
 
 .form-control::-moz-placeholder {
-  color: #dcdde0;
+  color: #999;
   opacity: 1;
 }
 
 .form-control:-ms-input-placeholder {
-  color: #dcdde0;
+  color: #999;
   opacity: 1;
 }
 
 .form-control::-ms-input-placeholder {
-  color: #dcdde0;
+  color: #999;
   opacity: 1;
 }
 
 .form-control::placeholder {
-  color: #dcdde0;
+  color: #999;
   opacity: 1;
 }
 

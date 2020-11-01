@@ -79,6 +79,11 @@ $role = Session::get('role');
                                 </div>
                             </div>
                             <div class="form-group col-lg-12">
+                                <label for="myDiv7">Kategori Tarif <span style="color:red;">*</span></label>
+                                <select class="form-control trfDiskon" name="trfDiskon" id="myDiv7">
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-12">
                                 <Button type="submit"class="btn btn-primary btn-user btn-block">Update</Button>
                             </div>
                         </form>
@@ -106,5 +111,27 @@ $('[type=tel]').on('keypress', function(e) {
   keys = ['0','1','2','3','4','5','6','7','8','9','.']
   return keys.indexOf(event.key) > -1
 })
+</script>
+
+<script type="text/javascript">
+  $('.trfDiskon').select2({
+    placeholder: 'Pilih Blok',
+    ajax: {
+      url: "/cari",
+      dataType: 'json',
+      delay: 250,
+      processResults: function (data) {
+        return {
+          results:  $.map(data, function (item) {
+            return {
+              text: item.nama,
+              id: item.id
+            }
+          })
+        };
+      },
+      cache: true
+    }
+  });
 </script>
 @endsection
