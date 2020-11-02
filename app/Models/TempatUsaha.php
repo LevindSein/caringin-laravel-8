@@ -115,11 +115,31 @@ class TempatUsaha extends Model
         ->get();
     }
 
-    public static function check(){
-
+    public static function airAvailable(){
+        return DB::table('meteran_air')->where([['stt_sedia',0],['stt_bayar',0]])->get();
+    }
+    
+    public static function listrikAvailable(){
+        return DB::table('meteran_listrik')->where([['stt_sedia',0],['stt_bayar',0]])->get();
     }
 
-    public static function airAvailable(){
-        return DB::table('meteran_air')->where('status',0)->get();
+    public static function trfKeamananIpk(){
+        return DB::table('trf_keamanan_ipk')->get();
+    }
+    
+    public static function trfKebersihan(){
+        return DB::table('trf_kebersihan')->get();
+    }
+    
+    public static function trfAirKotor(){
+        return DB::table('trf_air_kotor')->get();
+    }
+    
+    public static function trfLain(){
+        return DB::table('trf_lain')->get();
+    }
+    
+    public static function trfDiskon(){
+        return DB::table('trf_diskon')->get();
     }
 }

@@ -9,10 +9,15 @@ use App\Models\TempatUsaha;
 class TempatController extends Controller
 {
     public function index(){
-        // TempatUsaha::check();
         return view('tempat.index',[
             'dataset'=>TempatUsaha::data(),
             'airAvailable'=>TempatUsaha::airAvailable(),
+            'listrikAvailable'=>TempatUsaha::listrikAvailable(),
+            'trfKeamananIpk'=>TempatUsaha::trfKeamananIpk(),
+            'trfKebersihan'=>TempatUsaha::trfKebersihan(),
+            'trfAirKotor'=>TempatUsaha::trfAirKotor(),
+            'trfLain'=>TempatUsaha::trfLain(),
+            'trfDiskon'=>TempatUsaha::trfDiskon(),
         ]);
     }
 

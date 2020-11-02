@@ -29,7 +29,9 @@ class Pedagang extends Model
 
     public static function addReport($ktp,$email,$hp){
         $ktp = DB::table('user')->where('ktp',$ktp)->first();
-        $email = DB::table('user')->where('email',$email)->first();
+        if($email != NULL){
+            $email = DB::table('user')->where('email',$email)->first();
+        }
         $hp = DB::table('user')->where('hp',$hp)->first();
 
         if($ktp != NULL){

@@ -235,6 +235,7 @@ $role = Session::get('role');
                             type="text"
                             name="usaha"
                             autocomplete="off"
+                            style="text-transform: capitalize;"
                             id="usaha"
                             maxLength="30"
                             class="form-control"
@@ -300,7 +301,9 @@ $role = Session::get('role');
                                 <label for="myDiv2">Meteran Listrik <span style="color:red;">*</span></label>
                                 <select class="form-control" name="meterListrik" id="myDiv2">
                                     <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Alat</option>
-                                    <option value="Fahni"></option>
+                                    @foreach($listrikAvailable as $listrik)
+                                    <option value="{{$listrik->id}}">{{$listrik->kode}} - {{$listrik->nomor}} ({{$listrik->akhir}})</option>
+                                    @endforeach
                                 </select>
                             </div>
 
@@ -319,8 +322,10 @@ $role = Session::get('role');
                             <div class="form-group" style="display:none">
                                 <label for="myDiv3">Kategori Tarif <span style="color:red;">*</span></label>
                                 <select class="form-control" name="trfKeamananIpk" id="myDiv3">
-                                    <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Tarif</option>
-                                    <option value="Fahni">Fahni</option>
+                                    <option disabled="disabled" selected="selected" hidden="hidden" value="">--- Pilih Tarif ---</option>
+                                    @foreach($trfKeamananIpk as $tarif)
+                                    <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
+                                    @endforeach
                                 </select>
                             </div>
 
@@ -339,8 +344,10 @@ $role = Session::get('role');
                             <div class="form-group" style="display:none">
                                 <label for="myDiv4">Kategori Tarif <span style="color:red;">*</span></label>
                                 <select class="form-control" name="trfKebersihan" id="myDiv4">
-                                    <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Tarif</option>
-                                    <option value="Fahni"></option>
+                                    <option disabled="disabled" selected="selected" hidden="hidden" value="">--- Pilih Tarif ---</option>
+                                    @foreach($trfKebersihan as $tarif)
+                                    <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
+                                    @endforeach
                                 </select>
                             </div>
 
@@ -359,8 +366,10 @@ $role = Session::get('role');
                             <div class="form-group" style="display:none">
                                 <label for="myDiv5">Kategori Tarif <span style="color:red;">*</span></label>
                                 <select class="form-control" name="trfAirKotor" id="myDiv5">
-                                    <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Tarif</option>
-                                    <option value="Fahni"></option>
+                                    <option disabled="disabled" selected="selected" hidden="hidden" value="">--- Pilih Tarif ---</option>
+                                    @foreach($trfAirKotor as $tarif)
+                                    <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
+                                    @endforeach
                                 </select>
                             </div>
 
@@ -379,8 +388,10 @@ $role = Session::get('role');
                             <div class="form-group" style="display:none">
                                 <label for="myDiv6">Kategori Tarif <span style="color:red;">*</span></label>
                                 <select class="form-control" name="trfLain" id="myDiv6">
-                                    <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Tarif</option>
-                                    <option value="Fahni"></option>
+                                    <option disabled="disabled" selected="selected" hidden="hidden" value="">--- Pilih Tarif ---</option>
+                                    @foreach($trfLain as $tarif)
+                                    <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -427,8 +438,10 @@ $role = Session::get('role');
                             <div class="form-group" style="display:none" id="diskon">
                                 <label for="myDiv7">Kategori Tarif <span style="color:red;">*</span></label>
                                 <select class="form-control" name="trfDiskon" id="myDiv7">
-                                    <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Tarif</option>
-                                    <option value="Fahni"></option>
+                                    <option disabled="disabled" selected="selected" hidden="hidden" value="">--- Pilih Tarif ---</option>
+                                    @foreach($trfDiskon as $tarif)
+                                    <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>

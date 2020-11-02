@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Blok;
 use App\Models\User;
+use App\Models\TempatUsaha;
 
 class SearchController extends Controller
 {
@@ -27,5 +28,14 @@ class SearchController extends Controller
             ->get();
         }
         return response()->json($nasabah);
+    }
+
+    public function cariAlamat(Request $request){
+        $alamat = [];
+        if ($request->has('q')) {
+            $cariAlamat = $request->q;
+            $alamat = TempatUsaha::select('id', 'kd_kontrol')->where('kd_kontrol', 'LIKE', '%'.$cariAlamat.'%')->get();
+        }
+        return response()->json($alamat);
     }
 }

@@ -104,7 +104,6 @@ if($role != 'master'){
 <div
     class="modal fade"
     id="myModal"
-    tabindex="-1"
     role="dialog"
     aria-labelledby="exampleModalLabel"
     aria-hidden="true">
@@ -123,6 +122,7 @@ if($role != 'master'){
                         <label for="ktp">Nomor KTP <span style="color:red;">*</span></label>
                         <input
                             required
+                            autocomplete="off"
                             type="tel"
                             min="0"
                             name="ktp"
@@ -135,6 +135,7 @@ if($role != 'master'){
                         <label for="nama">Nama Pedagang <span style="color:red;">*</span></label>
                         <input
                             required
+                            autocomplete="off"
                             type="text"
                             style="text-transform: capitalize;"
                             name="nama"
@@ -147,15 +148,58 @@ if($role != 'master'){
                         <label for="anggota">Nomor Anggota</label>
                         <input
                             readonly
+                            autocomplete="off"
                             value="{{$no_anggota}}"
                             name="anggota"
                             class="form-control"
                             id="anggota">
                     </div>
+                    <div class="form-group row col-lg-12">
+                        <div class="col-sm-2">Status</div>
+                        <div class="col-sm-10">
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="pemilik"
+                                    id="pemilik"
+                                    value="pemilik"
+                                    data-related-item="divPemilik">
+                                <label class="form-check-label" for="pemilik">
+                                    Pemilik
+                                </label>
+                            </div>
+                            <div class="form-group" style="display:none">
+                                <label for="alamatPemilik"  id="divPemilik">Alamat <span style="color:red;">*</span></label>
+                                <div class="form-group">
+                                    <select style="width:100%" class="alamatPemilik" name="alamatPemilik[]" id="alamatPemilik" multiple></select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="pengguna"
+                                    id="pengguna"
+                                    value="pengguna"
+                                    data-related-item="divPengguna">
+                                <label class="form-check-label" for="pengguna">
+                                    Pengguna
+                                </label>
+                            </div>
+                            <div class="form-group" style="display:none">
+                                <label for="alamatPengguna"  id="divPengguna">Alamat <span style="color:red;">*</span></label>
+                                <div class="form-group">
+                                    <select style="width:100%" class="alamatPengguna" name="alamatPengguna[]" id="alamatPengguna" multiple></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group col-lg-12">
                         <label for="email">Email</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" maxlength="20" name="email" id="email" placeholder="youremail" aria-describedby="inputGroupPrepend">
+                            <input type="text" autocomplete="off" class="form-control" maxlength="20" name="email" id="email" placeholder="youremail" aria-describedby="inputGroupPrepend">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroupPrepend">@gmail.com</span>
                             </div>
@@ -167,7 +211,7 @@ if($role != 'master'){
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroupPrepend">+62</span>
                             </div>
-                            <input required type="tel" class="form-control" maxlength="12" name="hp" id="hp" placeholder="8783847xxx" aria-describedby="inputGroupPrepend">
+                            <input required type="tel" autocomplete="off" class="form-control" maxlength="12" name="hp" id="hp" placeholder="8783847xxx" aria-describedby="inputGroupPrepend">
                         </div>
                     </div>
                 </div>
@@ -182,6 +226,52 @@ if($role != 'master'){
 
 @section('js')
 <!-- Tambah Content pada Body JS -->
+<script type="text/javascript">
+$(document).ready(function () {
+    $('.alamatPemilik').select2({
+        placeholder: '--- Pilih Kepemilikan ---',
+        ajax: {
+            url: "/cari/alamat",
+            dataType: 'json',
+            delay: 250,
+            processResults: function (alamat) {
+                return {
+                results:  $.map(alamat, function (al) {
+                    return {
+                    text: al.kd_kontrol,
+                    id: al.id
+                    }
+                })
+                };
+            },
+            cache: true
+        }
+    });
+});
+
+$(document).ready(function () {
+    $('.alamatPengguna').select2({
+        placeholder: '--- Pilih Kepemilikan ---',
+        ajax: {
+            url: "/cari/alamat",
+            dataType: 'json',
+            delay: 250,
+            processResults: function (alamat) {
+                return {
+                results:  $.map(alamat, function (al) {
+                    return {
+                    text: al.kd_kontrol,
+                    id: al.id
+                    }
+                })
+                };
+            },
+            cache: true
+        }
+    });
+});
+</script>
+
 <script>
     $(document).ready(function () {
         $(
@@ -220,6 +310,52 @@ if($role != 'master'){
             ]
         });
     });
+</script>
+
+<script>
+    function evaluate() {
+        var item = $(this);
+        var relatedItem = $("#" + item.attr("data-related-item")).parent();
+
+        if (item.is(":checked")) {
+            relatedItem.fadeIn();
+        } else {
+            relatedItem.fadeOut();
+        }
+    }
+    $('input[type="checkbox"]')
+        .click(evaluate)
+        .each(evaluate);
+    
+    function checkPemilik() {
+        if ($('#pemilik').is(':checked')) {
+            document
+                .getElementById('alamatPemilik')
+                .required = true;
+        } else {
+            document
+                .getElementById('alamatPemilik')
+                .required = false;
+        }
+    }
+    $('input[type="checkbox"]')
+        .click(checkPemilik)
+        .each(checkPemilik);
+
+    function checkPengguna() {
+        if ($('#pengguna').is(':checked')) {
+            document
+                .getElementById('alamatPengguna')
+                .required = true;
+        } else {
+            document
+                .getElementById('alamatPengguna')
+                .required = false;
+        }
+    }
+    $('input[type="checkbox"]')
+        .click(checkPengguna)
+        .each(checkPengguna);
 </script>
 
 <script>

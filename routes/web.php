@@ -72,6 +72,7 @@ Route::get('tempatusaha/details/{id}',[TempatController::class, 'details']);
 
 Route::get('cari/blok',[SearchController::class, 'cariBlok']);
 Route::get('cari/nasabah',[SearchController::class, 'cariNasabah']);
+Route::get('cari/alamat',[SearchController::class, 'cariAlamat']);
 
 Route::middleware(['masteradmin'])->group(function () {
     

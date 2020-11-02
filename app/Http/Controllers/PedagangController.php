@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Exception;
 use App\Models\Pedagang;
 use App\Models\TempatUsaha;
@@ -13,7 +14,14 @@ class PedagangController extends Controller
         $ktp = $request->get('ktp');
         $nama = ucwords($request->get('nama'));
         $anggota = $request->get('anggota');
-        $email = strtolower($request->get('email').'@gmail.com');
+        $email = $request->get('email');
+        if($email == ""){
+            $email = NULL;
+        }
+        else{
+            $email = strtolower($email.'@gmail.com');
+        }
+
         $hp = $request->get('hp');
         if($hp[0] == '0'){
             $hp = '62'.substr($hp,1);
@@ -21,6 +29,8 @@ class PedagangController extends Controller
         else{
             $hp = '62'.$hp;
         }
+        $pemilik = $request->get('pemilik');
+        $pengguna = $request->get('pengguna');
 
         $err = Pedagang::addReport($ktp,$email,$hp);
 
@@ -34,11 +44,38 @@ class PedagangController extends Controller
                 $pedagang->nama = $nama;
                 $pedagang->anggota = $anggota;
                 $pedagang->ktp = $ktp;
-                $pedagang->email = $email;
+                if($email != NULL){
+                    $pedagang->email = $email;
+                }
                 $pedagang->hp = $hp;
                 $pedagang->password = md5(substr(str_shuffle('abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789'), 0, 10));
                 $pedagang->role = 'nasabah';
                 $pedagang->save();
+
+                $ped = Pedagang::where('nama',$nama)->first();
+                if($pemilik = "pemilik"){
+                    $alamatPemilik = $request->get('alamatPemilik');
+                    foreach($alamatPemilik as $alamat){
+                        $tempat = DB::table('tempat_usaha')->where('id',$alamat)->first();
+                        if($tempat != NULL){
+                            $tempat = TempatUsaha::find($tempat->id);
+                            $tempat->id_pemilik = $ped->id;
+                            $tempat->save();
+                        }
+                    }
+                }
+                
+                if($pengguna = "pengguna"){
+                    $alamatPengguna = $request->get('alamatPengguna');
+                    foreach($alamatPengguna as $alamat){
+                        $tempat = DB::table('tempat_usaha')->where('id',$alamat)->first();
+                        if($tempat != NULL){
+                            $tempat = TempatUsaha::find($tempat->id);
+                            $tempat->id_pengguna = $ped->id;
+                            $tempat->save();
+                        }
+                    }
+                }
 
                 return redirect()->route('pedagangindex')->with('success','Pedagang '.$nama.' Ditambah');
             }catch(\Exception $e){
