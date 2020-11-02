@@ -251,7 +251,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $('.alamatPengguna').select2({
-        placeholder: '--- Pilih Kepemilikan ---',
+        placeholder: '--- Pilih Tempat ---',
         ajax: {
             url: "/cari/alamat",
             dataType: 'json',

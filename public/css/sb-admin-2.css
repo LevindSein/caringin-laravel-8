@@ -5575,11 +5575,13 @@ a.close.disabled {
   outline: 0;
 }
 
+/* update */
 .modal-dialog {
   position: relative;
   width: auto;
   margin: 0.5rem;
   pointer-events: none;
+  overflow-y: initial !important;
 }
 
 .modal.fade .modal-dialog {
@@ -5693,10 +5695,13 @@ a.close.disabled {
   line-height: 1.5;
 }
 
+/* update */
 .modal-body {
   position: relative;
   flex: 1 1 auto;
   padding: 1rem;
+  height: 65vh;
+  overflow-y: auto;
 }
 
 .modal-footer {

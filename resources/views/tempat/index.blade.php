@@ -244,17 +244,17 @@ $role = Session::get('role');
 
                     <!-- Pemilik -->
                     <div class="form-group col-lg-12">
-                        <label for="pemilik">Pemilik Tempat</label>
+                        <label for="pemilik">Pemilik Tempat <span style="color:red;">*</span></label>
                         <div class="form-group">
-                            <select class="pemilik" name="pemilik" id="pemilik"></select>
+                            <select class="pemilik" name="pemilik" id="pemilik" required></select>
                         </div>
                     </div>
 
                     <!-- Pengguna -->
                     <div class="form-group col-lg-12">
-                        <label for="pengguna">Pengguna Tempat</label>
+                        <label for="pengguna">Pengguna Tempat <span style="color:red;">*</span></label>
                         <div class="form-group">
-                            <select class="pengguna" name="pengguna" id="pengguna"></select>
+                            <select class="pengguna" name="pengguna" id="pengguna" required></select>
                         </div>
                     </div>
 
@@ -268,7 +268,6 @@ $role = Session::get('role');
                                     type="checkbox"
                                     name="air"
                                     id="myCheck1"
-                                    value="a"
                                     data-related-item="myDiv1">
                                 <label class="form-check-label" for="myCheck1">
                                     Air Bersih
@@ -291,7 +290,6 @@ $role = Session::get('role');
                                     type="checkbox"
                                     name="listrik"
                                     id="myCheck2"
-                                    value="l"
                                     data-related-item="myDiv2">
                                 <label class="form-check-label" for="myCheck2">
                                     Listrik
@@ -302,7 +300,7 @@ $role = Session::get('role');
                                 <select class="form-control" name="meterListrik" id="myDiv2">
                                     <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Alat</option>
                                     @foreach($listrikAvailable as $listrik)
-                                    <option value="{{$listrik->id}}">{{$listrik->kode}} - {{$listrik->nomor}} ({{$listrik->akhir}})</option>
+                                    <option value="{{$listrik->id.','.$listrik->daya}}">{{$listrik->kode}} - {{$listrik->nomor}} ({{$listrik->akhir}}) - {{$listrik->daya}} W</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -312,7 +310,7 @@ $role = Session::get('role');
                                 <input
                                     class="form-check-input"
                                     type="checkbox"
-                                    name="ipkkeamanan"
+                                    name="keamananipk"
                                     id="myCheck3"
                                     data-related-item="myDiv3">
                                 <label class="form-check-label" for="myCheck3">
@@ -457,7 +455,7 @@ $role = Session::get('role');
                                     type="radio"
                                     name="status"
                                     id="myStatus1"
-                                    value="s1"
+                                    value="1"
                                     checked="checked">
                                 <label class="form-check-label" for="myStatus1">
                                     Aktif
@@ -469,7 +467,7 @@ $role = Session::get('role');
                                     type="radio"
                                     name="status"
                                     id="myStatus2"
-                                    value="s2">
+                                    value="2">
                                 <label class="form-check-label" for="myStatus2">
                                     Non-Aktif
                                 </label>
@@ -477,8 +475,8 @@ $role = Session::get('role');
                             <div class="form-group" style="display:none" id="ketStatus">
                                 <input
                                     type="text"
-                                    name="status"
-                                    id="status"
+                                    name="ket_tempat"
+                                    id="ket_tempat"
                                     maxLength="50"
                                     class="form-control"
                                     placeholder="Jelaskan Kondisi Tempat">
@@ -582,6 +580,26 @@ $(document).ready(function () {
             "order": [ 0, "asc" ]
         });
     });
+</script>
+
+<script>
+$('#los').on('keypress', function (event) {
+    var regex = new RegExp("^[a-zA-Z0-9,]+$");
+    var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+    if (!regex.test(key)) {
+       event.preventDefault();
+       return false;
+    }
+});
+
+$("#los").on("input", function() {
+  if (/^,/.test(this.value)) {
+    this.value = this.value.replace(/^,/, "")
+  }
+  else if (/^0/.test(this.value)) {
+    this.value = this.value.replace(/^0/, "")
+  }
+})
 </script>
 
 <!-- Fasilitas Button -->

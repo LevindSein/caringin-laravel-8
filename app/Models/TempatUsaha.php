@@ -142,4 +142,43 @@ class TempatUsaha extends Model
     public static function trfDiskon(){
         return DB::table('trf_diskon')->get();
     }
+
+    public static function kode($blok,$los){
+        $kode = "";
+        if(is_numeric($los[0]) == TRUE){
+            if($los[0] < 10){
+                $kode = $blok."-"."00".$los[0];
+            }
+            else if($los[0] < 100){
+                $kode = $blok."-"."0".$los[0];
+            }
+            else{
+                $kode = $blok."-".$los[0];
+            }
+        }
+        else{
+            $num = 0;
+            $strnum = 0;
+            for($i=0; $i < strlen($los[0]); $i++){
+                if (is_numeric($los[0][$i]) == TRUE){
+                    $num++;
+                }
+                else{
+                    $strnum = 1;
+                    break;
+                }
+            }
+
+            if($num == 1){
+                $kode = $blok."-"."00".$los[0];
+            }
+            else if($num == 2){
+                $kode = $blok."-"."0".$los[0];
+            }
+            else if($num >= 3 || $strnum == 1){
+                $kode = $blok."-".$los[0];
+            }
+        }
+        return $kode;
+    }
 }
