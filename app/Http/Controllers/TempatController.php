@@ -14,8 +14,8 @@ use App\Models\TarifListrik;
 
 class TempatController extends Controller
 {
-    public function index(){
-        return view('tempat.index',[
+    public function data(){
+        return view('tempat.data',[
             'dataset'=>TempatUsaha::data(),
             'airAvailable'=>TempatUsaha::airAvailable(),
             'listrikAvailable'=>TempatUsaha::listrikAvailable(),
@@ -76,7 +76,7 @@ class TempatController extends Controller
                 $meteran = MeteranAir::find($id_meteran_air);
                 $meteran->stt_sedia = 1;
                 $meteran->stt_bayar = 0;
-                // $meteran->save();
+                $meteran->save();
 
                 //Tagihan Pasang
                 $record = DB::table('pasang_alat')->where([['kd_kontrol',$kode],['id_meteran_air','!=',NULL],['tanggal',$tanggal]])->first();
@@ -110,7 +110,7 @@ class TempatController extends Controller
                 $meteran = MeteranListrik::find($id_meteran_listrik);
                 $meteran->stt_sedia = 1;
                 $meteran->stt_bayar = 0;
-                // $meteran->save();
+                $meteran->save();
 
                 //Tagihan Pasang
                 $record = DB::table('pasang_alat')->where([['kd_kontrol',$kode],['id_meteran_listrik','!=',NULL],['tanggal',$tanggal]])->first();
@@ -198,7 +198,7 @@ class TempatController extends Controller
                 $pasang->save();
             }
 
-            return redirect()->route('tempatindex')->with('success','Data Tempat Ditambah');
+            return redirect()->route('tempatdata')->with('success','Data Tempat Ditambah');
         }catch(\Exception $e){
             return redirect()->back()->with('errorUpd','Data Gagal Ditambah');
         }
@@ -217,9 +217,9 @@ class TempatController extends Controller
             $tempat = TempatUsaha::find($id);
             $nama = $tempat->kd_kontrol;
             $tempat->delete();
-            return redirect()->route('tempatindex')->with('success','Tempat '.$nama.' Dihapus');
+            return redirect()->route('tempatdata')->with('success','Tempat '.$nama.' Dihapus');
         }catch(\Exception $e){
-            return redirect()->route('tempatindex')->with('errorUpd','Tempat '.$nama.' Tidak Dapat Dihapus - Memiliki Sejumlah Tagihan');
+            return redirect()->route('tempatdata')->with('errorUpd','Tempat '.$nama.' Tidak Dapat Dihapus - Memiliki Sejumlah Tagihan');
         }
     }
 
@@ -233,5 +233,61 @@ class TempatController extends Controller
         else{
             return view('tempat.details',['dataset'=>$dataset,'nama'=>$nama]);
         }
+    }
+
+    public function fasilitas($fas){
+        $dataset = TempatUsaha::fasilitas($fas);
+        if($fas == 'airbersih'){
+            $fasilitas = 'Air Bersih';
+        }
+        else if($fas == 'listrik'){
+            $fasilitas = 'Listrik';
+        }
+        else if($fas == 'keamananipk'){
+            $fasilitas = 'Keamanan & IPK';
+        }
+        else if($fas == 'kebersihan'){
+            $fasilitas = 'Kebersihan';
+        }
+        else if($fas == 'airkotor'){
+            $fasilitas = 'Air Kotor';
+        }
+        else if($fas == 'diskon'){
+            $fasilitas = 'Diskon / Bebas Bayar';
+        }
+        else if($fas == 'lain'){
+            $fasilitas = 'Lain - Lain';
+        }
+        
+        return view('tempat.fasilitas',[
+            'dataset'=>$dataset,
+            'fasilitas'=>$fasilitas,
+            'fas'=>$fas,
+            'airAvailable'=>TempatUsaha::airAvailable(),
+            'listrikAvailable'=>TempatUsaha::listrikAvailable(),
+            'trfKeamananIpk'=>TempatUsaha::trfKeamananIpk(),
+            'trfKebersihan'=>TempatUsaha::trfKebersihan(),
+            'trfAirKotor'=>TempatUsaha::trfAirKotor(),
+            'trfLain'=>TempatUsaha::trfLain(),
+            'trfDiskon'=>TempatUsaha::trfDiskon(),
+        ]);
+    }
+
+    public function rekap(){
+        $dataset = TempatUsaha::rekap();
+        return view('tempat.rekap',[
+            'dataset'=>$dataset,
+            'airAvailable'=>TempatUsaha::airAvailable(),
+            'listrikAvailable'=>TempatUsaha::listrikAvailable(),
+            'trfKeamananIpk'=>TempatUsaha::trfKeamananIpk(),
+            'trfKebersihan'=>TempatUsaha::trfKebersihan(),
+            'trfAirKotor'=>TempatUsaha::trfAirKotor(),
+            'trfLain'=>TempatUsaha::trfLain(),
+            'trfDiskon'=>TempatUsaha::trfDiskon(),
+        ]);
+    }
+
+    public function rekapdetail($blok){
+        return view('tempat.details-rekap',['dataset'=>TempatUsaha::detailRekap($blok),'blok'=>$blok]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Exception;
 
 class Tagihan extends Model
 {
@@ -25,17 +26,17 @@ class Tagihan extends Model
         'thn_bayar',
         'stt_lunas',
         'stt_bayar',
-        'awal_air',
-        'akhir_air',
-        'pakai_air',
-        'byr_air',
-        'pemeliharaan_air',
-        'beban_air',
-        'arkot_air',
-        'ttl_air',
-        'rea_air',
-        'sel_air',
-        'den_air',
+        'awal_airbersih',
+        'akhir_airbersih',
+        'pakai_airbersih',
+        'byr_airbersih',
+        'pemeliharaan_airbersih',
+        'beban_airbersih',
+        'arkot_airbersih',
+        'ttl_airbersih',
+        'rea_airbersih',
+        'sel_airbersih',
+        'den_airbersih',
         'daya_listrik',
         'awal_listrik',
         'akhir_listrik',
@@ -84,7 +85,7 @@ class Tagihan extends Model
         $realisasi = DB::table('tagihan')
         ->leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
         ->where('tempat_usaha.trf_airbersih',1)
-        ->select(DB::raw('SUM(tagihan.rea_air) as realisasi'))
+        ->select(DB::raw('SUM(tagihan.rea_airbersih) as realisasi'))
         ->get();
 
         return $realisasi[0]->realisasi;
@@ -124,7 +125,7 @@ class Tagihan extends Model
         $selisih = DB::table('tagihan')
         ->leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
         ->where('tempat_usaha.trf_airbersih',1)
-        ->select(DB::raw('SUM(tagihan.sel_air) as selisih'))
+        ->select(DB::raw('SUM(tagihan.sel_airbersih) as selisih'))
         ->get();
 
         return $selisih[0]->selisih;
@@ -271,5 +272,23 @@ class Tagihan extends Model
         }
         
         return array($tagihanAku,$realisasiAku,$selisihAku);
+    }
+
+    public static function fasilitas($id,$fas){
+        try{
+            $data = DB::table('tagihan')
+            ->leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
+            ->where([
+                ['tagihan.id_tempat',$id],
+                ['tagihan.stt_lunas',0],
+                ['tempat_usaha.trf_'.$fas,'!=',NULL]
+            ])
+            ->select(DB::raw("SUM(sel_$fas) as selisih"))
+            ->get();
+            return $data[0]->selisih;
+        }
+        catch(\Exception $e){
+            return 0;
+        }
     }
 }

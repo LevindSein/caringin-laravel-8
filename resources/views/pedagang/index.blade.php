@@ -72,20 +72,17 @@ if($role != 'master'){
                             <td class="text-center">{{$data->hp}}</td>
                             <td class="text-center">
                                 <a
-                                    href="javascript:void(0)" 
-                                    onclick="location.href='{{url('pedagang/details',[$data->id])}}'" 
+                                    href="{{url('pedagang/details',[$data->id])}}"
                                     type="submit" 
                                     class="btn btn-sm btn-primary">Details</a>
                             </td>
                             <td class="text-center">
                                 <a
-                                    href="javascript:void(0)" 
-                                    onclick="location.href='{{url('pedagang/update',[$data->id])}}'">
+                                    href="{{url('pedagang/update',[$data->id])}}">
                                     <i class="fas fa-edit fa-sm"></i></a>
                                 &nbsp;
                                 <a
-                                    href="javascript:void(0)" 
-                                    onclick="location.href='{{url('pedagang/delete',[$data->id])}}'">
+                                    href="{{url('pedagang/delete',[$data->id])}}">
                                     <i class="fas fa-trash-alt" style="color:#e74a3b;"></i></a>
                             </td>
                         </tr>

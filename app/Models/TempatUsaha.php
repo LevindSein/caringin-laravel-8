@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Models\Tagihan;
 use Exception;
 
 class TempatUsaha extends Model
@@ -180,5 +181,50 @@ class TempatUsaha extends Model
             }
         }
         return $kode;
+    }
+
+    public static function fasilitas($fas){
+        return DB::table('tempat_usaha')
+        ->leftJoin('user as user_pengguna','tempat_usaha.id_pengguna','=','user_pengguna.id')
+        ->leftJoin('user as user_pemilik','tempat_usaha.id_pemilik','=','user_pemilik.id')
+        ->where('tempat_usaha.trf_'.$fas,'!=',NULL)
+        ->select(
+            'tempat_usaha.id',
+            'user_pengguna.nama as pengguna',
+            'user_pemilik.nama as pemilik',
+            'tempat_usaha.kd_kontrol',
+            'tempat_usaha.lok_tempat',
+            'tempat_usaha.no_alamat',
+            'tempat_usaha.jml_alamat',
+            'tempat_usaha.bentuk_usaha',
+            'tempat_usaha.stt_cicil',
+            'tempat_usaha.stt_tempat',
+            'tempat_usaha.ket_tempat',
+            )
+        ->get();
+    }
+
+    public static function rekap(){
+        return DB::table('tempat_usaha')
+            ->select(
+                'blok',
+                DB::raw('COUNT(*) as total'),
+                DB::raw("SUM(CASE WHEN trf_airbersih != 'NULL' THEN 1 ELSE 0 END) as airbersih"),
+                DB::raw("SUM(CASE WHEN trf_listrik != 'NULL' THEN 1 ELSE 0 END) as listrik"),
+                DB::raw("SUM(CASE WHEN trf_keamananipk != 'NULL' THEN 1 ELSE 0 END) as keamananipk"),
+                DB::raw("SUM(CASE WHEN trf_kebersihan != 'NULL' THEN 1 ELSE 0 END) as kebersihan"),
+                DB::raw("SUM(CASE WHEN stt_tempat = '1' THEN 1 ELSE 0 END) as aktif"),
+                )
+            ->groupBy('blok')
+            ->get();
+    }
+
+    public static function detailRekap($blok){
+        return DB::table('tempat_usaha')
+        ->leftJoin('user as user_pengguna','tempat_usaha.id_pengguna','=','user_pengguna.id')
+        ->leftJoin('user as user_pemilik','tempat_usaha.id_pemilik','=','user_pemilik.id')
+        ->where('blok',$blok)
+        ->select('kd_kontrol','stt_tempat','blok','user_pengguna.nama as pengguna','user_pemilik.nama as pemilik')
+        ->get();
     }
 }

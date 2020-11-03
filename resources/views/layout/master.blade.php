@@ -25,9 +25,9 @@ $username = Session::get('username');
         <link
             href="{{asset('https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i')}}"
             rel="stylesheet">
-
+        
         <!-- Custom styles for this template -->
-        <link href="{{asset('css/sb-admin-2-copy.min.css')}}" rel="stylesheet">
+        <link href="{{asset('css/sb-admin-2.css')}}" rel="stylesheet">
 
         <link href="{{asset('css/fixed-columns.min.css')}}" rel="stylesheet">
 
@@ -42,7 +42,6 @@ $username = Session::get('username');
         
         <link rel="stylesheet" href="{{asset('vendor/select2/select2.min.css')}}"/>
         <script src="{{asset('vendor/select2/select2.min.js')}}"></script>
-        
     </head>
 
     <body id="page-top">
@@ -66,7 +65,7 @@ $username = Session::get('username');
                 <hr class="sidebar-divider my-0">
 
                 <!-- Nav Item - Dashboard -->
-                <li class="nav-item"  >
+                <li class="nav-item {{ (request()->is('master/dashboard')) ? 'active' : '' }}"  >
                     <a class="nav-link" href="{{url('master/dashboard')}}">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span></a>
@@ -81,45 +80,17 @@ $username = Session::get('username');
                 </div>
 
                 <!-- Nav Item - Pedagang -->
-                <li class="nav-item">
+                <li class="nav-item {{ (request()->is('pedagang/*')) ? 'active' : '' }}">
                     <a class="nav-link" href="{{url('pedagang/data')}}">
                         <i class="fas fa-fw fa-users"></i>
                         <span>Pedagang</span></a>
                 </li>
 
                 <!-- Nav Item - Tempat Usaha -->
-                <li class="nav-item">
-                    <a
-                        class="nav-link collapsed"
-                        href="#"
-                        data-toggle="collapse"
-                        data-target="#collapseTempat"
-                        aria-expanded="true"
-                        aria-controls="collapseTempat">
+                <li class="nav-item {{ (request()->is('tempatusaha/*')) ? 'active' : '' }}">
+                    <a class="nav-link" href="{{url('tempatusaha/data')}}">
                         <i class="fas fa-fw fa-store"></i>
-                        <span>Tempat Usaha</span>
-                    </a>
-                    <div
-                        id="collapseTempat"
-                        class="collapse"
-                        aria-labelledby="headingPages"
-                        data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <div class="collapse-divider"></div>
-                            <h6 class="collapse-header">Data :</h6>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('tempatusaha/data')}}">Data Tempat</a>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('tempatusaha/rekap')}}">Rekap</a>
-                            <h6 class="collapse-header">Fasilitas :</h6>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('tempatusaha/fasilitas/air')}}">Air Bersih</a>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('tempatusaha/fasilitas/listrik')}}">Listrik</a>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('tempatusaha/fasilitas/keamanan&ipk')}}">Keamanan & IPK</a>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('tempatusaha/fasilitas/kebersihan')}}">Kebersihan</a>
-                            <h6 class="collapse-header">Additional :</h6>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('tempatusaha/fasilitas/airkotor')}}">Air Kotor</a>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('tempatusaha/fasilitas/diskon')}}">Diskon / Bebas Bayar</a>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('tempatusaha/fasilitas/lainlain')}}">Lain - Lain</a>
-                        </div>
-                    </div>
+                        <span>Tempat Usaha</span></a>
                 </li>
 
                 <!-- Nav Item - Tagihan -->
@@ -344,6 +315,7 @@ $username = Session::get('username');
                                     id="userDropdown"
                                     role="button"
                                     data-toggle="dropdown"
+                                    data-target="#logoutDropdown"
                                     aria-haspopup="true"
                                     aria-expanded="false">
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{$username}}</span>
@@ -351,6 +323,7 @@ $username = Session::get('username');
                                 </a>
                                 <!-- Dropdown - User Information -->
                                 <div
+                                    id="logoutDropdown"
                                     class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                     aria-labelledby="userDropdown">
                                     <a
@@ -417,7 +390,7 @@ $username = Session::get('username');
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <div class="modal-body">Pilih "Logout" di bawah ini jika anda siap untuk mengakhiri sesi anda saat ini.</div>
+                    <div class="modal-body-short">Pilih "Logout" di bawah ini jika anda siap untuk mengakhiri sesi anda saat ini.</div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                         <a class="btn btn-primary" href="{{url('logout')}}">Logout</a>
@@ -436,7 +409,7 @@ $username = Session::get('username');
 
         <!-- Bootstrap core JavaScript-->
         <script src="{{asset('vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-        <script src="{{asset('vendor/bootstrap/js/bootstrap.min.js')}}"></script>
+        <!-- <script src="{{asset('vendor/bootstrap/js/bootstrap.min.js')}}"></script> -->
 
         <!-- Core plugin JavaScript-->
         <script src="{{asset('vendor/jquery-easing/jquery.easing.min.js')}}"></script>

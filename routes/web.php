@@ -54,6 +54,10 @@ Route::get('keuangan/index',[KeuanganController::class, 'index'])->name('keuanga
 Route::get('kasir/index',[KasirController::class, 'index'])->name('kasirindex')->middleware('cekkasir');
 Route::get('nasabah/index',[NasabahController::class, 'index'])->name('nasabahindex')->middleware('ceknasabah');
 
+Route::get('cari/blok',[SearchController::class, 'cariBlok']);
+Route::get('cari/nasabah',[SearchController::class, 'cariNasabah']);
+Route::get('cari/alamat',[SearchController::class, 'cariAlamat']);
+
 Route::get('pedagang/data',function(){;
     return view('pedagang.index',['dataset'=>Pedagang::data()]);
 })->name('pedagangindex');
@@ -63,16 +67,15 @@ Route::post('pedagang/store/{id}',[PedagangController::class, 'store']);
 Route::get('pedagang/delete/{id}',[PedagangController::class, 'delete']);
 Route::get('pedagang/details/{id}',[PedagangController::class, 'details']);
 
-Route::get('tempatusaha/data',[TempatController::class, 'index'])->name('tempatindex');
+Route::get('tempatusaha/data',[TempatController::class, 'data'])->name('tempatdata');
 Route::post('tempatusaha/add',[TempatController::class, 'add']);
 Route::get('tempatusaha/update/{id}',[TempatController::class, 'update']);
 Route::post('tempatusaha/store/{id}',[TempatController::class, 'store']);
 Route::get('tempatusaha/delete/{id}',[TempatController::class, 'delete']);
 Route::get('tempatusaha/details/{id}',[TempatController::class, 'details']);
-
-Route::get('cari/blok',[SearchController::class, 'cariBlok']);
-Route::get('cari/nasabah',[SearchController::class, 'cariNasabah']);
-Route::get('cari/alamat',[SearchController::class, 'cariAlamat']);
+Route::get('tempatusaha/fasilitas/{fas}',[TempatController::class, 'fasilitas']);
+Route::get('tempatusaha/rekap',[TempatController::class, 'rekap']);
+Route::get('tempatusaha/rekap/{blok}',[TempatController::class, 'rekapdetail']);
 
 Route::middleware(['masteradmin'])->group(function () {
     

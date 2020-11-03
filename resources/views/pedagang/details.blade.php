@@ -26,7 +26,13 @@ $role = Session::get('role');
                             </div>
                             @foreach($dataset as $d)
                             <div class="input-group">
-                                <input readonly type="text" value="{{$d[0]}}" class="form-control" name="alamat" id="alamat" aria-describedby="inputGroupPrepend">
+                                <?php $id = $d[2] ?>
+                                <button 
+                                    onclick="location.href='{{url('tempatusaha/details',[$id])}}'"
+                                    class="form-control shadow"
+                                    aria-describedby="inputGroupPrepend"
+                                    style="text-align:left;">{{$d[0]}}
+                                </button>
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="inputGroupPrepend">Rp. {{number_format($d[1])}}</span>
                                 </div>

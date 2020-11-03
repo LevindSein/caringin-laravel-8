@@ -81,6 +81,7 @@ class Pedagang extends Model
             ->get();
             $details[$i][0] = $tempat[$i]->kd_kontrol;
             $details[$i][1] = $tagihan[0]->selisih;
+            $details[$i][2] = $tempat[$i]->id;
         }
         return $details;
     }
