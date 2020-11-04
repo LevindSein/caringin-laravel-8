@@ -100,65 +100,6 @@ $username = Session::get('username');
                         <span>Tagihan</span></a>
                 </li>
 
-                <!-- Nav Item - Tarif -->
-                <li class="nav-item">
-                    <a
-                        class="nav-link collapsed"
-                        href="#"
-                        data-toggle="collapse"
-                        data-target="#collapseTarif"
-                        aria-expanded="true"
-                        aria-controls="collapseTarif">
-                        <i class="fas fa-fw fa-list"></i>
-                        <span>Tarif</span>
-                    </a>
-                    <div
-                        id="collapseTarif"
-                        class="collapse"
-                        aria-labelledby="headingPages"
-                        data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <div class="collapse-divider"></div>
-                            <h6 class="collapse-header">Fasilitas :</h6>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('tarif/air')}}">Air Bersih</a>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('tarif/listrik')}}">Listrik</a>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('tarif/kebersihan')}}">Kebersihan</a>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('tarif/keamananipk')}}">Keamanan & IPK</a>
-                            <h6 class="collapse-header">Additional :</h6>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('tarif/airkotor')}}">Air Kotor</a>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('tarif/persentase')}}">Keamanan & IPK</a>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('tarif/diskon')}}">Diskon / Bebas Bayar</a>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('tarif/lainlain')}}">Lain - Lain</a>
-                        </div>
-                    </div>
-                </li>
-
-                <!-- Nav Item - User -->
-                <li class="nav-item">
-                    <a
-                        class="nav-link collapsed"
-                        href="#"
-                        data-toggle="collapse"
-                        data-target="#collapseUser"
-                        aria-expanded="true"
-                        aria-controls="collapseUser">
-                        <i class="fas fa-users"></i>
-                        <span>Pegawai</span>
-                    </a>
-                    <div
-                        id="collapseUser"
-                        class="collapse"
-                        aria-labelledby="headingUser"
-                        data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Data :</h6>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('pegawai/data')}}">Data Pegawai</a>
-                            <h6 class="collapse-header">Otoritas :</h6>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('pegawai/otoritas')}}">Otoritas Pegawai</a>
-                        </div>
-                    </div>
-                </li>
-
                 <!-- Divider -->
                 <hr class="sidebar-divider">
 
@@ -166,30 +107,6 @@ $username = Session::get('username');
                 <div class="sidebar-heading">
                     Report
                 </div>
-
-                <!-- Nav Item - Pemakaian -->
-                <li class="nav-item">
-                    <a
-                        class="nav-link collapsed"
-                        href="#"
-                        data-toggle="collapse"
-                        data-target="#collapsePemakaian"
-                        aria-expanded="true"
-                        aria-controls="collapsePemakaian">
-                        <i class="far fa-file-alt"></i>
-                        <span>Pemakaian</span>
-                    </a>
-                    <div
-                        id="collapsePemakaian"
-                        class="collapse"
-                        aria-labelledby="headingPages"
-                        data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <div class="collapse-divider"></div>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('pemakaian/show')}}">Pemakaian Bulanan</a>
-                        </div>
-                    </div>
-                </li>
 
                 <!-- Nav Item - Laporan -->
                 <li class="nav-item">
@@ -210,10 +127,9 @@ $username = Session::get('username');
                         data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <div class="collapse-divider"></div>
-                            <h6 class="collapse-header">Pendapatan :</h6>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('laporan/harian')}}">Harian</a>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('laporan/bulanan')}}">Bulanan</a>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('laporan/tahunan')}}">Tahunan</a>
+                            <h6 class="collapse-header">Rekap :</h6>
+                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('pendapatan')}}">Pendapatan</a>
+                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('pemakaian')}}">Pemakaian</a>
                             <h6 class="collapse-header">Data :</h6>
                             <a class="collapse-item" style="font-size:0.8rem;" href="{{url('laporan/tagihan')}}">Tagihan</a>
                             <a class="collapse-item" style="font-size:0.8rem;" href="{{url('laporan/tunggakan')}}">Tunggakan</a>
@@ -228,21 +144,40 @@ $username = Session::get('username');
 
                 <!-- Heading -->
                 <div class="sidebar-heading">
-                    Other
+                    Others
                 </div>
 
-                <!-- Nav Item - Meteran -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{{url('alat/data')}}">
+                <!-- Nav Item - Utilities -->
+                <li class="nav-item {{ (request()->is('utilities/*')) ? 'active' : '' }}">
+                    <a 
+                        class="nav-link collapsed" 
+                        href="#" 
+                        data-toggle="collapse" 
+                        data-target="#utilities" 
+                        aria-expanded="true" 
+                        aria-controls="collapseTwo">
                         <i class="fas fa-tools"></i>
-                        <span>Alat Meter</span></a>
+                        <span>Utilities</span>
+                    </a>
+                    <div 
+                        id="utilities" 
+                        class="collapse {{ (request()->is('utilities/*')) ? 'show' : '' }}" 
+                        aria-labelledby="headingTwo" 
+                        data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item {{ (request()->is('utilities/tarif')) ? 'active' : '' }}" style="font-size:0.8rem;" href="{{url('utilities/tarif')}}">Tarif</a>
+                            <a class="collapse-item {{ (request()->is('utilities/meteran')) ? 'active' : '' }}" style="font-size:0.8rem;" href="{{url('utilities/meteran')}}">Alat Meter</a>
+                            <a class="collapse-item {{ (request()->is('utilities/hari/libur')) ? 'active' : '' }}" style="font-size:0.8rem;" href="{{url('utilities/hari/libur')}}">Hari Libur</a>
+                            <a class="collapse-item {{ (request()->is('utilities/blok')) ? 'active' : '' }}" style="font-size:0.8rem;" href="{{url('utilities/blok')}}">Blok</a>
+                        </div>
+                    </div>
                 </li>
                 
-                <!-- Nav Item - Hari Libur -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{{url('harilibur/data')}}">
-                        <i class="far fa-calendar-alt"></i>
-                        <span>Hari Libur</span></a>
+                <!-- Nav Item - User -->
+                <li class="nav-item {{ (request()->is('user/*')) ? 'active' : '' }}">
+                    <a class="nav-link" href="{{url('user')}}">
+                        <i class="fas fa-users"></i>
+                        <span>User</span></a>
                 </li>
 
                 <!-- Divider -->

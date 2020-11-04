@@ -146,7 +146,11 @@ $role = Session::get('role');
                     @csrf
                     <div class="form-group">
                         <label for="blok">BLOK</label>
-                        <select class="form-control" name="blok" id="blok">
+                        <select class="form-control" name="blok" id="blok" required>
+                            <option selected="selected" hidden="hidden"  value="">Pilih Blok</option>
+                            @foreach($blok as $b)
+                            <option value="{{$b->nama}}">{{$b->nama}}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>

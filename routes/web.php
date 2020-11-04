@@ -12,6 +12,10 @@ use App\Http\Controllers\PedagangController;
 use App\Http\Controllers\TempatController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\TagihanController;
+use App\Http\Controllers\TarifController;
+use App\Http\Controllers\MeteranController;
+use App\Http\Controllers\HariLiburController;
+use App\Http\Controllers\BlokController;
 
 use App\Http\Controllers\Auth\LoginController;
 
@@ -84,6 +88,12 @@ Route::post('tagihan/store',[TagihanController::class, 'store']);
 Route::get('tagihan/delete/{id}',[TagihanController::class, 'delete']);
 Route::get('tagihan/{fasilitas}',[TagihanController::class, 'fasilitas'])->name('pedagangTagihan');
 Route::post('tagihan/store/{fasilitas}/{id}',[TagihanController::class, 'storeFasilitas']);
+Route::post('tagihan/edaran',[TagihanController::class, 'edaran']);
+
+Route::get('utilities/tarif', [TarifController::class, 'index']);
+Route::get('utilities/meteran', [MeteranController::class, 'index']);
+Route::get('utilities/hari/libur', [HariLiburController::class, 'index']);
+Route::get('utilities/blok', [BlokController::class, 'index']);
 
 //opsional
 Route::post('tagihan/pedagang/{fasilitas}',[TagihanController::class, 'pedagang']);

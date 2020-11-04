@@ -10,6 +10,7 @@ use App\Models\Pedagang;
 use App\Models\MeteranAir;
 use App\Models\MeteranListrik;
 use App\Models\TempatUsaha;
+use App\Models\Blok;
 
 use Exception;
 
@@ -41,6 +42,7 @@ class TagihanController extends Controller
             'bulan'=>$bulan,
             'tahun'=>$year,
             'dataTahun'=>Tagihan::dataTahun(),
+            'blok'=>Blok::all()
         ]);
     }
 
@@ -52,8 +54,10 @@ class TagihanController extends Controller
 
     }
 
-    public function delete($id){
-
+    public function delete(Request $request, $id){
+        $tagihan = Tagihan::find($id);
+        $tagihan->delete();
+        return redirect()->back()->with('success','Data Tagihan Dihapus');
     }
 
     public function fasilitas($fasilitas){
@@ -132,6 +136,12 @@ class TagihanController extends Controller
         
         $tagihan->save();
         return redirect()->route('pedagangTagihan',$fasilitas)->with('success','^_^');
+    }
+
+    public function edaran(Request $request){
+        date_default_timezone_set('Asia/Jakarta');
+        $month = date("Y-m", time());
+        return view('tagihan.edaran',['dataset'=>Tagihan::where([['blok',$request->get('blok')],['bln_tagihan',$month]])->get()]);
     }
 
     //opsional
