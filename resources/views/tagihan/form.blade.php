@@ -104,6 +104,13 @@ $ktp = $ktp + 1;
             'input',
             event => event.target.value = (parseInt(event.target.value.replace(/[^\d]+/gi, '')) || 0).toLocaleString('en-US')
         );
+    
+    document
+        .getElementById('awal')
+        .addEventListener(
+            'input',
+            event => event.target.value = (parseInt(event.target.value.replace(/[^\d]+/gi, '')) || 0).toLocaleString('en-US')
+        );
 </script>
 <script>
     document

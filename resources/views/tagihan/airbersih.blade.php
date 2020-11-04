@@ -39,11 +39,14 @@
         </div>
     </div>
     <div class="form-group col-lg-12">
-        <label for="awalListrik">Stand Awal Air Bersih</label>
+        <label for="awalListrik">Stand Awal Air Bersih <span style="color:red;">*</span></label>
         <input
             readonly
             required
             value="{{number_format($dataset->awal)}}"
+            autocomplete="off"
+            type="text" 
+            pattern="^[\d,]+$"
             name="awal"
             class="form-control"
             id="awal">

@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\Tagihan;
 use App\Models\Pedagang;
+use App\Models\MeteranAir;
+use App\Models\MeteranListrik;
+use App\Models\TempatUsaha;
 
 use Exception;
 
@@ -59,7 +62,7 @@ class TagihanController extends Controller
             return redirect()->back()->with('info','Bukan Periode Penambahan Tagihan');
         }
         else if($dataset == "Done"){
-            return redirect()->route('tagihandata',$now)->with('success','Data Tagihan Listrik Selesai');
+            return redirect()->route('tagihandata','now')->with('success','Update Data Tagihan Berhasil');
         }else{}
 
         if($fasilitas == 'listrik'){
@@ -80,6 +83,7 @@ class TagihanController extends Controller
     public function storeFasilitas(Request $request,$fasilitas, $id){
         $tagihanId = $request->get('tagihanId');
         $tempatId = $request->get('tempatId');
+        $tempat = TempatUsaha::find($tempatId);
         $penggunaId = $request->get('namaPengguna');
         $awal = $request->get('awal');
         $awal = explode(',',$awal);
@@ -89,6 +93,11 @@ class TagihanController extends Controller
         $akhir = explode(',',$akhir);
         $akhir = implode("",$akhir);
 
+        //Update Pengguna
+        $tempat->id_pengguna = $penggunaId;
+        $tagihan = Tagihan::find($tagihanId);
+        $tagihan->id_pengguna = $penggunaId;
+
         if($akhir < $awal){
             return redirect()->back()->with('error','Data Akhir Lebih Kecil dari Data Awal');
         }
@@ -97,12 +106,31 @@ class TagihanController extends Controller
             $daya = $request->get('daya');
             $daya = explode(',',$daya);
             $daya = implode("",$daya);
-            Tagihan::listrik($awal,$akhir,$daya);
+
+            //Update Meteran
+            $tempat->daya = $daya;
+            $tempat->save();
+            $meter = MeteranListrik::find($tempat->id_meteran_listrik);
+            $meter->akhir = $akhir;
+            $meter->daya = $daya;
+            $tagihan->daya_listrik = $daya;
+            $meter->save();
+
+            //Update Tagihan
+            Tagihan::listrik($awal,$akhir,$daya,$tagihanId);
         }
 
         if($fasilitas == 'airbersih'){
-            Tagihan::airBersih($awal,$akhir);
+            //Update Meteran
+            $meter = MeteranAir::find($tempat->id_meteran_air);
+            $meter->akhir = $akhir;
+            $meter->save();
+
+            //Update Tagihan
+            Tagihan::airBersih($awal,$akhir,$tagihanId);
         }
+        
+        $tagihan->save();
         return redirect()->route('pedagangTagihan',$fasilitas)->with('success','^_^');
     }
 
