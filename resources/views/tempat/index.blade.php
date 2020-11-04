@@ -9,7 +9,62 @@ $role = Session::get('role');
 
 @section('content')
 <!-- Tambah Content Pada Body Utama -->
-@yield('body')
+<div class = "container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            @yield('title')
+            <div>
+                <a 
+                    href="#" 
+                    data-toggle="modal"
+                    data-target="#myModal" 
+                    type="submit"
+                    class="btn btn-sm btn-warning"><b>
+                    <i class="fas fa-fw fa-plus fa-sm text-white-50"></i> Tempat Usaha</b>
+                </a>
+                &nbsp;
+                <a 
+                    href="{{url('tempatusaha/data')}}" 
+                    type="submit"
+                    class="btn btn-sm btn-info {{ (request()->is('tempatusaha/data')) ? 'disabled' : '' }}"><b> Data Tempat</b>
+                </a>
+                &nbsp;
+                <a 
+                    href="{{url('tempatusaha/rekap')}}" 
+                    type="submit"
+                    class="btn btn-sm btn-danger {{ (request()->is('tempatusaha/rekap')) ? 'disabled' : '' }}"><b>Rekap</b>
+                </a>
+                &nbsp;
+                <div class="dropdown no-arrow" style="display:inline-block">
+                    <a 
+                        class="dropdown-toggle btn btn-sm btn-success" 
+                        href="#" 
+                        role="button" 
+                        data-toggle="dropdown"
+                        aria-haspopup="true" 
+                        aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">Pengguna Fasilitas:</div>
+                        <a class="dropdown-item {{ (request()->is('tempatusaha/fasilitas/airbersih')) ? 'active' : '' }}" href="{{url('tempatusaha/fasilitas/airbersih')}}">Air Bersih</a>
+                        <a class="dropdown-item {{ (request()->is('tempatusaha/fasilitas/listrik')) ? 'active' : '' }}" href="{{url('tempatusaha/fasilitas/listrik')}}">Listrik</a>
+                        <a class="dropdown-item {{ (request()->is('tempatusaha/fasilitas/keamananipk')) ? 'active' : '' }}" href="{{url('tempatusaha/fasilitas/keamananipk')}}">Keamanan & IPK</a>
+                        <a class="dropdown-item {{ (request()->is('tempatusaha/fasilitas/kebersihan')) ? 'active' : '' }}" href="{{url('tempatusaha/fasilitas/kebersihan')}}">Kebersihan</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item {{ (request()->is('tempatusaha/fasilitas/airkotor')) ? 'active' : '' }}" href="{{url('tempatusaha/fasilitas/airkotor')}}">Air Kotor</a>
+                        <a class="dropdown-item {{ (request()->is('tempatusaha/fasilitas/diskon')) ? 'active' : '' }}" href="{{url('tempatusaha/fasilitas/diskon')}}">Diskon / Bebas Bayar</a>
+                        <a class="dropdown-item {{ (request()->is('tempatusaha/fasilitas/lain')) ? 'active' : '' }}" href="{{url('tempatusaha/fasilitas/lain')}}">Lain - Lain</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+        @yield('body')
+
+        </div>
+    </div>    
+</div>
 @endsection
 
 @section('modal')

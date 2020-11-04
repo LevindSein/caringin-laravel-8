@@ -11,6 +11,7 @@ use App\Http\Controllers\NasabahController;
 use App\Http\Controllers\PedagangController;
 use App\Http\Controllers\TempatController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\TagihanController;
 
 use App\Http\Controllers\Auth\LoginController;
 
@@ -76,6 +77,16 @@ Route::get('tempatusaha/details/{id}',[TempatController::class, 'details']);
 Route::get('tempatusaha/fasilitas/{fas}',[TempatController::class, 'fasilitas']);
 Route::get('tempatusaha/rekap',[TempatController::class, 'rekap']);
 Route::get('tempatusaha/rekap/{blok}',[TempatController::class, 'rekapdetail']);
+
+Route::get('tagihan/index/{data}',[TagihanController::class, 'data'])->name('tagihandata');
+Route::get('tagihan/update/{id}',[TagihanController::class, 'update']);
+Route::post('tagihan/store',[TagihanController::class, 'store']);
+Route::get('tagihan/delete/{id}',[TagihanController::class, 'delete']);
+Route::get('tagihan/{fasilitas}',[TagihanController::class, 'fasilitas'])->name('pedagangTagihan');
+Route::post('tagihan/store/{fasilitas}/{id}',[TagihanController::class, 'storeFasilitas']);
+
+//opsional
+Route::post('tagihan/pedagang/{fasilitas}',[TagihanController::class, 'pedagang']);
 
 Route::middleware(['masteradmin'])->group(function () {
     

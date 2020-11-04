@@ -2,9 +2,6 @@
 $role = Session::get('role');
 $random = str_pad(mt_rand(1,99999999),8,'0',STR_PAD_LEFT);
 $no_anggota = "BP3C".$random;
-if($role != 'master'){
-    echo "Yes";
-}
 ?>
 
 @php
@@ -360,7 +357,7 @@ $('[type=tel]').on('change', function(e) {
   $(e.target).val($(e.target).val().replace(/[^\d\.]/g, ''))
 })
 $('[type=tel]').on('keypress', function(e) {
-  keys = ['0','1','2','3','4','5','6','7','8','9','.']
+  keys = ['0','1','2','3','4','5','6','7','8','9']
   return keys.indexOf(event.key) > -1
 })
 </script>
