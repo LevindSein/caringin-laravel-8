@@ -491,14 +491,19 @@ class Tagihan extends Model
                 }
             }
 
+            date_default_timezone_set('Asia/Jakarta');
+            $now = date("Y-m",time());
+
             if($fasilitas == 'listrik'){
                 $dataset = DB::table('tagihan')
                 ->leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
                 ->leftJoin('user','tagihan.id_pengguna','=','user.id')
                 ->where([
                     ['tempat_usaha.trf_listrik','!=',NULL],
-                    ['tagihan.stt_listrik',NULL]
+                    ['tagihan.stt_listrik',NULL],
+                    ['tagihan.bln_tagihan',$now],
                 ])
+                ->orderBy('tempat_usaha.kd_kontrol','asc')
                 ->select(
                     'tagihan.id as tagihanId',
                     'tempat_usaha.id as tempatId',
@@ -523,8 +528,10 @@ class Tagihan extends Model
                 ->leftJoin('user','tagihan.id_pengguna','=','user.id')
                 ->where([
                     ['tempat_usaha.trf_airbersih','!=',NULL],
-                    ['tagihan.stt_airbersih',NULL]
+                    ['tagihan.stt_airbersih',NULL],
+                    ['tagihan.bln_tagihan',$now],
                 ])
+                ->orderBy('tempat_usaha.kd_kontrol','asc')
                 ->select(
                     'tagihan.id as tagihanId',
                     'tempat_usaha.id as tempatId',

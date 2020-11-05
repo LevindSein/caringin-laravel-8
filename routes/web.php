@@ -95,6 +95,9 @@ Route::get('utilities/meteran', [MeteranController::class, 'index']);
 Route::get('utilities/hari/libur', [HariLiburController::class, 'index']);
 Route::get('utilities/blok', [BlokController::class, 'index']);
 
+Route::get('utilities/tarif/add', [TarifController::class, 'add']);
+Route::post('utilities/tarif/update/{fasilitas}/{id}', [TarifController::class, 'update']);
+
 //opsional
 Route::post('tagihan/pedagang/{fasilitas}',[TagihanController::class, 'pedagang']);
 
