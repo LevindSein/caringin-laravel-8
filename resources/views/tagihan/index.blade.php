@@ -9,7 +9,7 @@ $role = Session::get('role');
 
 @section('content')
 <!-- Tambah Content Pada Body Utama -->
-<title>Tagihan Pedagang</title>
+<title>Tagihan Pedagang | BP3C</title>
 <div class = "container-fluid">
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">

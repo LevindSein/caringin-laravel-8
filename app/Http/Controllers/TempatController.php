@@ -205,7 +205,15 @@ class TempatController extends Controller
     }
 
     public function update($id){
-
+        return view('tempat.update',[
+            'airAvailable'=>TempatUsaha::airAvailable(),
+            'listrikAvailable'=>TempatUsaha::listrikAvailable(),
+            'trfKeamananIpk'=>TempatUsaha::trfKeamananIpk(),
+            'trfKebersihan'=>TempatUsaha::trfKebersihan(),
+            'trfAirKotor'=>TempatUsaha::trfAirKotor(),
+            'trfLain'=>TempatUsaha::trfLain(),
+            'trfDiskon'=>TempatUsaha::trfDiskon(),
+        ]);
     }
 
     public function store(Request $request,$id){

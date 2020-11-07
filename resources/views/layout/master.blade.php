@@ -109,7 +109,7 @@ $username = Session::get('username');
                 </div>
 
                 <!-- Nav Item - Laporan -->
-                <li class="nav-item">
+                <li class="nav-item {{ (request()->is('rekap/*')) ? 'active' : '' }}">
                     <a
                         class="nav-link collapsed"
                         href="#"
@@ -122,21 +122,22 @@ $username = Session::get('username');
                     </a>
                     <div
                         id="collapsePages"
-                        class="collapse"
+                        class="collapse {{ (request()->is('rekap/*')) ? 'show' : '' }}"
                         aria-labelledby="headingPages"
                         data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <div class="collapse-divider"></div>
-                            <h6 class="collapse-header">Rekap :</h6>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('pendapatan')}}">Pendapatan</a>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('pemakaian')}}">Pemakaian</a>
-                            <h6 class="collapse-header">Data :</h6>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('laporan/tagihan')}}">Tagihan</a>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('laporan/tunggakan')}}">Tunggakan</a>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('laporan/bongkaran')}}">Bongkaran</a>
-                            <a class="collapse-item" style="font-size:0.8rem;" href="{{url('laporan/penghapusan')}}">Penghapusan</a>
+                            <a class="collapse-item {{ (request()->is('rekap/pemakaian')) ? 'active' : '' }}" style="font-size:0.8rem;" href="{{url('rekap/pemakaian')}}">Pemakaian</a>
+                            <a class="collapse-item {{ (request()->is('rekap/pendapatan')) ? 'active' : '' }}" style="font-size:0.8rem;" href="{{url('rekap/pendapatan')}}">Pendapatan</a>
                         </div>
                     </div>
+                </li>
+
+                <!-- Nav Item - Data -->
+                <li class="nav-item {{ (request()->is('rekap/data/*')) ? 'active' : '' }}">
+                    <a class="nav-link" href="{{url('rekap/data')}}">
+                        <i class="fa fa-list"></i>
+                        <span>Data</span></a>
                 </li>
 
                 <!-- Divider -->
@@ -165,7 +166,7 @@ $username = Session::get('username');
                         aria-labelledby="headingTwo" 
                         data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item {{ (request()->is('utilities/tarif')) ? 'active' : '' }}" style="font-size:0.8rem;" href="{{url('utilities/tarif')}}">Tarif</a>
+                            <a class="collapse-item {{ (request()->is('utilities/tarif*')) ? 'active' : '' }}" style="font-size:0.8rem;" href="{{url('utilities/tarif')}}">Tarif</a>
                             <a class="collapse-item {{ (request()->is('utilities/meteran')) ? 'active' : '' }}" style="font-size:0.8rem;" href="{{url('utilities/meteran')}}">Alat Meter</a>
                             <a class="collapse-item {{ (request()->is('utilities/hari/libur')) ? 'active' : '' }}" style="font-size:0.8rem;" href="{{url('utilities/hari/libur')}}">Hari Libur</a>
                             <a class="collapse-item {{ (request()->is('utilities/blok')) ? 'active' : '' }}" style="font-size:0.8rem;" href="{{url('utilities/blok')}}">Blok</a>

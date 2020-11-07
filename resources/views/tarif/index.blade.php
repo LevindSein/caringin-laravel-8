@@ -9,41 +9,36 @@ $role = Session::get('role');
 
 @section('content')
 <!-- Tambah Content Pada Body Utama -->
-<title>Tarif Fasilitas</title>
+<title>Tarif Fasilitas | BP3C</title>
 <div class = "container-fluid">
     <ul class="tabs-animated-shadow tabs-animated nav">
         <li class="nav-item">
-            <a role="tab" class="nav-link active" id="tab-c-0" data-toggle="tab" href="#tab-animated-0">
+            <a role="tab" class="nav-link {{ (Session::get('tarif') == 'listrik') ? 'active' : '' }}" id="tab-c-0" data-toggle="tab" href="#tab-animated-0">
                 <span>Listrik</span>
             </a>
         </li>
         <li class="nav-item">
-            <a role="tab" class="nav-link" id="tab-c-1" data-toggle="tab" href="#tab-animated-1">
+            <a role="tab" class="nav-link {{ (Session::get('tarif') == 'airbersih') ? 'active' : '' }}" id="tab-c-1" data-toggle="tab" href="#tab-animated-1">
                 <span>Air Bersih</span>
             </a>
         </li>
         <li class="nav-item">
-            <a role="tab" class="nav-link" id="tab-c-2" data-toggle="tab" href="#tab-animated-2">
+            <a role="tab" class="nav-link  {{ (Session::get('tarif') == 'keamananipk') ? 'active' : '' }}" id="tab-c-2" data-toggle="tab" href="#tab-animated-2">
                 <span>Keamanan & IPK</span>
             </a>
         </li>
         <li class="nav-item">
-            <a role="tab" class="nav-link" id="tab-c-3" data-toggle="tab" href="#tab-animated-3">
+            <a role="tab" class="nav-link {{ (Session::get('tarif') == 'kebersihan') ? 'active' : '' }}" id="tab-c-3" data-toggle="tab" href="#tab-animated-3">
                 <span>Kebersihan</span>
             </a>
         </li>
         <li class="nav-item">
-            <a role="tab" class="nav-link" id="tab-c-4" data-toggle="tab" href="#tab-animated-4">
+            <a role="tab" class="nav-link {{ (Session::get('tarif') == 'airkotor') ? 'active' : '' }}" id="tab-c-4" data-toggle="tab" href="#tab-animated-4">
                 <span>Air Kotor</span>
             </a>
         </li>
         <li class="nav-item">
-            <a role="tab" class="nav-link" id="tab-c-5" data-toggle="tab" href="#tab-animated-5">
-                <span>Diskon</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a role="tab" class="nav-link" id="tab-c-6" data-toggle="tab" href="#tab-animated-6">
+            <a role="tab" class="nav-link {{ (Session::get('tarif') == 'lain') ? 'active' : '' }}" id="tab-c-6" data-toggle="tab" href="#tab-animated-6">
                 <span>Lain - Lain</span>
             </a>
         </li>
@@ -66,25 +61,22 @@ $role = Session::get('role');
         <div class="card-body">
             
             <div class="tab-content">
-                <div class="tab-pane active" id="tab-animated-0" role="tabpanel">
+                <div class="tab-pane  {{ (Session::get('tarif') == 'listrik') ? 'active' : '' }}" id="tab-animated-0" role="tabpanel">
                     @include('tarif.listrik')
                 </div>
-                <div class="tab-pane" id="tab-animated-1" role="tabpanel">
+                <div class="tab-pane  {{ (Session::get('tarif') == 'airbersih') ? 'active' : '' }}" id="tab-animated-1" role="tabpanel">
                     @include('tarif.airbersih')
                 </div>
-                <div class="tab-pane" id="tab-animated-2" role="tabpanel">
+                <div class="tab-pane {{ (Session::get('tarif') == 'keamananipk') ? 'active' : '' }}" id="tab-animated-2" role="tabpanel">
                     @include('tarif.keamananipk')
                 </div>
-                <div class="tab-pane" id="tab-animated-3" role="tabpanel">
+                <div class="tab-pane {{ (Session::get('tarif') == 'kebersihan') ? 'active' : '' }}" id="tab-animated-3" role="tabpanel">
                     @include('tarif.kebersihan')
                 </div>
-                <div class="tab-pane" id="tab-animated-4" role="tabpanel">
+                <div class="tab-pane {{ (Session::get('tarif') == 'airkotor') ? 'active' : '' }}" id="tab-animated-4" role="tabpanel">
                     @include('tarif.airkotor')
                 </div>
-                <div class="tab-pane" id="tab-animated-5" role="tabpanel">
-                    @include('tarif.diskon')
-                </div>
-                <div class="tab-pane" id="tab-animated-6" role="tabpanel">
+                <div class="tab-pane {{ (Session::get('tarif') == 'lain') ? 'active' : '' }}" id="tab-animated-6" role="tabpanel">
                     @include('tarif.lain')
                 </div>
             </div>

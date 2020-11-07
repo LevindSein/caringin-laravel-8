@@ -16,6 +16,9 @@ use App\Http\Controllers\TarifController;
 use App\Http\Controllers\MeteranController;
 use App\Http\Controllers\HariLiburController;
 use App\Http\Controllers\BlokController;
+use App\Http\Controllers\PendapatanController;
+use App\Http\Controllers\PemakaianController;
+use App\Http\Controllers\DataController;
 
 use App\Http\Controllers\Auth\LoginController;
 
@@ -90,13 +93,24 @@ Route::get('tagihan/{fasilitas}',[TagihanController::class, 'fasilitas'])->name(
 Route::post('tagihan/store/{fasilitas}/{id}',[TagihanController::class, 'storeFasilitas']);
 Route::post('tagihan/edaran',[TagihanController::class, 'edaran']);
 
-Route::get('utilities/tarif', [TarifController::class, 'index']);
-Route::get('utilities/meteran', [MeteranController::class, 'index']);
-Route::get('utilities/hari/libur', [HariLiburController::class, 'index']);
-Route::get('utilities/blok', [BlokController::class, 'index']);
+Route::get('utilities/tarif',[TarifController::class, 'index']);
+Route::get('utilities/meteran',[MeteranController::class, 'index']);
+Route::get('utilities/hari/libur',[HariLiburController::class, 'index']);
+Route::get('utilities/blok',[BlokController::class, 'index']);
 
-Route::get('utilities/tarif/add', [TarifController::class, 'add']);
-Route::post('utilities/tarif/update/{fasilitas}/{id}', [TarifController::class, 'update']);
+Route::post('utilities/tarif/add',[TarifController::class, 'add']);
+Route::post('utilities/tarif/update/{fasilitas}/{id}',[TarifController::class, 'update']);
+
+Route::post('utilities/meteran/add',[MeteranController::class, 'add']);
+Route::get('utilities/meteran/delete/{fasilitas}/{id}',[MeteranController::class, 'delete']);
+
+Route::get('rekap/pendapatan',[PendapatanController::class, 'index']);
+Route::get('rekap/pendapatan/{filter}',[PendapatanController::class, 'filter']);
+
+Route::get('rekap/pemakaian',[PemakaianController::class, 'index']);
+Route::get('rekap/pemakaian/{fasilitas}/{bulan}',[PemakaianController::class, 'fasilitas']);
+
+Route::get('rekap/data',[DataController::class, 'index']);
 
 //opsional
 Route::post('tagihan/pedagang/{fasilitas}',[TagihanController::class, 'pedagang']);

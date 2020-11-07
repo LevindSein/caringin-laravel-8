@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 use App\Models\TarifListrik;
 use App\Models\TarifAirBersih;
 use App\Models\TarifKeamananIpk;
 use App\Models\TarifKebersihan;
 use App\Models\TarifAirKotor;
-use App\Models\TarifDiskon;
 use App\Models\TarifLain;
 
 class TarifController extends Controller
@@ -21,12 +21,11 @@ class TarifController extends Controller
             'keamananipk'=>TarifKeamananIpk::orderBy('tarif', 'asc')->get(),
             'kebersihan'=>TarifKebersihan::orderBy('tarif', 'asc')->get(),
             'airkotor'=>TarifAirKotor::orderBy('tarif', 'asc')->get(),
-            'diskon'=>TarifDiskon::orderBy('tarif', 'asc')->get(),
             'lain'=>TarifLain::orderBy('tarif', 'asc')->get(),
         ]);
     }
 
-    public function add(){
+    public function add(Request $request){
 
     }
 
@@ -58,6 +57,7 @@ class TarifController extends Controller
             $tarif->trf_ppn = $request->get('ppnListrik');
             $tarif->trf_pasang = $pasang;
             $tarif->save();
+            Session::put('tarif','listrik');
             return redirect()->back()->with('success','Tarif Listrik Diupdate');
         }
 
@@ -90,26 +90,32 @@ class TarifController extends Controller
             $tarif->trf_ppn = $request->get('ppnAir');
             $tarif->trf_pasang = $pasang;
             $tarif->save();
+            Session::put('tarif','airbersih');
             return redirect()->back()->with('success','Tarif Air Diupdate');
         }
 
         if($fasilitas == 'keamananipk'){
+            Session::put('tarif','keamananipk');
             echo 'keamananipk';
         }
 
         if($fasilitas == 'kebersihan'){
+            Session::put('tarif','kebersihan');
             echo 'kebersihan';
         }
 
         if($fasilitas == 'airkotor'){
+            Session::put('tarif','airkotor');
             echo 'airkotor';
         }
 
         if($fasilitas == 'diskon'){
+            Session::put('tarif','diskon');
             echo 'diskon';
         }
 
         if($fasilitas == 'lain'){
+            Session::put('tarif','lain');
             echo 'lain';
         }
     }
