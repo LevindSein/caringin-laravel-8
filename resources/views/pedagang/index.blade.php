@@ -75,11 +75,13 @@ $no_anggota = "BP3C".$random;
                             </td>
                             <td class="text-center">
                                 <a
-                                    href="{{url('pedagang/update',[$data->id])}}">
+                                    href="{{url('pedagang/update',[$data->id])}}"
+                                    title="Edit">
                                     <i class="fas fa-edit fa-sm"></i></a>
                                 &nbsp;
                                 <a
-                                    href="{{url('pedagang/delete',[$data->id])}}">
+                                    href="{{url('pedagang/delete',[$data->id])}}"
+                                    title="Hapus">
                                     <i class="fas fa-trash-alt" style="color:#e74a3b;"></i></a>
                             </td>
                         </tr>
@@ -291,7 +293,8 @@ $(document).ready(function () {
                     title: 'Data Pedagang',
                     exportOptions: {
                         columns: [ 0, 1, 2, 3, 4, 5]
-                    }
+                    },
+                    titleAttr: 'Download Excel'
                 }
             ],
             "fixedColumns":   {

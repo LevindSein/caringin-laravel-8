@@ -25,6 +25,7 @@ class CekLogin
             Session::put('role',$user->role);
             Session::put('tarif','listrik');
             Session::put('meteran','listrik');
+            Session::put('user','admin');
             if ($user->role == 'master') {
                 return redirect()->route('masterindex')->with('success','Login Berhasil');
             }

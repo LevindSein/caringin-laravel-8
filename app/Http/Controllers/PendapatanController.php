@@ -10,16 +10,29 @@ class PendapatanController extends Controller
         return view('pendapatan.index');
     }
 
-    public function filter(Request $request, $filter){
-        if($filter == "harian"){
+    
+    public function harian(Request $request){
+
+    }
+
+    public function bulanan(Request $request){
+
+    }
+
+    public function tahunan(Request $request){
+        
+    }
+
+    public function details($filter, $id){
+        if($filter == 'harian'){
 
         }
-
-        if($filter == "bulanan"){
-
+        
+        if($filter == 'bulanan'){
+            
         }
 
-        if($filter == "tahunan"){
+        if($filter == 'tahunan'){
             
         }
     }

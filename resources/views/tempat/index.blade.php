@@ -19,7 +19,7 @@ $role = Session::get('role');
                     data-toggle="modal"
                     data-target="#myModal" 
                     type="submit"
-                    class="btn btn-sm btn-warning"><b>
+                    class="btn btn-sm btn-success"><b>
                     <i class="fas fa-fw fa-plus fa-sm text-white-50"></i> Tempat Usaha</b>
                 </a>
                 &nbsp;
@@ -37,12 +37,13 @@ $role = Session::get('role');
                 &nbsp;
                 <div class="dropdown no-arrow" style="display:inline-block">
                     <a 
-                        class="dropdown-toggle btn btn-sm btn-success" 
+                        class="dropdown-toggle btn btn-sm btn-warning" 
                         href="#" 
                         role="button" 
                         data-toggle="dropdown"
                         aria-haspopup="true" 
-                        aria-expanded="false">
+                        aria-expanded="false"
+                        title="Menu Lainnya">
                         <i class="fas fa-ellipsis-v fa-sm fa-fw"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">

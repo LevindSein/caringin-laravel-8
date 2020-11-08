@@ -139,11 +139,13 @@
                 </td>
                 <td class="text-center">
                 <a
-                        href="{{url('tempatusaha/update',[$data->id])}}">
+                        href="{{url('tempatusaha/update',[$data->id])}}"
+                        title="Edit">
                         <i class="fas fa-edit fa-sm"></i></a>
                     &nbsp;
                     <a
-                        href="{{url('tempatusaha/delete',[$data->id])}}">
+                        href="{{url('tempatusaha/delete',[$data->id])}}"
+                        title="Hapus">
                         <i class="fas fa-trash-alt" style="color:#e74a3b;"></i></a>
                 </td>
             </tr>
@@ -176,7 +178,8 @@
                     title: 'Data Tempat Usaha',
                     exportOptions: {
                         columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-                    }
+                    },
+                    titleAttr: 'Download Excel'
                 }
             ],
             "fixedColumns":   {

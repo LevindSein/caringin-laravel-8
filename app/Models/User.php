@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use App\Models\User;
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
@@ -50,4 +52,20 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static function admin(){
+        return User::where('role','admin')->get();
+    }
+    
+    public static function keuangan(){
+        return User::where('role','keuangan')->get();
+    }
+
+    public static function manajer(){
+        return User::where('role','manajer')->get();
+    }
+
+    public static function kasir(){
+        return User::where('role','kasir')->get();
+    }
 }

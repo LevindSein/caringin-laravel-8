@@ -39,7 +39,8 @@
                 <td class="text-center" style="{{ ($kontrol == 'idle') ? 'color:green;' : '' }}" >{{$kontrol}}</td>
                 <td class="text-center">
                     <a
-                        href="{{url('utilities/meteran/delete',['airbersih',$data->id])}}">
+                        href="{{url('utilities/meteran/delete',['airbersih',$data->id])}}"
+                        title="Hapus">
                         <i class="fas fa-trash-alt" style="color:#e74a3b;"></i></a>
                 </td>
             </tr>
@@ -75,7 +76,8 @@
                     title: 'Daftar Alat Air Bersih',
                     exportOptions: {
                         columns: [0, 1, 2, 3]
-                    }
+                    },
+                    titleAttr: 'Download Excel'
                 }
             ]
         });

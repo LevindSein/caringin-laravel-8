@@ -18,6 +18,8 @@
                 <th colspan="3" class="air">Air</th>
                 <th rowspan="2" class="keamanan">Keamanan IPK (Rp.)</th>
                 <th rowspan="2" class="kebersihan">Kebersihan (Rp.)</th>
+                <th rowspan="2" style="background-color:rgba(50, 255, 255, 0.2);">Air Kotor (Rp.)</th>
+                <th rowspan="2" style="background-color:rgba(255, 50, 255, 0.2);">Lain - Lain (Rp.)</th>
                 <th rowspan="2" style="background-color:rgba(255, 212, 71, 0.2);">Jumlah (Rp.)</th>
                 <th rowspan="2">Action</th>
             </tr>
@@ -45,14 +47,18 @@
                 <td>{{number_format($d->sel_airbersih)}}</td>
                 <td>{{number_format($d->sel_keamananipk)}}</td>
                 <td>{{number_format($d->sel_kebersihan)}}</td>
+                <td>{{number_format($d->sel_airkotor)}}</td>
+                <td>{{number_format($d->sel_lain)}}</td>
                 <td>{{number_format($d->sel_tagihan)}}</td>
                 <td class="text-center">
                     <a
-                        href="{{url('tagihan/update',[$d->id])}}">
+                        href="{{url('tagihan/update',[$d->id])}}"
+                        title="Edit">
                         <i class="fas fa-edit fa-sm"></i></a>
                     &nbsp;
                     <a
-                        href="{{url('tagihan/delete',[$d->id])}}">
+                        href="{{url('tagihan/delete',[$d->id])}}"
+                        title="Hapus">
                         <i class="fas fa-trash-alt" style="color:#e74a3b;"></i></a>
                 </td>
             </tr>
@@ -83,8 +89,9 @@
                     className: 'btn btn-success bg-gradient-success',
                     title: 'Tagihan Periode {{$bulan}}',
                     exportOptions: {
-                        columns: [0,1,2,3,4,5,6,7,8,9,10,11]
-                    }
+                        columns: [0,1,2,3,4,5,6,7,8,9,10,11,12,13]
+                    },
+                    titleAttr: 'Download Excel'
                 }
             ],
             "scrollX": true,
@@ -92,11 +99,11 @@
             "deferRender": true,
             "fixedColumns":   {
                 "leftColumns": 2,
-                "rightColumns": 1,
+                "rightColumns": 2,
             },
             "pageLength": 8,
             "aoColumnDefs": [
-                { "bSortable": false, "aTargets": [12] }
+                { "bSortable": false, "aTargets": [14] }
             ],
             "order": [ 0, "asc" ]
         });

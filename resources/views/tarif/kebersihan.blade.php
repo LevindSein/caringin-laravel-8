@@ -20,11 +20,13 @@
                 <td>{{number_format($data->tarif)}}</td>
                 <td class="text-center">
                     <a
-                        href="{{url('utilities/tarif/update',['kebersihan',$data->id])}}">
+                        href="{{url('utilities/tarif/update',['kebersihan',$data->id])}}"
+                        title="Edit">
                         <i class="fas fa-edit fa-sm"></i></a>
                     &nbsp;
                     <a
-                        href="{{url('utilities/tarif/delete',['kebersihan',$data->id])}}">
+                        href="{{url('utilities/tarif/delete',['kebersihan',$data->id])}}"
+                        title="Hapus">
                         <i class="fas fa-trash-alt" style="color:#e74a3b;"></i></a>
                 </td>
             </tr>
@@ -60,7 +62,8 @@
                     title: 'Tarif Kebersihan',
                     exportOptions: {
                         columns: [0, 1]
-                    }
+                    },
+                    titleAttr: 'Download Excel'
                 }
             ]
         });

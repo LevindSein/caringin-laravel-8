@@ -57,37 +57,43 @@ function tgl_indo($tanggal){
                                 <a
                                     href="{{url('rekap/pemakaian',['listrik',$d->bln_tagihan])}}"
                                     target="_blank"
-                                    class="btn btn-light">
+                                    class="btn btn-light"
+                                    title="Listrik">
                                     <i class="fas fa-bolt" style="color:#fd7e14;"></i></a>
                                 &nbsp;
                                 <a
                                     href="{{url('rekap/pemakaian',['airbersih',$d->bln_tagihan])}}"
                                     target="_blank"
-                                    class="btn btn-light">
+                                    class="btn btn-light"
+                                    title="Air Bersih">
                                     <i class="fas fa-tint" style="color:#36b9cc"></i></a>
                                 &nbsp;
                                 <a
                                     href="{{url('rekap/pemakaian',['keamananipk',$d->bln_tagihan])}}"
                                     target="_blank"
-                                    class="btn btn-light">
+                                    class="btn btn-light"
+                                    title="Keamanan & IPK">
                                     <i class="fas fa-lock" style="color:#e74a3b"></i></a>
                                 &nbsp;
                                 <a
                                     href="{{url('rekap/pemakaian',['kebersihan',$d->bln_tagihan])}}"
                                     target="_blank"
-                                    class="btn btn-light">
+                                    class="btn btn-light"
+                                    title="Kebersihan">
                                     <i class="fas fa-leaf" style="color:#1cc88a;"></i></a>
                                 &nbsp;
                                 <a
                                     href="{{url('rekap/pemakaian',['airkotor',$d->bln_tagihan])}}"
                                     target="_blank"
-                                    class="btn btn-light">
+                                    class="btn btn-light"
+                                    title="Air Kotor">
                                     <i class="fas fa-fill-drip" style="color:#5a5c69;"></i></a>
                                 &nbsp;
                                 <a
                                     href="{{url('rekap/pemakaian',['lain',$d->bln_tagihan])}}"
                                     target="_blank"
-                                    class="btn btn-light">
+                                    class="btn btn-light"
+                                    title="Lain - Lain">
                                     <i class="fas fa-credit-card" style="color:#6610f2;"></i></a>
                             </td>
                         </tr>

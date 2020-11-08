@@ -49,11 +49,13 @@ $role = Session::get('role');
                             <td class="text-center">{{$d->ket}}</td>
                             <td class="text-center">
                                 <a
-                                    href="{{url('utilities/hari/libur/update',[$d->id])}}">
+                                    href="{{url('utilities/hari/libur/update',[$d->id])}}"
+                                    title="Edit">
                                     <i class="fas fa-edit fa-sm"></i></a>
                                 &nbsp;
                                 <a
-                                    href="{{url('utilities/hari/libur/delete',[$d->id])}}">
+                                    href="{{url('utilities/hari/libur/delete',[$d->id])}}"
+                                    title="Hapus">
                                     <i class="fas fa-trash-alt" style="color:#e74a3b;"></i></a>
                             </td>
                         </tr>
@@ -146,7 +148,8 @@ $role = Session::get('role');
                     title: 'Data Hari Libur',
                     exportOptions: {
                         columns: [ 0, 1, 2 ]
-                    }
+                    },
+                    titleAttr: 'Download Excel'
                 }
             ],
         });

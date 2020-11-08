@@ -38,13 +38,13 @@ $role = Session::get('role');
             
             <div class="tab-content">
                 <div class="tab-pane active" id="tab-animated-0" role="tabpanel">
-                    Fahni
+                    @include('pendapatan.harian')
                 </div>
                 <div class="tab-pane" id="tab-animated-1" role="tabpanel">
-                    Amsyari
+                    @include('pendapatan.bulanan')
                 </div>
                 <div class="tab-pane" id="tab-animated-2" role="tabpanel">
-                    Levindsein
+                    @include('pendapatan.tahunan')
                 </div>
             </div>
         </div>
@@ -54,6 +54,144 @@ $role = Session::get('role');
 
 @section('modal')
 <!-- Tambah Content pada Body modal -->
+<div
+    class="modal fade"
+    id="modalHarian"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cari Pendapatan Harian by Range</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form class="user" action="{{url('data/harian')}}" method="POST">
+                <div class="modal-body-short">
+                    @csrf
+                    <div class="form-group col-lg-12">
+                        <label for="dari">Dari</label>
+                        <input
+                            required
+                            autocomplete="off"
+                            type="date"
+                            name="dari"
+                            class="form-control"
+                            id="dari">
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <label for="sampai">Sampai</label>
+                        <input
+                            required
+                            autocomplete="off"
+                            type="date"
+                            name="sampai"
+                            class="form-control"
+                            id="sampai">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div
+    class="modal fade"
+    id="modalBulanan"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cari Pendapatan Bulanan by Range</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form class="user" action="{{url('data/bulanan')}}" method="POST">
+                <div class="modal-body-short">
+                    @csrf
+                    <div class="form-group col-lg-12">
+                        <label>Dari</label>
+                        <div class="input-group">
+                            <select class="form-control" name="dariBulan" id="dariBulan" required>
+                                <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Bulan</option>
+                            </select>
+                            <select class="form-control" name="dariTahun" id="dariTahun" required>
+                                <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Tahun</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <label>Sampai</label>
+                        <div class="input-group">
+                            <select class="form-control" name="sampaiBulan" id="sampaiBulan" required>
+                                <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Bulan</option>
+                            </select>
+                            <select class="form-control" name="sampaiTahun" id="sampaiTahun" required>
+                                <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Tahun</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div
+    class="modal fade"
+    id="modalTahunan"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cari Pendapatan Tahunan by Range</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form class="user" action="{{url('data/tahunan')}}" method="POST">
+                <div class="modal-body-short">
+                    @csrf
+                    <div class="form-group col-lg-12">
+                        <label>Dari</label>
+                        <div class="form-group">
+                            <select class="form-control" name="dari" id="dari" required>
+                                <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Tahun</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <label>Sampai</label>
+                        <div class="form-group">
+                            <select class="form-control" name="sampai" id="sampai" required>
+                                <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Tahun</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('js')

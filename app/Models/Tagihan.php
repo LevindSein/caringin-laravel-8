@@ -349,6 +349,8 @@ class Tagihan extends Model
             'sel_keamananipk',
             'sel_kebersihan',
             'sel_tagihan',
+            'sel_airkotor',
+            'sel_lain',
             )
         ->get();
     }

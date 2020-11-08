@@ -1,32 +1,36 @@
 <div class="table-responsive">
     <table 
         class="table table-bordered" 
-        id="trf_airkotor"
+        id="userKeuangan"
         cellspacing="0"
         width="100%"
         style="font-size:0.75rem;">
         <thead>
             <tr>
-                <th>Kategori</th>
-                <th>Tarif (Rp.)</th>
+                <th>No.</th>
+                <th>Username</th>
+                <th>Nama</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
             <?php $i= 1; ?>
-            @foreach($airkotor as $data)
+            @foreach($keuangan as $data)
             <tr>
                 <td class="text-center">{{$i}}</td>
-                <td>{{number_format($data->tarif)}}</td>
+                <td class="text-center">{{$data->username}}</td>
+                <td class="text-center">{{$data->nama}}</td>
                 <td class="text-center">
                     <a
-                        href="{{url('utilities/tarif/update',['airkotor',$data->id])}}"
-                        title="Edit">
+                        href="{{url('user/reset',[$data->id])}}">
+                        <i class="fas fa-key fa-sm" style="color:orange;"></i></a>
+                    &nbsp;
+                    <a
+                        href="{{url('user/update',[$data->id])}}">
                         <i class="fas fa-edit fa-sm"></i></a>
                     &nbsp;
                     <a
-                        href="{{url('utilities/tarif/delete',['airkotor',$data->id])}}"
-                        title="Hapus">
+                        href="{{url('user/delete',[$data->id])}}">
                         <i class="fas fa-trash-alt" style="color:#e74a3b;"></i></a>
                 </td>
             </tr>
@@ -40,7 +44,7 @@
 <script>
     $(document).ready(function () {
         $(
-            '#trf_airkotor'
+            '#userKeuangan'
         ).DataTable({
             "processing": true,
             "bProcessing": true,
@@ -59,9 +63,9 @@
                     text: '<i class="fas fa-file-excel fa-lg"></i>',
                     extend: 'excel',
                     className: 'btn btn-success bg-gradient-success',
-                    title: 'Tarif Air Kotor',
+                    title: 'Data Keuangan',
                     exportOptions: {
-                        columns: [0, 1]
+                        columns: [0, 1, 2]
                     },
                     titleAttr: 'Download Excel'
                 }

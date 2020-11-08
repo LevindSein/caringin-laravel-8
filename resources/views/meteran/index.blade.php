@@ -9,7 +9,7 @@ $role = Session::get('role');
 
 @section('content')
 <!-- Tambah Content Pada Body Utama -->
-<title>Alat Meteran | BP3C</title>
+<title>Data Alat Meteran | BP3C</title>
 <div class = "container-fluid">
     <ul class="tabs-animated-shadow tabs-animated nav">
         <li class="nav-item">
@@ -27,7 +27,7 @@ $role = Session::get('role');
 <div class = "container-fluid">
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Alat Meteran</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Data Alat Meteran</h6>
             <div>
                 <a 
                     href="#" 
@@ -36,6 +36,12 @@ $role = Session::get('role');
                     type="submit" 
                     class="btn btn-sm btn-success"><b>
                     <i class="fas fa-fw fa-plus fa-sm text-white-50"></i> Alat Meteran</b></a>
+                &nbsp;
+                <a 
+                    href="{{url('utilities/meteran/print')}}"
+                    type="submit" 
+                    class="btn btn-sm btn-info"><b>
+                    <i class="fas fa-fw fa-print fa-sm text-white-50"></i> Print Form</b></a>
             </div>
         </div>
         <div class="card-body">
@@ -74,9 +80,10 @@ $role = Session::get('role');
                 <div class="modal-body-short">
                     @csrf
                     <div class="form-group col-lg-12">
-                        <label for="nomor">Nomor Alat</label>
+                        <label for="nomor">Nomor Alat  <span style="color:red;">*</span></label>
                         <input
                             required
+                            type="text"
                             autocomplete="off"
                             name="nomor"
                             class="form-control"

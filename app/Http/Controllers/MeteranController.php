@@ -37,4 +37,8 @@ class MeteranController extends Controller
             return redirect()->back()->with('error','Alat Meter Terpasang');
         }
     }
+
+    public function print(){
+        
+    }
 }

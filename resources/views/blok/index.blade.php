@@ -129,7 +129,8 @@ $role = Session::get('role');
                     title: 'Data Blok',
                     exportOptions: {
                         columns: [ 0, 1, 2 ]
-                    }
+                    },
+                    titleAttr: 'Download Excel'
                 }
             ],
         });

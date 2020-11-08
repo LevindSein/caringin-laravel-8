@@ -134,8 +134,8 @@ $username = Session::get('username');
                 </li>
 
                 <!-- Nav Item - Data -->
-                <li class="nav-item {{ (request()->is('rekap/data/*')) ? 'active' : '' }}">
-                    <a class="nav-link" href="{{url('rekap/data')}}">
+                <li class="nav-item {{ (request()->is('data')) ? 'active' : '' }}">
+                    <a class="nav-link" href="{{url('data')}}">
                         <i class="fa fa-list"></i>
                         <span>Data</span></a>
                 </li>
@@ -175,7 +175,7 @@ $username = Session::get('username');
                 </li>
                 
                 <!-- Nav Item - User -->
-                <li class="nav-item {{ (request()->is('user/*')) ? 'active' : '' }}">
+                <li class="nav-item {{ (request()->is('user*')) ? 'active' : '' }}">
                     <a class="nav-link" href="{{url('user')}}">
                         <i class="fas fa-users"></i>
                         <span>User</span></a>

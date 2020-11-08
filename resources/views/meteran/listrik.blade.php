@@ -41,7 +41,8 @@
                 <td class="text-center" style="{{ ($kontrol == 'idle') ? 'color:green;' : '' }}" >{{$kontrol}}</td>
                 <td class="text-center">
                     <a
-                        href="{{url('utilities/meteran/delete',['listrik',$data->id])}}">
+                        href="{{url('utilities/meteran/delete',['listrik',$data->id])}}"
+                        title="Hapus">
                         <i class="fas fa-trash-alt" style="color:#e74a3b;"></i></a>
                 </td>
             </tr>
@@ -77,7 +78,8 @@
                     title: 'Daftar Alat Listrik',
                     exportOptions: {
                         columns: [0, 1, 2, 3, 4]
-                    }
+                    },
+                    titleAttr: 'Download Excel'
                 }
             ]
         });

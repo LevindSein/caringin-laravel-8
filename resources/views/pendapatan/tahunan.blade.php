@@ -1,46 +1,49 @@
-<div class="table-responsive">
-    <table 
-        class="table table-bordered" 
-        id="trf_airkotor"
-        cellspacing="0"
+
+<div class="text-right my-auto">
+    <a 
+        href="#" 
+        data-toggle="modal"
+        data-target="#modalTahunan" 
+        type="submit" 
+        class="btn btn-sm btn-info">
+        <i class="fas fa-search fa-sm text-white-50"></i> by Range</a>
+</div>
+<br>
+<div class="table-responsive ">
+    <table
+        class="table"
+        id="tahunan"
         width="100%"
+        cellspacing="0"
         style="font-size:0.75rem;">
-        <thead>
+        <thead class="table-bordered">
             <tr>
-                <th>Kategori</th>
-                <th>Tarif (Rp.)</th>
+                <th>Tanggal</th>
+                <th>Realisasi</th>
+                <th>Selisih</th>
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody>
-            <?php $i= 1; ?>
-            @foreach($airkotor as $data)
+        <tbody class="table-bordered">
             <tr>
-                <td class="text-center">{{$i}}</td>
-                <td>{{number_format($data->tarif)}}</td>
+                <td class="text-center"></td>
+                <td></td>
+                <td></td>
                 <td class="text-center">
                     <a
-                        href="{{url('utilities/tarif/update',['airkotor',$data->id])}}"
-                        title="Edit">
-                        <i class="fas fa-edit fa-sm"></i></a>
-                    &nbsp;
-                    <a
-                        href="{{url('utilities/tarif/delete',['airkotor',$data->id])}}"
-                        title="Hapus">
-                        <i class="fas fa-trash-alt" style="color:#e74a3b;"></i></a>
+                        href="{{url('rekap/pendapatan/details',['tahunan','id'])}}"
+                        type="submit" 
+                        class="btn btn-sm btn-primary">Details</a>
                 </td>
             </tr>
-            <?php $i++; ?>
-            @endforeach
         </tbody>
     </table>
 </div>
 
-
 <script>
     $(document).ready(function () {
         $(
-            '#trf_airkotor'
+            '#tahunan'
         ).DataTable({
             "processing": true,
             "bProcessing": true,
@@ -48,24 +51,23 @@
                 'loadingRecords': '&nbsp;',
                 'processing': '<i class="fas fa-spinner"></i>'
             },
-            "scrollX": true,
-            "bSortable": false,
-            "deferRender": true,
             "dom": "r<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'" +
                     "row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-
             "buttons": [
                 {
                     text: '<i class="fas fa-file-excel fa-lg"></i>',
                     extend: 'excel',
                     className: 'btn btn-success bg-gradient-success',
-                    title: 'Tarif Air Kotor',
+                    title: 'Pendapatan Tahunan',
                     exportOptions: {
-                        columns: [0, 1]
+                        columns: [0,1,2]
                     },
                     titleAttr: 'Download Excel'
                 }
-            ]
+            ],
+            "scrollX": true,
+            "scrollCollapse": true,
+            "deferRender": true,
         });
     });
 </script>
