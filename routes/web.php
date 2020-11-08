@@ -25,6 +25,14 @@ use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Session;
 use App\Models\Pedagang;
 use App\Models\TempatUsaha;
+use App\Models\HariLibur;
+use App\Models\TarifAirBersih;
+use App\Models\TarifListrik;
+use App\Models\TarifKeamananIpk;
+use App\Models\TarifKebersihan;
+use App\Models\TarifAirKotor;
+use App\Models\TarifLain;
+use App\Models\Blok;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,7 +74,7 @@ Route::get('cari/blok',[SearchController::class, 'cariBlok']);
 Route::get('cari/nasabah',[SearchController::class, 'cariNasabah']);
 Route::get('cari/alamat',[SearchController::class, 'cariAlamat']);
 
-Route::get('pedagang/data',function(){;
+Route::get('pedagang/data',function(){
     return view('pedagang.index',['dataset'=>Pedagang::data()]);
 })->name('pedagangindex');
 Route::post('pedagang/add',[PedagangController::class, 'add']);
@@ -75,7 +83,18 @@ Route::post('pedagang/store/{id}',[PedagangController::class, 'store']);
 Route::get('pedagang/delete/{id}',[PedagangController::class, 'delete']);
 Route::get('pedagang/details/{id}',[PedagangController::class, 'details']);
 
-Route::get('tempatusaha/data',[TempatController::class, 'data'])->name('tempatdata');
+Route::get('tempatusaha/data',function(){
+    return view('tempat.data',[
+        'dataset'=>TempatUsaha::data(),
+        'airAvailable'=>TempatUsaha::airAvailable(),
+        'listrikAvailable'=>TempatUsaha::listrikAvailable(),
+        'trfKeamananIpk'=>TempatUsaha::trfKeamananIpk(),
+        'trfKebersihan'=>TempatUsaha::trfKebersihan(),
+        'trfAirKotor'=>TempatUsaha::trfAirKotor(),
+        'trfLain'=>TempatUsaha::trfLain(),
+        'trfDiskon'=>TempatUsaha::trfDiskon(),
+    ]);
+})->name('tempatdata');
 Route::post('tempatusaha/add',[TempatController::class, 'add']);
 Route::get('tempatusaha/update/{id}',[TempatController::class, 'update']);
 Route::post('tempatusaha/store/{id}',[TempatController::class, 'store']);
@@ -93,16 +112,45 @@ Route::get('tagihan/{fasilitas}',[TagihanController::class, 'fasilitas'])->name(
 Route::post('tagihan/store/{fasilitas}/{id}',[TagihanController::class, 'storeFasilitas']);
 Route::post('tagihan/edaran',[TagihanController::class, 'edaran']);
 
-Route::get('utilities/tarif',[TarifController::class, 'index']);
-Route::get('utilities/meteran',[MeteranController::class, 'index']);
-Route::get('utilities/hari/libur',[HariLiburController::class, 'index']);
-Route::get('utilities/blok',[BlokController::class, 'index']);
-
+Route::get('utilities/tarif',function(){ 
+    return view('tarif.index',[
+        'listrik'=>TarifListrik::first(),
+        'airbersih'=>TarifAirBersih::first(),
+        'keamananipk'=>TarifKeamananIpk::orderBy('tarif', 'asc')->get(),
+        'kebersihan'=>TarifKebersihan::orderBy('tarif', 'asc')->get(),
+        'airkotor'=>TarifAirKotor::orderBy('tarif', 'asc')->get(),
+        'lain'=>TarifLain::orderBy('tarif', 'asc')->get(),
+    ]);
+});
 Route::post('utilities/tarif/add',[TarifController::class, 'add']);
-Route::post('utilities/tarif/update/{fasilitas}/{id}',[TarifController::class, 'update']);
+Route::get('utilities/tarif/update/{fasilitas}/{id}',[TarifController::class, 'update']);
+Route::post('utilities/tarif/store/{fasilitas}/{id}',[TarifController::class, 'store']);
+Route::get('utilities/tarif/delete/{fasilitas}/{id}',[TarifController::class, 'delete']);
 
+Route::get('utilities/meteran',function(){
+    return view('meteran.index',[
+        'listrik'=>MeteranListrik::all(),
+        'airbersih'=>MeteranAir::all()
+    ]);
+});
 Route::post('utilities/meteran/add',[MeteranController::class, 'add']);
 Route::get('utilities/meteran/delete/{fasilitas}/{id}',[MeteranController::class, 'delete']);
+
+Route::get('utilities/hari/libur',function(){
+    return view('harilibur.index',[
+        'dataset'=>HariLibur::orderBy('tanggal','asc')->get()
+    ]);
+});
+Route::post('utilities/hari/libur/add',[HariLiburController::class, 'add']);
+Route::get('utilities/hari/libur/update/{id}',[HariLiburController::class, 'update']);
+Route::post('utilities/hari/libur/store/{id}',[HariLiburController::class, 'store']);
+Route::get('utilities/hari/libur/delete/{id}',[HariLiburController::class, 'delete']);
+
+Route::get('utilities/blok',function(){
+    return view('blok.index',[
+        'dataset'=>Blok::orderBy('nama','asc')->get()
+    ]);
+});
 
 Route::get('rekap/pendapatan',[PendapatanController::class, 'index']);
 Route::get('rekap/pendapatan/{filter}',[PendapatanController::class, 'filter']);

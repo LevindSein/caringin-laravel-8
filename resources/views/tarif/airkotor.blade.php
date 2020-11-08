@@ -19,11 +19,13 @@
                 <td class="text-center">{{$i}}</td>
                 <td>{{number_format($data->tarif)}}</td>
                 <td class="text-center">
-                    <form action="{{url('utilities/tarif/update',['airkotor',$data->id])}}" method="POST">
-                        @csrf
-                        <button type="submit" class="btn btn-primary btn-sm">
-                            <i class="fas fa-edit fa-sm"></i></button>
-                    </form>
+                    <a
+                        href="{{url('utilities/tarif/update',['airkotor',$data->id])}}">
+                        <i class="fas fa-edit fa-sm"></i></a>
+                    &nbsp;
+                    <a
+                        href="{{url('utilities/tarif/delete',['airkotor',$data->id])}}">
+                        <i class="fas fa-trash-alt" style="color:#e74a3b;"></i></a>
                 </td>
             </tr>
             <?php $i++; ?>

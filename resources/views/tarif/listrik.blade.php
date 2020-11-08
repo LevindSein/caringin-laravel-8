@@ -1,8 +1,7 @@
 <div class="row justify-content-center">
         <div class="col-lg-6">
             <div class="p-4">
-                <form class="user" action="{{url('utilities/tarif/update',['listrik',1])}}" method="POST">
-                    @csrf
+                <form class="user" action="{{url('utilities/tarif/update',['listrik',1])}}" method="GET">
                     <div class="form-group col-lg-12">
                         <label for="blok1">Tarif Blok 1 <span style="color:red;">*</span></label>
                         <div class="input-group">

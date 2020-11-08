@@ -14,19 +14,6 @@ use App\Models\TarifListrik;
 
 class TempatController extends Controller
 {
-    public function data(){
-        return view('tempat.data',[
-            'dataset'=>TempatUsaha::data(),
-            'airAvailable'=>TempatUsaha::airAvailable(),
-            'listrikAvailable'=>TempatUsaha::listrikAvailable(),
-            'trfKeamananIpk'=>TempatUsaha::trfKeamananIpk(),
-            'trfKebersihan'=>TempatUsaha::trfKebersihan(),
-            'trfAirKotor'=>TempatUsaha::trfAirKotor(),
-            'trfLain'=>TempatUsaha::trfLain(),
-            'trfDiskon'=>TempatUsaha::trfDiskon(),
-        ]);
-    }
-
     public function add(Request $request){
         try{
             date_default_timezone_set('Asia/Jakarta');

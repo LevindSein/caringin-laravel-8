@@ -12,13 +12,6 @@ use Exception;
 
 class MeteranController extends Controller
 {
-    public function index(){
-        return view('meteran.index',[
-            'listrik'=>MeteranListrik::all(),
-            'airbersih'=>MeteranAir::all()
-        ]);
-    }
-
     public function add(Request $request, $id){
         
     }

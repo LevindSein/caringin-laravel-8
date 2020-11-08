@@ -14,17 +14,6 @@ use App\Models\TarifLain;
 
 class TarifController extends Controller
 {
-    public function index(){
-        return view('tarif.index',[
-            'listrik'=>TarifListrik::first(),
-            'airbersih'=>TarifAirBersih::first(),
-            'keamananipk'=>TarifKeamananIpk::orderBy('tarif', 'asc')->get(),
-            'kebersihan'=>TarifKebersihan::orderBy('tarif', 'asc')->get(),
-            'airkotor'=>TarifAirKotor::orderBy('tarif', 'asc')->get(),
-            'lain'=>TarifLain::orderBy('tarif', 'asc')->get(),
-        ]);
-    }
-
     public function add(Request $request){
 
     }
