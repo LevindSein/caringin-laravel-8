@@ -19,363 +19,373 @@ $role = Session::get('role');
             <div class="row justify-content-center">
                 <div class="card shadow col-lg-6">
                     <div class="p-4">
-                    <div class="form-group col-lg-12">
-                        <label for="blok">Blok <span style="color:red;">*</span></label>
-                        <div class="form-group">
-                            <select class="blok" name="blok" id="blok" required></select>
-                        </div>
-                    </div>
-                    <div class="form-group col-lg-12">
-                        <label for="los">Nomor Los <span style="color:red;">*</span></label>
-                        <input
-                            required
-                            type="text"
-                            autocomplete="off"
-                            name="los"
-                            id="los"
-                            class="form-control"
-                            value="{{$dataset->no_alamat}}"
-                            placeholder="1A,2,3 (Pisahkan dengan Koma)">
-                    </div>
-                    <div class="form-group col-lg-12">
-                        <label for="lokasi">Lokasi</label>
-                        <input
-                            type="text"
-                            name="lokasi"
-                            autocomplete="off"
-                            id="lokasi"
-                            maxLength="50"
-                            class="form-control"
-                            value="{{$dataset->lok_tempat}}"
-                            placeholder="Pedagang K5 Di Depan A-1-001">
-                    </div>
-                    <div class="form-group col-lg-12">
-                        <label for="los">Bentuk Usaha <span style="color:red;">*</span></label>
-                        <input
-                            required
-                            type="text"
-                            name="usaha"
-                            autocomplete="off"
-                            style="text-transform: capitalize;"
-                            id="usaha"
-                            maxLength="30"
-                            class="form-control"
-                            value="{{$dataset->bentuk_usaha}}"
-                            placeholder="Misal : Distributor Logistik">
-                    </div>
-
-                    <!-- Pemilik -->
-                    <div class="form-group col-lg-12">
-                        <label for="pemilik">Pemilik Tempat <span style="color:red;">*</span></label>
-                        <div class="form-group">
-                            <select class="pemilik" name="pemilik" id="pemilik" required></select>
-                        </div>
-                    </div>
-
-                    <!-- Pengguna -->
-                    <div class="form-group col-lg-12">
-                        <label for="pengguna">Pengguna Tempat <span style="color:red;">*</span></label>
-                        <div class="form-group">
-                            <select class="pengguna" name="pengguna" id="pengguna" required></select>
-                        </div>
-                    </div>
-
-                    <!-- Fasilitas -->
-                    <div class="form-group row col-lg-12">
-                        <div class="col-sm-2">Fasilitas</div>
-                        <div class="col-sm-10">
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="checkbox"
-                                    name="air"
-                                    id="myCheck1"
-                                    <?php if($dataset->trf_airbersih == 1){ ?>
-                                    checked
-                                    <?php } ?>
-                                    data-related-item="myDiv1">
-                                <label class="form-check-label" for="myCheck1">
-                                    Air Bersih
-                                </label>
-                            </div>
-                            <div class="form-group" style="display:none">
-                                <label for="myDiv1">Meteran Air <span style="color:red;">*</span></label>
-                                <select class="form-control" name="meterAir" id="myDiv1">
-                                    <option disabled="disabled" selected="selected" value="{{$dataset->airId}}">{{$dataset->airKode}} - {{$dataset->airNomor}} ({{$dataset->airAkhir}})</option>
-                                    @foreach($airAvailable as $air)
-                                    <option value="{{$air->id}}">{{$air->kode}} - {{$air->nomor}} ({{$air->akhir}})</option>
-                                    @endforeach
-                                </select>
-                                <div class="col-sm-10">
-                                    <div class="form-check">
-                                        <input
-                                            class="form-check-input"
-                                            type="checkbox"
-                                            name="dis_airbersih"
-                                            id="dis_airbersih"
-                                            value="dis_airbersih"
-                                            <?php if($dataset->dis_airbersih == 1){ ?>
-                                            checked
-                                            <?php } ?>>
-                                        <label class="form-check-label" for="dis_airbersih">
-                                            Bebas Bayar
-                                        </label>
-                                    </div>
+                        <form
+                            class="user"
+                            action="{{url('tempatusaha/store',[$dataset->id])}}"
+                            method="POST">
+                            @csrf
+                            <div class="form-group col-lg-12">
+                                <label for="blok">Blok <span style="color:red;">*</span></label>
+                                <div class="form-group">
+                                    <select class="blok" name="blok" id="blok" required></select>
                                 </div>
                             </div>
-
-
-                            <div class="form-check">
+                            <div class="form-group col-lg-12">
+                                <label for="los">Nomor Los <span style="color:red;">*</span></label>
                                 <input
-                                    class="form-check-input"
-                                    type="checkbox"
-                                    name="listrik"
-                                    id="myCheck2"
-                                    <?php if($dataset->trf_listrik == 1){ ?>
-                                    checked
-                                    <?php } ?>
-                                    data-related-item="myDiv2">
-                                <label class="form-check-label" for="myCheck2">
-                                    Listrik
-                                </label>
+                                    required
+                                    type="text"
+                                    autocomplete="off"
+                                    name="los"
+                                    id="los"
+                                    class="form-control"
+                                    value="{{$dataset->no_alamat}}"
+                                    placeholder="1A,2,3 (Pisahkan dengan Koma)">
                             </div>
-                            <div class="form-group" style="display:none">
-                                <label for="myDiv2">Meteran Listrik <span style="color:red;">*</span></label>
-                                <select class="form-control" name="meterListrik" id="myDiv2">
-                                    <option disabled="disabled" selected="selected" value="{{$dataset->listrikId}}">{{$dataset->listrikKode}} - {{$dataset->listrikNomor}} ({{$dataset->listrikAkhir}})</option>
-                                    @foreach($listrikAvailable as $listrik)
-                                    <option value="{{$listrik->id.','.$listrik->daya}}">{{$listrik->kode}} - {{$listrik->nomor}} ({{$listrik->akhir}}) - {{$listrik->daya}} W</option>
-                                    @endforeach
-                                </select>
-                                <div class="col-sm-10">
-                                    <div class="form-check">
-                                        <input
-                                            class="form-check-input"
-                                            type="checkbox"
-                                            name="dis_listrik"
-                                            id="dis_listrik"
-                                            value="dis_airbersih"
-                                            <?php if($dataset->dis_listrik == 1){ ?>
-                                            checked
-                                            <?php } ?>>
-                                        <label class="form-check-label" for="dis_listrik">
-                                            Bebas Bayar
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="checkbox"
-                                    name="keamananipk"
-                                    id="myCheck3"
-                                    <?php if($dataset->trf_keamananipk != NULL){ ?>
-                                    checked
-                                    <?php } ?>
-                                    data-related-item="myDiv3">
-                                <label class="form-check-label" for="myCheck3">
-                                    Keamanan & IPK
-                                </label>
-                            </div>
-                            <div class="form-group" style="display:none">
-                                <label for="myDiv3">Kategori Tarif <span style="color:red;">*</span></label>
-                                <select class="form-control" name="trfKeamananIpk" id="myDiv3">
-                                    <option disabled="disabled" selected="selected" value="{{$dataset->keamananIpkId}}">Rp. {{$dataset->keamananIpk}}</option>
-                                    @foreach($trfKeamananIpk as $tarif)
-                                    <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
-                                    @endforeach
-                                </select>
-                                <div class="col-sm-10">
-                                    <div class="form-check">
-                                        <input
-                                            class="form-check-input"
-                                            type="checkbox"
-                                            name="dis_keamananipk"
-                                            id="dis_keamananipk"
-                                            value="dis_keamananipk"
-                                            <?php if($dataset->dis_keamananipk == 1){ ?>
-                                            checked
-                                            <?php } ?>>
-                                        <label class="form-check-label" for="dis_keamananipk">
-                                            Diskon
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="checkbox"
-                                    name="kebersihan"
-                                    id="myCheck4"
-                                    <?php if($dataset->trf_kebersihan != NULL){ ?>
-                                    checked
-                                    <?php } ?>
-                                    data-related-item="myDiv4">
-                                <label class="form-check-label" for="myCheck4">
-                                    Kebersihan
-                                </label>
-                            </div>
-                            <div class="form-group" style="display:none">
-                                <label for="myDiv4">Kategori Tarif <span style="color:red;">*</span></label>
-                                <select class="form-control" name="trfKebersihan" id="myDiv4">
-                                    <option disabled="disabled" selected="selected" value="{{$dataset->kebersihanId}}">Rp. {{$dataset->kebersihan}}</option>
-                                    @foreach($trfKebersihan as $tarif)
-                                    <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
-                                    @endforeach
-                                </select>
-                                <div class="col-sm-10">
-                                    <div class="form-check">
-                                        <input
-                                            class="form-check-input"
-                                            type="checkbox"
-                                            name="dis_kebersihan"
-                                            id="dis_kebersihan"
-                                            value="dis_kebersihan"
-                                            <?php if($dataset->dis_kebersihan == 1){ ?>
-                                            checked
-                                            <?php } ?>>
-                                        <label class="form-check-label" for="dis_kebersihan">
-                                            Diskon
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <hr class="sidebar-divider d-none d-md-block">
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="checkbox"
-                                    name="airkotor"
-                                    id="myCheck5"
-                                    <?php if($dataset->trf_airkotor != NULL){ ?>
-                                    checked
-                                    <?php } ?>
-                                    data-related-item="myDiv5">
-                                <label class="form-check-label" for="myCheck5">
-                                    Air Kotor
-                                </label>
-                            </div>
-                            <div class="form-group" style="display:none">
-                                <label for="myDiv5">Kategori Tarif <span style="color:red;">*</span></label>
-                                <select class="form-control" name="trfAirKotor" id="myDiv5">
-                                    <option disabled="disabled" selected="selected" value="{{$dataset->arkotId}}">Rp. {{$dataset->arkot}}</option>
-                                    @foreach($trfAirKotor as $tarif)
-                                    <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="checkbox"
-                                    name="lain"
-                                    id="myCheck6"
-                                    <?php if($dataset->trf_lain != NULL){ ?>
-                                    checked
-                                    <?php } ?>
-                                    data-related-item="myDiv6">
-                                <label class="form-check-label" for="myCheck6">
-                                    Lain - Lain
-                                </label>
-                            </div>
-                            <div class="form-group" style="display:none">
-                                <label for="myDiv6">Kategori Tarif <span style="color:red;">*</span></label>
-                                <select class="form-control" name="trfLain" id="myDiv6">
-                                    <option disabled="disabled" selected="selected" value="{{$dataset->lainId}}">Rp. {{$dataset->lain}}</option>
-                                    @foreach($trfLain as $tarif)
-                                    <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Pembayaran -->
-                    <div class="form-group row col-lg-12">
-                        <div class="col-sm-2">Metode</div>
-                        <div class="col-sm-10">
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="cicilan"
-                                    id="cicilan1"
-                                    value="0"
-                                    <?php if($dataset->stt_cicil == 0){ ?>
-                                    checked
-                                    <?php } ?>>
-                                <label class="form-check-label" for="cicilan1">
-                                    Kontan
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="cicilan"
-                                    id="cicilan2"
-                                    value="1"
-                                    <?php if($dataset->stt_cicil == 1){ ?>
-                                    checked
-                                    <?php } ?>>
-                                <label class="form-check-label" for="cicilan2">
-                                    Cicil
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Status -->
-                    <div class="form-group row col-lg-12">
-                        <div class="col-sm-2">Status Tempat</div>
-                        <div class="col-sm-10">
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="status"
-                                    id="myStatus1"
-                                    value="1"
-                                    <?php if($dataset->stt_tempat == 1){ ?>
-                                    checked
-                                    <?php } ?>>
-                                <label class="form-check-label" for="myStatus1">
-                                    Aktif
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="status"
-                                    id="myStatus2"
-                                    value="2"
-                                    <?php if($dataset->stt_tempat == 2){ ?>
-                                    checked
-                                    <?php } ?>>
-                                <label class="form-check-label" for="myStatus2">
-                                    Non-Aktif
-                                </label>
-                            </div>
-                            <div class="form-group" style="display:none" id="ketStatus">
+                            <div class="form-group col-lg-12">
+                                <label for="lokasi">Lokasi</label>
                                 <input
                                     type="text"
-                                    name="ket_tempat"
-                                    id="ket_tempat"
+                                    name="lokasi"
+                                    autocomplete="off"
+                                    id="lokasi"
                                     maxLength="50"
                                     class="form-control"
-                                    placeholder="Jelaskan Kondisi Tempat">
+                                    value="{{$dataset->lok_tempat}}"
+                                    placeholder="Pedagang K5 Di Depan A-1-001">
                             </div>
-                        </div>
+                            <div class="form-group col-lg-12">
+                                <label for="los">Bentuk Usaha <span style="color:red;">*</span></label>
+                                <input
+                                    required
+                                    type="text"
+                                    name="usaha"
+                                    autocomplete="off"
+                                    style="text-transform: capitalize;"
+                                    id="usaha"
+                                    maxLength="30"
+                                    class="form-control"
+                                    value="{{$dataset->bentuk_usaha}}"
+                                    placeholder="Misal : Distributor Logistik">
+                            </div>
+
+                            <!-- Pemilik -->
+                            <div class="form-group col-lg-12">
+                                <label for="pemilik">Pemilik Tempat <span style="color:red;">*</span></label>
+                                <div class="form-group">
+                                    <select class="pemilik" name="pemilik" id="pemilik" required></select>
+                                </div>
+                            </div>
+
+                            <!-- Pengguna -->
+                            <div class="form-group col-lg-12">
+                                <label for="pengguna">Pengguna Tempat <span style="color:red;">*</span></label>
+                                <div class="form-group">
+                                    <select class="pengguna" name="pengguna" id="pengguna" required></select>
+                                </div>
+                            </div>
+
+                            <!-- Fasilitas -->
+                            <div class="form-group row col-lg-12">
+                                <div class="col-sm-2">Fasilitas</div>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            name="air"
+                                            id="myCheck1"
+                                            <?php if($dataset->trf_airbersih == 1){ ?>
+                                            checked
+                                            <?php } ?>
+                                            data-related-item="myDiv1">
+                                        <label class="form-check-label" for="myCheck1">
+                                            Air Bersih
+                                        </label>
+                                    </div>
+                                    <div class="form-group" style="display:none">
+                                        <label for="myDiv1">Meteran Air <span style="color:red;">*</span></label>
+                                        <select class="form-control" name="meterAir" id="myDiv1">
+                                            <option selected value="{{$dataset->airId}}">{{$dataset->airKode}} - {{$dataset->airNomor}} ({{$dataset->airAkhir}})</option>
+                                            @foreach($airAvailable as $air)
+                                            <option value="{{$air->id}}">{{$air->kode}} - {{$air->nomor}} ({{$air->akhir}})</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="col-sm-10">
+                                            <div class="form-check">
+                                                <input
+                                                    class="form-check-input"
+                                                    type="checkbox"
+                                                    name="dis_airbersih"
+                                                    id="dis_airbersih"
+                                                    value="dis_airbersih"
+                                                    <?php if($dataset->dis_airbersih == 1){ ?>
+                                                    checked
+                                                    <?php } ?>>
+                                                <label class="form-check-label" for="dis_airbersih">
+                                                    Bebas Bayar
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            name="listrik"
+                                            id="myCheck2"
+                                            <?php if($dataset->trf_listrik == 1){ ?>
+                                            checked
+                                            <?php } ?>
+                                            data-related-item="myDiv2">
+                                        <label class="form-check-label" for="myCheck2">
+                                            Listrik
+                                        </label>
+                                    </div>
+                                    <div class="form-group" style="display:none">
+                                        <label for="myDiv2">Meteran Listrik <span style="color:red;">*</span></label>
+                                        <select class="form-control" name="meterListrik" id="myDiv2">
+                                            <option selected value="{{$dataset->listrikId.','.$dataset->listrikDaya}}">{{$dataset->listrikKode}} - {{$dataset->listrikNomor}} ({{$dataset->listrikAkhir}})</option>
+                                            @foreach($listrikAvailable as $listrik)
+                                            <option value="{{$listrik->id.','.$listrik->daya}}">{{$listrik->kode}} - {{$listrik->nomor}} ({{$listrik->akhir}}) - {{$listrik->daya}} W</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="col-sm-10">
+                                            <div class="form-check">
+                                                <input
+                                                    class="form-check-input"
+                                                    type="checkbox"
+                                                    name="dis_listrik"
+                                                    id="dis_listrik"
+                                                    value="dis_airbersih"
+                                                    <?php if($dataset->dis_listrik == 1){ ?>
+                                                    checked
+                                                    <?php } ?>>
+                                                <label class="form-check-label" for="dis_listrik">
+                                                    Bebas Bayar
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            name="keamananipk"
+                                            id="myCheck3"
+                                            <?php if($dataset->trf_keamananipk != NULL){ ?>
+                                            checked
+                                            <?php } ?>
+                                            data-related-item="myDiv3">
+                                        <label class="form-check-label" for="myCheck3">
+                                            Keamanan & IPK
+                                        </label>
+                                    </div>
+                                    <div class="form-group" style="display:none">
+                                        <label for="myDiv3">Kategori Tarif <span style="color:red;">*</span></label>
+                                        <select class="form-control" name="trfKeamananIpk" id="myDiv3">
+                                            <option selected value="{{$dataset->keamananIpkId}}">Rp. {{$dataset->keamananIpk}}</option>
+                                            @foreach($trfKeamananIpk as $tarif)
+                                            <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="col-sm-10">
+                                            <div class="form-check">
+                                                <input
+                                                    class="form-check-input"
+                                                    type="checkbox"
+                                                    name="dis_keamananipk"
+                                                    id="dis_keamananipk"
+                                                    value="dis_keamananipk"
+                                                    <?php if($dataset->dis_keamananipk == 1){ ?>
+                                                    checked
+                                                    <?php } ?>>
+                                                <label class="form-check-label" for="dis_keamananipk">
+                                                    Diskon
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            name="kebersihan"
+                                            id="myCheck4"
+                                            <?php if($dataset->trf_kebersihan != NULL){ ?>
+                                            checked
+                                            <?php } ?>
+                                            data-related-item="myDiv4">
+                                        <label class="form-check-label" for="myCheck4">
+                                            Kebersihan
+                                        </label>
+                                    </div>
+                                    <div class="form-group" style="display:none">
+                                        <label for="myDiv4">Kategori Tarif <span style="color:red;">*</span></label>
+                                        <select class="form-control" name="trfKebersihan" id="myDiv4">
+                                            <option selected value="{{$dataset->kebersihanId}}">Rp. {{$dataset->kebersihan}}</option>
+                                            @foreach($trfKebersihan as $tarif)
+                                            <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="col-sm-10">
+                                            <div class="form-check">
+                                                <input
+                                                    class="form-check-input"
+                                                    type="checkbox"
+                                                    name="dis_kebersihan"
+                                                    id="dis_kebersihan"
+                                                    value="dis_kebersihan"
+                                                    <?php if($dataset->dis_kebersihan == 1){ ?>
+                                                    checked
+                                                    <?php } ?>>
+                                                <label class="form-check-label" for="dis_kebersihan">
+                                                    Diskon
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <hr class="sidebar-divider d-none d-md-block">
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            name="airkotor"
+                                            id="myCheck5"
+                                            <?php if($dataset->trf_airkotor != NULL){ ?>
+                                            checked
+                                            <?php } ?>
+                                            data-related-item="myDiv5">
+                                        <label class="form-check-label" for="myCheck5">
+                                            Air Kotor
+                                        </label>
+                                    </div>
+                                    <div class="form-group" style="display:none">
+                                        <label for="myDiv5">Kategori Tarif <span style="color:red;">*</span></label>
+                                        <select class="form-control" name="trfAirKotor" id="myDiv5">
+                                            <option selected value="{{$dataset->arkotId}}">Rp. {{$dataset->arkot}}</option>
+                                            @foreach($trfAirKotor as $tarif)
+                                            <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            name="lain"
+                                            id="myCheck6"
+                                            <?php if($dataset->trf_lain != NULL){ ?>
+                                            checked
+                                            <?php } ?>
+                                            data-related-item="myDiv6">
+                                        <label class="form-check-label" for="myCheck6">
+                                            Lain - Lain
+                                        </label>
+                                    </div>
+                                    <div class="form-group" style="display:none">
+                                        <label for="myDiv6">Kategori Tarif <span style="color:red;">*</span></label>
+                                        <select class="form-control" name="trfLain" id="myDiv6">
+                                            <option selected value="{{$dataset->lainId}}">Rp. {{$dataset->lain}}</option>
+                                            @foreach($trfLain as $tarif)
+                                            <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pembayaran -->
+                            <div class="form-group row col-lg-12">
+                                <div class="col-sm-2">Metode</div>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="radio"
+                                            name="cicilan"
+                                            id="cicilan1"
+                                            value="0"
+                                            <?php if($dataset->stt_cicil == 0){ ?>
+                                            checked
+                                            <?php } ?>>
+                                        <label class="form-check-label" for="cicilan1">
+                                            Kontan
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="radio"
+                                            name="cicilan"
+                                            id="cicilan2"
+                                            value="1"
+                                            <?php if($dataset->stt_cicil == 1){ ?>
+                                            checked
+                                            <?php } ?>>
+                                        <label class="form-check-label" for="cicilan2">
+                                            Cicil
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="form-group row col-lg-12">
+                                <div class="col-sm-2">Status Tempat</div>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="radio"
+                                            name="status"
+                                            id="myStatus1"
+                                            value="1"
+                                            <?php if($dataset->stt_tempat == 1){ ?>
+                                            checked
+                                            <?php } ?>>
+                                        <label class="form-check-label" for="myStatus1">
+                                            Aktif
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="radio"
+                                            name="status"
+                                            id="myStatus2"
+                                            value="2"
+                                            <?php if($dataset->stt_tempat == 2){ ?>
+                                            checked
+                                            <?php } ?>>
+                                        <label class="form-check-label" for="myStatus2">
+                                            Non-Aktif
+                                        </label>
+                                    </div>
+                                    <div class="form-group" style="display:none" id="ketStatus">
+                                        <input
+                                            type="text"
+                                            name="ket_tempat"
+                                            id="ket_tempat"
+                                            maxLength="50"
+                                            class="form-control"
+                                            placeholder="Jelaskan Kondisi Tempat">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <Button type="submit"class="btn btn-primary btn-user btn-block">Update</Button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

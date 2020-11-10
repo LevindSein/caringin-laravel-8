@@ -216,7 +216,7 @@ class PedagangController extends Controller
             $pedagang->delete();
             return redirect()->route('pedagangindex')->with('success','Pedagang '.$nama.' Dihapus');
         }catch(\Exception $e){
-            return redirect()->route('pedagangindex')->with('errorUpd','Pedagang '.$nama.' Tidak Dapat Dihapus - Pedagang menempati Los');
+            return redirect()->route('pedagangindex')->with('errorUpd','Pedagang '.$nama.' Tidak Dapat Dihapus - Pedagang menempati Los atau Memiliki Catatan Tagihan');
         }
     }
 

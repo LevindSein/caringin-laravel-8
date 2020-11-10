@@ -182,20 +182,24 @@ class TempatController extends Controller
                 $pasang = PasangAlat::where([
                     ['kd_kontrol',$kode],['id_meteran_air',$id_meteran_air],['id_tempat',NULL],['tanggal',$tanggal]
                     ])->first();
-                $id_pasang = $pasang->id;
-                $pasang = PasangAlat::find($id_pasang);
-                $pasang->id_tempat = $id_tempat;
-                $pasang->save();
+                if($pasang != NULL){
+                    $id_pasang = $pasang->id;
+                    $pasang = PasangAlat::find($id_pasang);
+                    $pasang->id_tempat = $id_tempat;
+                    $pasang->save();
+                }
             }
             
             if(empty($request->get('listrik')) == FALSE){
                 $pasang = PasangAlat::where([
                     ['kd_kontrol',$kode],['id_meteran_listrik',$id_meteran_listrik],['id_tempat',NULL],['tanggal',$tanggal]
                     ])->first();
-                $id_pasang = $pasang->id;
-                $pasang = PasangAlat::find($id_pasang);
-                $pasang->id_tempat = $id_tempat;
-                $pasang->save();
+                if($pasang != NULL){
+                    $id_pasang = $pasang->id;
+                    $pasang = PasangAlat::find($id_pasang);
+                    $pasang->id_tempat = $id_tempat;
+                    $pasang->save();
+                }
             }
 
             return redirect()->route('tempatdata')->with('success','Data Tempat Ditambah');
@@ -218,7 +222,307 @@ class TempatController extends Controller
     }
 
     public function store(Request $request,$id){
-        return redirect()->route('tempatdata')->with('success','Tempat Usaha Diupdate');
+        try{
+            date_default_timezone_set('Asia/Jakarta');
+            $tanggal = date("Y-m-d", time());
+
+            //deklarasi model
+            $tempat = TempatUsaha::find($id);
+
+            //blok
+            $blok = $request->get('blok');
+            $tempat->blok = $blok;
+            
+            //no_alamat
+            $los = strtoupper($request->get('los'));
+            $tempat->no_alamat = $los;
+            
+            //jml_alamat
+            $los = explode(",",$los);
+            $tempat->jml_alamat = count($los);
+            
+            //kd_kontrol
+            $kode = TempatUsaha::kode($blok,$los);
+            $tempat->kd_kontrol = $kode;
+            
+            //bentuk_usaha
+            $tempat->bentuk_usaha = ucwords($request->get('usaha'));
+            
+            //lok_tempat
+            $lokasi = $request->get('lokasi');
+            if($lokasi != NULL){
+                $tempat->lok_tempat = $lokasi;
+            }
+            else{
+                $tempat->lok_tempat = NULL;
+            }
+
+            //id_pemilik
+            $id_pemillik = $request->get('pemilik');
+            $tempat->id_pemilik = $id_pemillik;
+
+            // //id_pengguna
+            $id_pengguna = $request->get('pengguna');
+            $tempat->id_pengguna = $id_pengguna;
+
+            $pasangBaruAir = 0;
+            $pasangBaruListrik = 0;
+
+            $meterAirLama = $tempat->id_meteran_air;
+
+            //Fasilitas
+            if(empty($request->get('air')) == FALSE){
+                $id_meteran_air = $request->get('meterAir');
+                $tempat->id_meteran_air = $id_meteran_air;
+                $meteran = MeteranAir::find($id_meteran_air);
+                $meteran->stt_sedia = 1;
+                $meteran->stt_bayar = 0;
+                $meteran->save();
+
+                if(empty($request->get('dis_airbersih')) == FALSE){
+                    $tempat->dis_airbersih = 1;
+                }
+
+                if($tempat->trf_airbersih == NULL){
+                    $tempat->trf_airbersih = 1;
+                    //Tagihan Pasang Baru
+                    $record = DB::table('pasang_alat')->where([['kd_kontrol',$kode],['id_meteran_air','!=',NULL],['tanggal',$tanggal]])->first();
+                    if($record == NULL){
+                        $tarif = TarifAirBersih::find(1);
+                        $pasang = new PasangAlat;
+                        $pasang->kd_kontrol = $kode;
+                        $pasang->id_pemilik = $id_pemillik;
+                        $pasang->id_pengguna = $id_pengguna;
+                        $pasang->id_meteran_air = $id_meteran_air;
+                        $pasang->stt_pasang = 1; //Air
+                        $pasang->ttl_pasang = $tarif->trf_pasang;
+                        $pasang->rea_pasang = 0;
+                        $pasang->sel_pasang = $tarif->trf_pasang;
+                        $pasang->tanggal = $tanggal;
+                        $pasang->save();
+                    }
+                    $pasangBaruAir = 1;
+                
+                    //Download Surat Perintah Bayar Pasang
+                }
+                else{
+                    $tempat->trf_airbersih = 1;
+                    //Jika Ganti Meteran Tagihan Ganti
+                    if($meterAirLama != $request->get('meterAir')){
+                        $tarif = TarifAirBersih::find(1);
+                        $pasang = new PasangAlat;
+                        $pasang->id_tempat = $id;
+                        $pasang->kd_kontrol = $kode;
+                        $pasang->id_pemilik = $id_pemillik;
+                        $pasang->id_pengguna = $id_pengguna;
+                        $pasang->id_meteran_air = $id_meteran_air;
+                        $pasang->stt_pasang = 1; //Air
+                        $pasang->ttl_pasang = $tarif->trf_pasang;
+                        $pasang->rea_pasang = 0;
+                        $pasang->sel_pasang = $tarif->trf_pasang;
+                        $pasang->tanggal = $tanggal;
+                        $pasang->save();
+                        
+                        $meteran = MeteranAir::find($meterAirLama);
+                        $meteran->stt_sedia = 0;
+                        $meteran->stt_bayar = 0;
+                        $meteran->save();
+
+                        // Download Surat Perintah Bayar
+                    }
+                }
+
+            }
+            else{
+                if($tempat->trf_airbersih != NULL){
+                    $meteran = MeteranAir::find($tempat->id_meteran_air);
+                    $meteran->stt_sedia = 0;
+                    $meteran->stt_bayar = 0;
+                    $meteran->save();
+                }
+                $tempat->trf_airbersih = NULL;
+                $tempat->id_meteran_air = NULL;
+                $tempat->dis_airbersih = NULL;
+            }
+
+            $meterListrikLama = $tempat->id_meteran_listrik;
+
+            if(empty($request->get('listrik')) == FALSE){
+                $value = $request->get('meterListrik');
+                $value = explode(',',$value);
+                $id_meteran_listrik = $value[0];
+                $dayaListrik = $value[1];
+                $tempat->id_meteran_listrik = $id_meteran_listrik;
+                $tempat->daya = $dayaListrik;
+                $meteran = MeteranListrik::find($id_meteran_listrik);
+                $meteran->stt_sedia = 1;
+                $meteran->stt_bayar = 0;
+                $meteran->save();
+
+                if(empty($request->get('dis_listrik')) == FALSE){
+                    $tempat->dis_listrik = 1;
+                }
+
+                
+                if($tempat->trf_listrik == NULL){
+                    $tempat->trf_listrik = 1;
+                    //Tagihan Pasang Baru
+                    $record = DB::table('pasang_alat')->where([['kd_kontrol',$kode],['id_meteran_listrik','!=',NULL],['tanggal',$tanggal]])->first();
+                    if($record == NULL){
+                        $tarif = TarifListrik::find(1);
+                        $pasang = new PasangAlat;
+                        $pasang->kd_kontrol = $kode;
+                        $pasang->id_pemilik = $id_pemillik;
+                        $pasang->id_pengguna = $id_pengguna;
+                        $pasang->id_meteran_listrik = $id_meteran_listrik;
+                        $pasang->stt_pasang = 2; //Listrik
+                        $pasang->ttl_pasang = $tarif->trf_pasang;
+                        $pasang->rea_pasang = 0;
+                        $pasang->sel_pasang = $tarif->trf_pasang;
+                        $pasang->tanggal = $tanggal;
+                        $pasang->save();
+                    }
+                    $pasangBaruListrik = 1;
+
+                    // Download Surat Perintah Bayar Pasang
+                }
+                else{
+                    $tempat->trf_listrik = 1;
+                    //Jika Ganti Meteran Tagihan Ganti
+                    if($meterListrikLama != $request->get('meterListrik')){
+                        $tarif = TarifListrik::find(1);
+                        $pasang = new PasangAlat;
+                        $pasang->id_tempat = $id;
+                        $pasang->kd_kontrol = $kode;
+                        $pasang->id_pemilik = $id_pemillik;
+                        $pasang->id_pengguna = $id_pengguna;
+                        $pasang->id_meteran_listrik = $id_meteran_listrik;
+                        $pasang->stt_pasang = 2; //Listrik
+                        $pasang->ttl_pasang = $tarif->trf_pasang;
+                        $pasang->rea_pasang = 0;
+                        $pasang->sel_pasang = $tarif->trf_pasang;
+                        $pasang->tanggal = $tanggal;
+                        $pasang->save();
+
+                        $meteran = MeteranListrik::find($meterListrikLama);
+                        $meteran->stt_sedia = 0;
+                        $meteran->stt_bayar = 0;
+                        $meteran->save();
+
+                        // Download Surat Perintah Bayar
+                    }
+                }
+            }
+            else{
+                if($tempat->trf_listrik != NULL){
+                    $meteran = MeteranListrik::find($tempat->id_meteran_listrik);
+                    $meteran->stt_sedia = 0;
+                    $meteran->stt_bayar = 0;
+                    $meteran->save();
+                }
+                $tempat->trf_listrik = NULL;
+                $tempat->daya = NULL;
+                $tempat->id_meteran_listrik = NULL;
+                $tempat->dis_listrik = NULL;
+            }
+
+            if(empty($request->get('keamananipk')) == FALSE){
+                $tempat->trf_keamananipk = $request->get('trfKeamananIpk');
+
+                if(empty($request->get('dis_keamananipk')) == FALSE){
+                    $tempat->dis_keamananipk = 1;
+                }
+            }
+            else{
+                $tempat->trf_keamananipk = NULL;
+                $tempat->dis_keamananipk = NULL;
+            }
+
+            if(empty($request->get('kebersihan')) == FALSE){
+                $tempat->trf_kebersihan = $request->get('trfKebersihan');
+
+                if(empty($request->get('dis_kebersihan')) == FALSE){
+                    $tempat->dis_kebersihan = 1;
+                }
+            }
+            else{
+                $tempat->trf_kebersihan = NULL;
+                $tempat->dis_kebersihan = NULL;
+            }
+
+            if(empty($request->get('airkotor')) == FALSE){
+                $tempat->trf_airkotor = $request->get('trfAirKotor');
+            }
+            else{
+                $tempat->trf_airkotor = NULL;
+            }
+
+            if(empty($request->get('lain')) == FALSE){
+                $tempat->trf_lain = $request->get('trfLain');
+            }
+            else{
+                $tempat->trf_lain = NULL;
+            }
+
+            // stt_cicil / Metode Pembayaran
+            $stt_cicil = $request->get('cicilan');
+            if($stt_cicil == "0"){
+                $tempat->stt_cicil = 0; //Kontan
+            }
+            else if ($stt_cicil == "1"){
+                $tempat->stt_cicil = 1; //Cicil
+            }
+
+            // stt_tempat
+            $stt_tempat = $request->get('status');
+            if($stt_tempat == "1"){
+                $tempat->stt_tempat = 1;
+            }
+            else if($stt_tempat == "2"){
+                $tempat->stt_tempat = 2;
+                $tempat->ket_tempat = $request->get('ket_tempat');
+            }
+
+            //Save Record Tempat Usaha
+            $tempat->save();
+
+            
+            //get ID
+            $id_tempat = $tempat->id;
+
+            //Tagihan Pasang Alat Baru
+            if($pasangBaruAir == 1){
+                if(empty($request->get('air')) == FALSE){
+                    $pasang = PasangAlat::where([
+                        ['kd_kontrol',$kode],['id_meteran_air',$id_meteran_air],['id_tempat',NULL],['tanggal',$tanggal]
+                        ])->first();
+                    if($pasang != NULL){
+                        $id_pasang = $pasang->id;
+                        $pasang = PasangAlat::find($id_pasang);
+                        $pasang->id_tempat = $id_tempat;
+                        $pasang->save();
+                    }
+                }
+            }
+            
+            if($pasangBaruListrik == 1){
+                if(empty($request->get('listrik')) == FALSE){
+                    $pasang = PasangAlat::where([
+                        ['kd_kontrol',$kode],['id_meteran_listrik',$id_meteran_listrik],['id_tempat',NULL],['tanggal',$tanggal]
+                        ])->first();
+                    if($pasang != NULL){
+                        $id_pasang = $pasang->id;
+                        $pasang = PasangAlat::find($id_pasang);
+                        $pasang->id_tempat = $id_tempat;
+                        $pasang->save();
+                    }
+                }
+            }
+
+            return redirect()->route('tempatdata')->with('success','Data Tempat Diupdate');
+        }catch(\Exception $e){
+            return redirect()->back()->with('error','Kesalahan Sistem');
+        }
     }
 
     public function delete($id){

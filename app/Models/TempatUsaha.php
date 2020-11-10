@@ -297,6 +297,7 @@ class TempatUsaha extends Model
             'meteran_listrik.kode as listrikKode',
             'meteran_listrik.nomor as listrikNomor',
             'meteran_listrik.akhir as listrikAkhir',
+            'meteran_listrik.daya as listrikDaya',
             'trf_keamanan_ipk.id as keamananIpkId',
             'trf_keamanan_ipk.tarif as keamananIpk',
             'trf_kebersihan.id as kebersihanId',
