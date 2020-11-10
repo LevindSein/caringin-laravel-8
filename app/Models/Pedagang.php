@@ -27,12 +27,10 @@ class Pedagang extends Model
         return DB::table('user')->where('role','nasabah')->get();
     }
 
-    public static function addReport($ktp,$email,$hp){
-        $ktp = DB::table('user')->where('ktp',$ktp)->first();
-        if($email != NULL){
-            $email = DB::table('user')->where('email',$email)->first();
-        }
-        $hp = DB::table('user')->where('hp',$hp)->first();
+    public static function addReport($data){
+        $ktp = DB::table('user')->where('ktp',$data[0])->first();
+        $email = DB::table('user')->where('email',$data[1])->first();
+        $hp = DB::table('user')->where('hp',$data[2])->first();
 
         if($ktp != NULL){
             return "KTP";
@@ -45,14 +43,13 @@ class Pedagang extends Model
         if($hp != NULL){
             return "Nomor HP";
         }
-
         return "OK";
     }
 
-    public static function updReport($ktp, $email, $hp, $id){
-        $ktp = DB::table('user')->where([['ktp',$ktp],['id','!=',$id]])->first();
-        $email = DB::table('user')->where([['email',$email],['id','!=',$id]])->first();
-        $hp = DB::table('user')->where([['hp',$hp],['id','!=',$id]])->first();
+    public static function updReport($data, $id){
+        $ktp = DB::table('user')->where([['ktp',$data[0]],['id','!=',$id]])->first();
+        $email = DB::table('user')->where([['email',$data[1]],['id','!=',$id]])->first();
+        $hp = DB::table('user')->where([['hp',$data[2]],['id','!=',$id]])->first();
 
         if($ktp != NULL){
             return "KTP";
@@ -65,7 +62,6 @@ class Pedagang extends Model
         if($hp != NULL){
             return "Nomor HP";
         }
-
         return "OK";
     }
     
@@ -84,5 +80,21 @@ class Pedagang extends Model
             $details[$i][2] = $tempat[$i]->id;
         }
         return $details;
+    }
+
+    public static function nasabah($id, $status){
+        if($status == 'pemilik')
+            $data = DB::table('tempat_usaha')->where('id_pemilik',$id)->select('kd_kontrol')->get();
+
+        if($status == 'pengguna')
+            $data = DB::table('tempat_usaha')->where('id_pengguna',$id)->select('kd_kontrol')->get();
+
+        $nasabah = array();
+        $i = 0;
+        foreach($data as $d){
+            $nasabah[$i] = $d->kd_kontrol; 
+            $i++;
+        }
+        return $nasabah;
     }
 }

@@ -70,8 +70,12 @@ $role = Session::get('role');
                                             name="pemilik"
                                             id="pemilik"
                                             value="pemilik"
-                                            data-related-item="divPemilik"
-                                            checked>
+                                            <?php 
+                                            $dataPemilik = DB::table('tempat_usaha')->where('id_pemilik',$dataset->id)->first();
+                                            if($dataPemilik != NULL){ ?>
+                                            checked
+                                            <?php }?>
+                                            data-related-item="divPemilik">
                                         <label class="form-check-label" for="pemilik">
                                             Pemilik
                                         </label>
@@ -91,6 +95,11 @@ $role = Session::get('role');
                                             name="pengguna"
                                             id="pengguna"
                                             value="pengguna"
+                                            <?php 
+                                            $dataPengguna = DB::table('tempat_usaha')->where('id_pengguna',$dataset->id)->first();
+                                            if($dataPengguna != NULL){ ?>
+                                            checked
+                                            <?php } ?>
                                             data-related-item="divPengguna">
                                         <label class="form-check-label" for="pengguna">
                                             Pengguna
@@ -119,7 +128,7 @@ $role = Session::get('role');
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="inputGroupPrepend">+62</span>
                                     </div>
-                                    <input required type="tel" value="{{substr($dataset->hp,2)}}" class="form-control" maxlength="12" name="hp" id="hp" placeholder="8783847xxx" aria-describedby="inputGroupPrepend">
+                                    <input required autocomplete="off" type="tel" value="{{substr($dataset->hp,2)}}" class="form-control" maxlength="12" name="hp" id="hp" placeholder="8783847xxx" aria-describedby="inputGroupPrepend">
                                 </div>
                             </div>
                             <div class="form-group col-lg-12">
@@ -151,12 +160,12 @@ $(document).ready(function () {
             delay: 250,
             processResults: function (alamat) {
                 return {
-                results:  $.map(alamat, function (al) {
-                    return {
-                    text: al.kd_kontrol,
-                    id: al.id
-                    }
-                })
+                    results:  $.map(alamat, function (al) {
+                        return {
+                        text: al.kd_kontrol,
+                        id: al.kd_kontrol
+                        }
+                    })
                 };
             },
             cache: true
@@ -164,13 +173,14 @@ $(document).ready(function () {
     });
 });
 
-$('.alamatPemilik').on('select2:select', function(e) {
-  var text = 'A'; // get text
-  var id = 'B'; // get value
+var s1 = $("#alamatPemilik").select2();
+var valPemilik = <?php echo json_encode($pemilik); ?>;
 
-  tagsArray.push(text);
-  console.log(tagsArray);
+valPemilik.forEach(function(e){
+    if(!s1.find('option:contains(' + e + ')').length) 
+        s1.append($('<option>').text(e));
 });
+s1.val(valPemilik).trigger("change"); 
 
 $(document).ready(function () {
     $('.alamatPengguna').select2({
@@ -181,18 +191,27 @@ $(document).ready(function () {
             delay: 250,
             processResults: function (alamat) {
                 return {
-                results:  $.map(alamat, function (al) {
-                    return {
-                    text: al.kd_kontrol,
-                    id: al.id
-                    }
-                })
+                    results:  $.map(alamat, function (al) {
+                        return {
+                        text: al.kd_kontrol,
+                        id: al.kd_kontrol
+                        }
+                    })
                 };
             },
             cache: true
         }
     });
 });
+
+var s2 = $("#alamatPengguna").select2();
+var valPengguna = <?php echo json_encode($pengguna); ?>;
+
+valPengguna.forEach(function(e){
+    if(!s2.find('option:contains(' + e + ')').length) 
+        s2.append($('<option>').text(e));
+});
+s2.val(valPengguna).trigger("change"); 
 </script>
 
 <script>
@@ -246,7 +265,7 @@ $('[type=tel]').on('change', function(e) {
   $(e.target).val($(e.target).val().replace(/[^\d\.]/g, ''))
 })
 $('[type=tel]').on('keypress', function(e) {
-  keys = ['0','1','2','3','4','5','6','7','8','9','.']
+  keys = ['0','1','2','3','4','5','6','7','8','9']
   return keys.indexOf(event.key) > -1
 })
 </script>
