@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Tagihan;
+use App\Models\TempatUsaha;
 use Exception;
 
 class TempatUsaha extends Model
@@ -19,7 +20,6 @@ class TempatUsaha extends Model
         'trf_airbersih',
         'trf_airkotor',
         'trf_lain',
-        'trf_diskon',
         'id_pengguna',
         'id_pemilik',
         'kd_kontrol',
@@ -30,12 +30,15 @@ class TempatUsaha extends Model
         'id_meteran_listrik',
         'blok',
         'daya',
+        'dis_airbersih',
+        'dis_listrik',
+        'dis_keamananipk',
+        'dis_kebersihan',
         'stt_cicil',
         'stt_tempat',
         'ket_tempat',
         'lok_tempat',
         'otoritas_user',
-        'kd_linkaja',
         'updated_at',
         'created_at'
     ];
@@ -78,7 +81,6 @@ class TempatUsaha extends Model
         ->leftJoin('trf_keamanan_ipk','tempat_usaha.trf_keamananipk','=','trf_keamanan_ipk.id')
         ->leftJoin('trf_air_kotor','tempat_usaha.trf_airkotor','=','trf_air_kotor.id')
         ->leftJoin('trf_lain','tempat_usaha.trf_lain','=','trf_lain.id')
-        ->leftJoin('trf_diskon','tempat_usaha.trf_diskon','=','trf_diskon.id')
         ->select(
             'tempat_usaha.id',
             'user_pengguna.nama as pengguna',
@@ -89,7 +91,6 @@ class TempatUsaha extends Model
             'tempat_usaha.trf_listrik',
             'tempat_usaha.trf_airkotor',
             'tempat_usaha.trf_lain',
-            'tempat_usaha.trf_diskon',
             'tempat_usaha.kd_kontrol',
             'tempat_usaha.lok_tempat',
             'tempat_usaha.no_alamat',
@@ -101,11 +102,15 @@ class TempatUsaha extends Model
             'trf_keamanan_ipk.tarif as keamananipk',
             'trf_air_kotor.tarif as airkotor',
             'trf_lain.tarif as lain',
-            'trf_diskon.tarif as diskon',
             'tempat_usaha.stt_cicil',
+            'tempat_usaha.dis_airbersih',
+            'tempat_usaha.dis_listrik',
+            'tempat_usaha.dis_keamananipk',
+            'tempat_usaha.dis_kebersihan',
             'tempat_usaha.stt_tempat',
             'tempat_usaha.ket_tempat',
             )
+        ->orderBy('tempat_usaha.kd_kontrol','asc')
         ->get();
     }
   
@@ -184,24 +189,53 @@ class TempatUsaha extends Model
     }
 
     public static function fasilitas($fas){
-        return DB::table('tempat_usaha')
-        ->leftJoin('user as user_pengguna','tempat_usaha.id_pengguna','=','user_pengguna.id')
-        ->leftJoin('user as user_pemilik','tempat_usaha.id_pemilik','=','user_pemilik.id')
-        ->where('tempat_usaha.trf_'.$fas,'!=',NULL)
-        ->select(
-            'tempat_usaha.id',
-            'user_pengguna.nama as pengguna',
-            'user_pemilik.nama as pemilik',
-            'tempat_usaha.kd_kontrol',
-            'tempat_usaha.lok_tempat',
-            'tempat_usaha.no_alamat',
-            'tempat_usaha.jml_alamat',
-            'tempat_usaha.bentuk_usaha',
-            'tempat_usaha.stt_cicil',
-            'tempat_usaha.stt_tempat',
-            'tempat_usaha.ket_tempat',
-            )
-        ->get();
+        if($fas == 'diskon'){
+            return DB::table('tempat_usaha')
+            ->leftJoin('user as user_pengguna','tempat_usaha.id_pengguna','=','user_pengguna.id')
+            ->leftJoin('user as user_pemilik','tempat_usaha.id_pemilik','=','user_pemilik.id')
+            ->where('tempat_usaha.dis_airbersih','!=',NULL)
+            ->orWhere('tempat_usaha.dis_listrik','!=',NULL)
+            ->orWhere('tempat_usaha.dis_keamananipk','!=',NULL)
+            ->orWhere('tempat_usaha.dis_kebersihan','!=',NULL)
+            ->select(
+                'tempat_usaha.id',
+                'user_pengguna.nama as pengguna',
+                'user_pemilik.nama as pemilik',
+                'tempat_usaha.kd_kontrol',
+                'tempat_usaha.lok_tempat',
+                'tempat_usaha.no_alamat',
+                'tempat_usaha.jml_alamat',
+                'tempat_usaha.bentuk_usaha',
+                'tempat_usaha.dis_listrik',
+                'tempat_usaha.dis_airbersih',
+                'tempat_usaha.dis_keamananipk',
+                'tempat_usaha.dis_kebersihan',
+                'tempat_usaha.stt_cicil',
+                'tempat_usaha.stt_tempat',
+                'tempat_usaha.ket_tempat',
+                )
+            ->get();
+        }
+        else{
+            return DB::table('tempat_usaha')
+            ->leftJoin('user as user_pengguna','tempat_usaha.id_pengguna','=','user_pengguna.id')
+            ->leftJoin('user as user_pemilik','tempat_usaha.id_pemilik','=','user_pemilik.id')
+            ->where('tempat_usaha.trf_'.$fas,'!=',NULL)
+            ->select(
+                'tempat_usaha.id',
+                'user_pengguna.nama as pengguna',
+                'user_pemilik.nama as pemilik',
+                'tempat_usaha.kd_kontrol',
+                'tempat_usaha.lok_tempat',
+                'tempat_usaha.no_alamat',
+                'tempat_usaha.jml_alamat',
+                'tempat_usaha.bentuk_usaha',
+                'tempat_usaha.stt_cicil',
+                'tempat_usaha.stt_tempat',
+                'tempat_usaha.ket_tempat',
+                )
+            ->get();
+        }
     }
 
     public static function rekap(){
@@ -226,5 +260,59 @@ class TempatUsaha extends Model
         ->where('blok',$blok)
         ->select('kd_kontrol','stt_tempat','blok','user_pengguna.nama as pengguna','user_pemilik.nama as pemilik')
         ->get();
+    }
+
+    public static function updateData($id){
+        return TempatUsaha::where('tempat_usaha.id',$id)
+        ->leftJoin('user as pemilik','tempat_usaha.id_pemilik','=','pemilik.id')
+        ->leftJoin('user as pengguna','tempat_usaha.id_pengguna','=','pengguna.id')
+        ->leftJoin('meteran_air','tempat_usaha.id_meteran_air','=','meteran_air.id')
+        ->leftJoin('meteran_listrik','tempat_usaha.id_meteran_listrik','=','meteran_listrik.id')
+        ->leftJoin('trf_kebersihan','tempat_usaha.trf_kebersihan','=','trf_kebersihan.id')
+        ->leftJoin('trf_keamanan_ipk','tempat_usaha.trf_keamananipk','=','trf_keamanan_ipk.id')
+        ->leftJoin('trf_air_kotor','tempat_usaha.trf_airkotor','=','trf_air_kotor.id')
+        ->leftJoin('trf_lain','tempat_usaha.trf_lain','=','trf_lain.id')
+        ->select(
+            'tempat_usaha.id',
+            'tempat_usaha.trf_kebersihan',
+            'tempat_usaha.trf_keamananipk',
+            'tempat_usaha.trf_listrik',
+            'tempat_usaha.trf_airbersih',
+            'tempat_usaha.trf_airkotor',
+            'tempat_usaha.trf_lain',
+            'pemilik.id as pemilikId',
+            'pemilik.nama as pemilik',
+            'pemilik.ktp as pemilikKtp',
+            'pengguna.id as penggunaId',
+            'pengguna.nama as pengguna',
+            'pengguna.ktp as penggunaKtp',
+            'tempat_usaha.no_alamat',
+            'tempat_usaha.bentuk_usaha',
+            'tempat_usaha.blok',
+            'meteran_air.id as airId',
+            'meteran_air.kode as airKode',
+            'meteran_air.nomor as airNomor',
+            'meteran_air.akhir as airAkhir',
+            'meteran_listrik.id as listrikId',
+            'meteran_listrik.kode as listrikKode',
+            'meteran_listrik.nomor as listrikNomor',
+            'meteran_listrik.akhir as listrikAkhir',
+            'trf_keamanan_ipk.id as keamananIpkId',
+            'trf_keamanan_ipk.tarif as keamananIpk',
+            'trf_kebersihan.id as kebersihanId',
+            'trf_kebersihan.tarif as kebersihan',
+            'trf_air_kotor.id as arkotId',
+            'trf_air_kotor.tarif as arkot',
+            'trf_lain.id as lainId',
+            'trf_lain.tarif as lain',
+            'tempat_usaha.dis_airbersih',
+            'tempat_usaha.dis_listrik',
+            'tempat_usaha.dis_keamananipk',
+            'tempat_usaha.dis_kebersihan',
+            'tempat_usaha.stt_cicil',
+            'tempat_usaha.stt_tempat',
+            'tempat_usaha.ket_tempat',
+            'tempat_usaha.lok_tempat',)
+        ->first();
     }
 }

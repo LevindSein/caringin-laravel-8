@@ -48,7 +48,7 @@ $username = Session::get('username');
 
         <div class="se-pre-con">  
         </div>
-
+        
         <!-- Page Wrapper -->
         <div id="wrapper">
 
@@ -134,7 +134,7 @@ $username = Session::get('username');
                 </li>
 
                 <!-- Nav Item - Data -->
-                <li class="nav-item {{ (request()->is('data')) ? 'active' : '' }}">
+                <li class="nav-item {{ (request()->is('data*')) ? 'active' : '' }}">
                     <a class="nav-link" href="{{url('data')}}">
                         <i class="fa fa-list"></i>
                         <span>Data</span></a>
@@ -371,25 +371,18 @@ $username = Session::get('username');
 
         <!--for column table toggle-->
         <script>
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                $($.fn.dataTable.tables(true))
-                    .DataTable()
-                    .columns
-                    .adjust();
+            $(document).ready(function() {
+                $('a[data-toggle="tab"]').on( 'shown.bs.tab', function (e) {
+                    $($.fn.dataTable.tables( true ) ).DataTable().columns.adjust().draw();
+                } ); 
             });
         </script>
         <script>
-            jQuery
-                .fn
-                .dataTable
-                .Api
-                .register('processing()', function (show) {
-                    return this.iterator('table', function (ctx) {
-                        ctx
-                            .oApi
-                            ._fnProcessingDisplay(ctx, show);
-                    });
+            jQuery.fn.dataTable.Api.register('processing()', function (show) {
+                return this.iterator('table', function (ctx) {
+                    ctx.oApi._fnProcessingDisplay(ctx, show);
                 });
+            });
         </script>
         
         @yield('js')

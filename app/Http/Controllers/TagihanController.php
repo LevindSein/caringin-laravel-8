@@ -54,12 +54,6 @@ class TagihanController extends Controller
 
     }
 
-    public function delete(Request $request, $id){
-        $tagihan = Tagihan::find($id);
-        $tagihan->delete();
-        return redirect()->back()->with('success','Data Tagihan Dihapus');
-    }
-
     public function fasilitas($fasilitas){
         $dataset = Tagihan::tagihan($fasilitas);
         if($dataset == "Not Periode"){

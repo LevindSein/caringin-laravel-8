@@ -34,6 +34,7 @@ $role = Session::get('role');
                             name="los"
                             id="los"
                             class="form-control"
+                            value="{{$dataset->no_alamat}}"
                             placeholder="1A,2,3 (Pisahkan dengan Koma)">
                     </div>
                     <div class="form-group col-lg-12">
@@ -45,6 +46,7 @@ $role = Session::get('role');
                             id="lokasi"
                             maxLength="50"
                             class="form-control"
+                            value="{{$dataset->lok_tempat}}"
                             placeholder="Pedagang K5 Di Depan A-1-001">
                     </div>
                     <div class="form-group col-lg-12">
@@ -58,6 +60,7 @@ $role = Session::get('role');
                             id="usaha"
                             maxLength="30"
                             class="form-control"
+                            value="{{$dataset->bentuk_usaha}}"
                             placeholder="Misal : Distributor Logistik">
                     </div>
 
@@ -87,6 +90,9 @@ $role = Session::get('role');
                                     type="checkbox"
                                     name="air"
                                     id="myCheck1"
+                                    <?php if($dataset->trf_airbersih == 1){ ?>
+                                    checked
+                                    <?php } ?>
                                     data-related-item="myDiv1">
                                 <label class="form-check-label" for="myCheck1">
                                     Air Bersih
@@ -95,11 +101,27 @@ $role = Session::get('role');
                             <div class="form-group" style="display:none">
                                 <label for="myDiv1">Meteran Air <span style="color:red;">*</span></label>
                                 <select class="form-control" name="meterAir" id="myDiv1">
-                                    <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Alat</option>
+                                    <option disabled="disabled" selected="selected" value="{{$dataset->airId}}">{{$dataset->airKode}} - {{$dataset->airNomor}} ({{$dataset->airAkhir}})</option>
                                     @foreach($airAvailable as $air)
                                     <option value="{{$air->id}}">{{$air->kode}} - {{$air->nomor}} ({{$air->akhir}})</option>
                                     @endforeach
                                 </select>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            name="dis_airbersih"
+                                            id="dis_airbersih"
+                                            value="dis_airbersih"
+                                            <?php if($dataset->dis_airbersih == 1){ ?>
+                                            checked
+                                            <?php } ?>>
+                                        <label class="form-check-label" for="dis_airbersih">
+                                            Bebas Bayar
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
 
 
@@ -109,6 +131,9 @@ $role = Session::get('role');
                                     type="checkbox"
                                     name="listrik"
                                     id="myCheck2"
+                                    <?php if($dataset->trf_listrik == 1){ ?>
+                                    checked
+                                    <?php } ?>
                                     data-related-item="myDiv2">
                                 <label class="form-check-label" for="myCheck2">
                                     Listrik
@@ -117,11 +142,27 @@ $role = Session::get('role');
                             <div class="form-group" style="display:none">
                                 <label for="myDiv2">Meteran Listrik <span style="color:red;">*</span></label>
                                 <select class="form-control" name="meterListrik" id="myDiv2">
-                                    <option disabled="disabled" selected="selected" hidden="hidden" value="">Pilih Alat</option>
+                                    <option disabled="disabled" selected="selected" value="{{$dataset->listrikId}}">{{$dataset->listrikKode}} - {{$dataset->listrikNomor}} ({{$dataset->listrikAkhir}})</option>
                                     @foreach($listrikAvailable as $listrik)
                                     <option value="{{$listrik->id.','.$listrik->daya}}">{{$listrik->kode}} - {{$listrik->nomor}} ({{$listrik->akhir}}) - {{$listrik->daya}} W</option>
                                     @endforeach
                                 </select>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            name="dis_listrik"
+                                            id="dis_listrik"
+                                            value="dis_airbersih"
+                                            <?php if($dataset->dis_listrik == 1){ ?>
+                                            checked
+                                            <?php } ?>>
+                                        <label class="form-check-label" for="dis_listrik">
+                                            Bebas Bayar
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
 
 
@@ -131,6 +172,9 @@ $role = Session::get('role');
                                     type="checkbox"
                                     name="keamananipk"
                                     id="myCheck3"
+                                    <?php if($dataset->trf_keamananipk != NULL){ ?>
+                                    checked
+                                    <?php } ?>
                                     data-related-item="myDiv3">
                                 <label class="form-check-label" for="myCheck3">
                                     Keamanan & IPK
@@ -139,11 +183,27 @@ $role = Session::get('role');
                             <div class="form-group" style="display:none">
                                 <label for="myDiv3">Kategori Tarif <span style="color:red;">*</span></label>
                                 <select class="form-control" name="trfKeamananIpk" id="myDiv3">
-                                    <option disabled="disabled" selected="selected" hidden="hidden" value="">--- Pilih Tarif ---</option>
+                                    <option disabled="disabled" selected="selected" value="{{$dataset->keamananIpkId}}">Rp. {{$dataset->keamananIpk}}</option>
                                     @foreach($trfKeamananIpk as $tarif)
                                     <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
                                     @endforeach
                                 </select>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            name="dis_keamananipk"
+                                            id="dis_keamananipk"
+                                            value="dis_keamananipk"
+                                            <?php if($dataset->dis_keamananipk == 1){ ?>
+                                            checked
+                                            <?php } ?>>
+                                        <label class="form-check-label" for="dis_keamananipk">
+                                            Diskon
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
 
 
@@ -153,6 +213,9 @@ $role = Session::get('role');
                                     type="checkbox"
                                     name="kebersihan"
                                     id="myCheck4"
+                                    <?php if($dataset->trf_kebersihan != NULL){ ?>
+                                    checked
+                                    <?php } ?>
                                     data-related-item="myDiv4">
                                 <label class="form-check-label" for="myCheck4">
                                     Kebersihan
@@ -161,11 +224,27 @@ $role = Session::get('role');
                             <div class="form-group" style="display:none">
                                 <label for="myDiv4">Kategori Tarif <span style="color:red;">*</span></label>
                                 <select class="form-control" name="trfKebersihan" id="myDiv4">
-                                    <option disabled="disabled" selected="selected" hidden="hidden" value="">--- Pilih Tarif ---</option>
+                                    <option disabled="disabled" selected="selected" value="{{$dataset->kebersihanId}}">Rp. {{$dataset->kebersihan}}</option>
                                     @foreach($trfKebersihan as $tarif)
                                     <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
                                     @endforeach
                                 </select>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            name="dis_kebersihan"
+                                            id="dis_kebersihan"
+                                            value="dis_kebersihan"
+                                            <?php if($dataset->dis_kebersihan == 1){ ?>
+                                            checked
+                                            <?php } ?>>
+                                        <label class="form-check-label" for="dis_kebersihan">
+                                            Diskon
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
 
                             <hr class="sidebar-divider d-none d-md-block">
@@ -175,6 +254,9 @@ $role = Session::get('role');
                                     type="checkbox"
                                     name="airkotor"
                                     id="myCheck5"
+                                    <?php if($dataset->trf_airkotor != NULL){ ?>
+                                    checked
+                                    <?php } ?>
                                     data-related-item="myDiv5">
                                 <label class="form-check-label" for="myCheck5">
                                     Air Kotor
@@ -183,7 +265,7 @@ $role = Session::get('role');
                             <div class="form-group" style="display:none">
                                 <label for="myDiv5">Kategori Tarif <span style="color:red;">*</span></label>
                                 <select class="form-control" name="trfAirKotor" id="myDiv5">
-                                    <option disabled="disabled" selected="selected" hidden="hidden" value="">--- Pilih Tarif ---</option>
+                                    <option disabled="disabled" selected="selected" value="{{$dataset->arkotId}}">Rp. {{$dataset->arkot}}</option>
                                     @foreach($trfAirKotor as $tarif)
                                     <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
                                     @endforeach
@@ -197,6 +279,9 @@ $role = Session::get('role');
                                     type="checkbox"
                                     name="lain"
                                     id="myCheck6"
+                                    <?php if($dataset->trf_lain != NULL){ ?>
+                                    checked
+                                    <?php } ?>
                                     data-related-item="myDiv6">
                                 <label class="form-check-label" for="myCheck6">
                                     Lain - Lain
@@ -205,7 +290,7 @@ $role = Session::get('role');
                             <div class="form-group" style="display:none">
                                 <label for="myDiv6">Kategori Tarif <span style="color:red;">*</span></label>
                                 <select class="form-control" name="trfLain" id="myDiv6">
-                                    <option disabled="disabled" selected="selected" hidden="hidden" value="">--- Pilih Tarif ---</option>
+                                    <option disabled="disabled" selected="selected" value="{{$dataset->lainId}}">Rp. {{$dataset->lain}}</option>
                                     @foreach($trfLain as $tarif)
                                     <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
                                     @endforeach
@@ -216,7 +301,7 @@ $role = Session::get('role');
 
                     <!-- Pembayaran -->
                     <div class="form-group row col-lg-12">
-                        <div class="col-sm-2">Metode Pembayaran</div>
+                        <div class="col-sm-2">Metode</div>
                         <div class="col-sm-10">
                             <div class="form-check">
                                 <input
@@ -225,7 +310,9 @@ $role = Session::get('role');
                                     name="cicilan"
                                     id="cicilan1"
                                     value="0"
-                                    checked>
+                                    <?php if($dataset->stt_cicil == 0){ ?>
+                                    checked
+                                    <?php } ?>>
                                 <label class="form-check-label" for="cicilan1">
                                     Kontan
                                 </label>
@@ -236,30 +323,13 @@ $role = Session::get('role');
                                     type="radio"
                                     name="cicilan"
                                     id="cicilan2"
-                                    value="1">
+                                    value="1"
+                                    <?php if($dataset->stt_cicil == 1){ ?>
+                                    checked
+                                    <?php } ?>>
                                 <label class="form-check-label" for="cicilan2">
-                                    Cicilan
+                                    Cicil
                                 </label>
-                            </div>
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="cicilan"
-                                    id="cicilan3"
-                                    value="2">
-                                <label class="form-check-label" for="cicilan3">
-                                    Diskon / Bebas Bayar
-                                </label>
-                            </div> 
-                            <div class="form-group" style="display:none" id="diskon">
-                                <label for="myDiv7">Kategori Tarif <span style="color:red;">*</span></label>
-                                <select class="form-control" name="trfDiskon" id="myDiv7">
-                                    <option disabled="disabled" selected="selected" hidden="hidden" value="">--- Pilih Tarif ---</option>
-                                    @foreach($trfDiskon as $tarif)
-                                    <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
-                                    @endforeach
-                                </select>
                             </div>
                         </div>
                     </div>
@@ -275,7 +345,9 @@ $role = Session::get('role');
                                     name="status"
                                     id="myStatus1"
                                     value="1"
-                                    checked="checked">
+                                    <?php if($dataset->stt_tempat == 1){ ?>
+                                    checked
+                                    <?php } ?>>
                                 <label class="form-check-label" for="myStatus1">
                                     Aktif
                                 </label>
@@ -286,7 +358,10 @@ $role = Session::get('role');
                                     type="radio"
                                     name="status"
                                     id="myStatus2"
-                                    value="2">
+                                    value="2"
+                                    <?php if($dataset->stt_tempat == 2){ ?>
+                                    checked
+                                    <?php } ?>>
                                 <label class="form-check-label" for="myStatus2">
                                     Non-Aktif
                                 </label>
@@ -302,7 +377,6 @@ $role = Session::get('role');
                             </div>
                         </div>
                     </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -317,6 +391,32 @@ $role = Session::get('role');
 
 @section('js')
 <!-- Tambah Content pada Body JS -->
+<script>
+var data = [
+    {
+        id: '{{$dataset->blok}}',
+        text: '{{$dataset->blok}}'
+    },
+    {
+        id: '{{$dataset->pemilikId}}',
+        text: '{{$dataset->pemilik}}' + ' - ' + '{{$dataset->pemilikKtp}}'
+    },
+    {
+        id: '{{$dataset->penggunaId}}',
+        text: '{{$dataset->pengguna}}' + ' - ' + '{{$dataset->penggunaKtp}}'
+    },
+];
+
+var blok = new Option(data[0].text, data[0].id, false, false);
+$('#blok').append(blok).trigger('change');
+
+var pemilik = new Option(data[1].text, data[1].id, false, false);
+$('#pemilik').append(pemilik).trigger('change');
+
+var pengguna = new Option(data[2].text, data[2].id, false, false);
+$('#pengguna').append(pengguna).trigger('change');
+</script>
+
 <script type="text/javascript">
 $(document).ready(function () {
     $('.blok').select2({
@@ -383,6 +483,34 @@ $("#los").on("input", function() {
     this.value = this.value.replace(/^0/, "")
   }
 })
+</script>
+
+
+<!-- Status Button -->
+<script>
+    function statusTempat() {
+        if ($('#myStatus2').is(':checked')) {
+            document
+                .getElementById('ketStatus')
+                .style
+                .display = 'block';
+            document
+                .getElementById('ket_tempat')
+                .required = true;
+        }
+        else {
+            document
+                .getElementById('ketStatus')
+                .style
+                .display = 'none';
+            document
+                .getElementById('ket_tempat')
+                .required = false;
+        }
+    }
+    $('input[type="radio"]')
+        .click(statusTempat)
+        .each(statusTempat);
 </script>
 
 <!-- Fasilitas Button -->
@@ -494,69 +622,5 @@ $("#los").on("input", function() {
     $('input[type="checkbox"]')
         .click(checkLain)
         .each(checkLain);
-</script>
-
-<!-- Pembayaran -->
-<script>
-    function cicilan() {
-        if ($('#cicilan1').is(':checked')) {
-            document
-                .getElementById('diskon')
-                .style
-                .display = 'none';
-            document
-                .getElementById('myDiv7')
-                .required = false;
-        }
-        else if($('#cicilan2').is(':checked')) {
-            document
-                .getElementById('diskon')
-                .style
-                .display = 'none';
-            document
-                .getElementById('myDiv7')
-                .required = false;
-        }
-        else{
-            document
-                .getElementById('diskon')
-                .style
-                .display = 'block';
-            document
-                .getElementById('myDiv7')
-                .required = true;
-        }
-    }
-    $('input[type="radio"]')
-        .click(cicilan)
-        .each(cicilan);
-</script>
-
-
-<!-- Status Button -->
-<script>
-    function statusTempat() {
-        if ($('#myStatus1').is(':checked')) {
-            document
-                .getElementById('ketStatus')
-                .style
-                .display = 'none';
-            document
-                .getElementById('ket_tempat')
-                .required = false;
-        }
-        else {
-            document
-                .getElementById('ketStatus')
-                .style
-                .display = 'block';
-            document
-                .getElementById('ket_tempat')
-                .required = true;
-        }
-    }
-    $('input[type="radio"]')
-        .click(statusTempat)
-        .each(statusTempat);
 </script>
 @endsection

@@ -65,6 +65,10 @@ class TempatController extends Controller
                 $meteran->stt_bayar = 0;
                 $meteran->save();
 
+                if(empty($request->get('dis_airbersih')) == FALSE){
+                    $tempat->dis_airbersih = 1;
+                }
+
                 //Tagihan Pasang
                 $record = DB::table('pasang_alat')->where([['kd_kontrol',$kode],['id_meteran_air','!=',NULL],['tanggal',$tanggal]])->first();
                 if($record == NULL){
@@ -99,6 +103,10 @@ class TempatController extends Controller
                 $meteran->stt_bayar = 0;
                 $meteran->save();
 
+                if(empty($request->get('dis_listrik')) == FALSE){
+                    $tempat->dis_listrik = 1;
+                }
+
                 //Tagihan Pasang
                 $record = DB::table('pasang_alat')->where([['kd_kontrol',$kode],['id_meteran_listrik','!=',NULL],['tanggal',$tanggal]])->first();
                 if($record == NULL){
@@ -122,10 +130,18 @@ class TempatController extends Controller
 
             if(empty($request->get('keamananipk')) == FALSE){
                 $tempat->trf_keamananipk = $request->get('trfKeamananIpk');
+
+                if(empty($request->get('dis_keamananipk')) == FALSE){
+                    $tempat->dis_keamananipk = 1;
+                }
             }
 
             if(empty($request->get('kebersihan')) == FALSE){
                 $tempat->trf_kebersihan = $request->get('trfKebersihan');
+
+                if(empty($request->get('dis_kebersihan')) == FALSE){
+                    $tempat->dis_kebersihan = 1;
+                }
             }
 
             if(empty($request->get('airkotor')) == FALSE){
@@ -144,11 +160,6 @@ class TempatController extends Controller
             else if ($stt_cicil == "1"){
                 $tempat->stt_cicil = 1; //Cicil
             }
-            else if($stt_cicil == "2"){
-                $tempat->stt_cicil = 2; //Bebas Bayar
-                //trf_diskon
-                $tempat->trf_diskon = $request->get('trfDiskon');
-            }
 
             // stt_tempat
             $stt_tempat = $request->get('status');
@@ -165,6 +176,8 @@ class TempatController extends Controller
 
             //get ID
             $id_tempat = $tempat->id;
+
+            //Tagihan Pasang Alat
             if(empty($request->get('air')) == FALSE){
                 $pasang = PasangAlat::where([
                     ['kd_kontrol',$kode],['id_meteran_air',$id_meteran_air],['id_tempat',NULL],['tanggal',$tanggal]
@@ -193,6 +206,7 @@ class TempatController extends Controller
 
     public function update($id){
         return view('tempat.update',[
+            'dataset'=>TempatUsaha::updateData($id),
             'airAvailable'=>TempatUsaha::airAvailable(),
             'listrikAvailable'=>TempatUsaha::listrikAvailable(),
             'trfKeamananIpk'=>TempatUsaha::trfKeamananIpk(),
@@ -204,7 +218,7 @@ class TempatController extends Controller
     }
 
     public function store(Request $request,$id){
-
+        return redirect()->route('tempatdata')->with('success','Tempat Usaha Diupdate');
     }
 
     public function delete($id){
@@ -254,7 +268,13 @@ class TempatController extends Controller
             $fasilitas = 'Lain - Lain';
         }
         
-        return view('tempat.fasilitas',[
+        if($fas == 'diskon'){
+            $view = 'tempat.diskon';
+        }
+        else{
+            $view = 'tempat.fasilitas';
+        }
+        return view($view,[
             'dataset'=>$dataset,
             'fasilitas'=>$fasilitas,
             'fas'=>$fas,

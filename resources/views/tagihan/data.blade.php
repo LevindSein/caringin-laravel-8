@@ -55,11 +55,6 @@
                         href="{{url('tagihan/update',[$d->id])}}"
                         title="Edit">
                         <i class="fas fa-edit fa-sm"></i></a>
-                    &nbsp;
-                    <a
-                        href="{{url('tagihan/delete',[$d->id])}}"
-                        title="Hapus">
-                        <i class="fas fa-trash-alt" style="color:#e74a3b;"></i></a>
                 </td>
             </tr>
             @endforeach

@@ -89,36 +89,7 @@ class PedagangController extends Controller
     }
 
     public function store(Request $request, $id){
-        $ktp = $request->get('ktp');
-        $nama = ucwords($request->get('nama'));
-        $email = strtolower($request->get('email').'@gmail.com');
-        $hp = $request->get('hp');
-        if($hp[0] == '0'){
-            $hp = '62'.substr($hp,1);
-        }
-        else{
-            $hp = '62'.$hp;
-        }
-
-        $err = Pedagang::updReport($ktp,$email,$hp,$id);
-
-        if($err != "OK"){
-            return redirect()->back()->with('error','Pedagang '.$nama.', '.$err.' Telah Digunakan');
-        }
-        else{
-            try{
-                $pedagang = Pedagang::find($id);
-                $pedagang->nama = $nama;
-                $pedagang->ktp = $ktp;
-                $pedagang->email = $email;
-                $pedagang->hp = $hp;
-                $user->save();
-
-                return redirect()->route('pedagangindex')->with('success','Pedagang '.$nama.' Ditambah');
-            }catch(\Exception $e){
-                return redirect()->back()->with('error','Pedagang '.$nama.', '.$err.' Telah Digunakan');
-            } 
-        }
+        return redirect()->route('pedagangindex')->with('success','Pedagang Diupdate');
     }
 
     public function delete($id){

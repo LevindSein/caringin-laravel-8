@@ -19,8 +19,12 @@
                 <th rowspan="2">No.Los</th>
                 <th rowspan="2">Jml.Los</th>
                 <th rowspan="2">Usaha</th>
-                <th colspan="6">Fasilitas</th>
-                <th rowspan="2">Diskon (%)</th>
+                <th colspan="2">Listrik</th>
+                <th colspan="2">Air Bersih</th>
+                <th colspan="2">Keamanan & IPK</th>
+                <th colspan="2">Kebersihan</th>
+                <th rowspan="2">Air Kotor</th>
+                <th rowspan="2">Lain - Lain</th>
                 <th rowspan="2">Status</th>
                 <th rowspan="2">Ket</th>
                 <th rowspan="2">Pemilik</th>
@@ -28,108 +32,38 @@
                 <th rowspan="2">Action</th>
             </tr>
             <tr>
-                <th>Air Bersih</th>
-                <th>Listrik</th>
-                <th>Keamanan IPK (RP.)</th>
-                <th>Kebersihan (RP.)</th>
-                <th>Air Kotor (RP.)</th>
-                <th>Lain-Lain (RP.)</th>
+                <th>Meteran</th>
+                <th>Bebas Bayar</th>
+                <th>Meteran</th>
+                <th>Bebas Bayar</th>
+                <th>Tarif</th>
+                <th>Diskon</th>
+                <th>Tarif</th>
+                <th>Diskon</th>
             </tr>
         </thead>
         
         <tbody class="table-bordered">
             @foreach($dataset as $data)
-            <td class="text-center"
-                    <?php if($data->stt_cicil==0){ ?> style="color:green;" <?php } ?>
-                    <?php if($data->stt_cicil==1 || $data->stt_cicil==2){ ?> style="color:orange;" <?php } ?>>
-                    {{$data->kd_kontrol}}
-                </td>
-                <td class="text-center">
-                    @if($data->lok_tempat == NULL)
-                        &mdash;
-                    @else
-                        {{$data->lok_tempat}}
-                    @endif
-                </td>
+            <tr>
+                <td class="text-center" style="{{ ($data->stt_cicil == 0) ? 'color:green;' : 'color:orange;' }}">{{$data->kd_kontrol}}</td>
+                <td class="text-center">@if($data->lok_tempat == NULL) &mdash; @else {{$data->lok_tempat}} @endif</td>
                 <td class="text-left">{{$data->pengguna}}</td>
                 <td class="text-center" style="white-space:normal;">{{$data->no_alamat}}</td>
-                <td>{{$data->jml_alamat}}</td>
-                <td class="text-left">{{$data->bentuk_usaha}}</td>
-                <td class="text-center">
-                    @if($data->trf_airbersih != NULL)
-                        @if($data->air == NULL)
-                            0
-                        @else
-                            {{$data->air}}
-                        @endif
-                    @else
-                        &mdash;
-                    @endif
-                </td>
-                <td class="text-center">
-                    @if($data->trf_listrik != NULL)
-                        @if($data->listrik == NULL)
-                            0
-                        @else
-                            {{$data->listrik}}
-                        @endif
-                    @else
-                        &mdash;
-                    @endif
-                </td>
-                <td class="text-center">
-                    @if($data->trf_keamananipk == NULL)
-                        &mdash;
-                    @else
-                        {{number_format($data->keamananipk)}}
-                    @endif
-                </td>
-                <td class="text-center">
-                    @if($data->trf_kebersihan == NULL)
-                        &mdash;
-                    @else
-                        {{number_format($data->kebersihan)}}
-                    @endif
-                </td>
-                <td class="text-center">
-                    @if($data->trf_airkotor == NULL)
-                        &mdash;
-                    @else
-                        {{number_format($data->airkotor)}}
-                    @endif
-                </td>
-                <td class="text-center">
-                    @if($data->trf_lain == NULL)
-                        &mdash;
-                    @else
-                        {{number_format($data->lain)}}
-                    @endif
-                </td>
-                <td class="text-center">
-                    @if($data->trf_diskon == NULL)
-                        &mdash;
-                    @else
-                        {{number_format($data->diskon)}}
-                    @endif
-                </td>
-                <td class="text-center">
-                    @if($data->stt_tempat == 1)
-                        &#10004;
-                    @elseif($data->stt_tempat == 2)
-                        &#10060;
-                    @else
-                        &nbsp;
-                    @endif
-                </td>
-                <td class="text-center">
-                    @if($data->ket_tempat == NULL && $data->stt_tempat == 1)
-                        Aktif
-                    @elseif($data->ket_tempat == NULL && $data->stt_tempat == NULL)
-                        &mdash;
-                    @elseif($stt_tempat == 2)
-                        {{$data->ket_tempat}}
-                    @endif
-                </td>
+                <td class="text-center">{{$data->jml_alamat}}</td>
+                <td class="text-center">{{$data->bentuk_usaha}}</td>
+                <td class="text-center">@if($data->trf_listrik == NULL) <i class="fas fa-times"></i> @else {{$data->listrik}} @endif</td>
+                <td class="text-center">@if($data->dis_listrik == 0) <i class="fas fa-times"></i> @else <i class="fas fa-check"></i> @endif</td>
+                <td class="text-center">@if($data->trf_airbersih == NULL) <i class="fas fa-times"></i> @else {{$data->air}} @endif</td>
+                <td class="text-center">@if($data->dis_airbersih == 0) <i class="fas fa-times"></i> @else <i class="fas fa-check"></i> @endif</td>
+                <td class="text-center">@if($data->trf_keamananipk == NULL) <i class="fas fa-times"></i> @else {{number_format($data->keamananipk)}} @endif</td>
+                <td class="text-center">@if($data->dis_keamananipk == 0) <i class="fas fa-times"></i> @else <i class="fas fa-check"></i> @endif</td>
+                <td class="text-center">@if($data->trf_kebersihan == NULL) <i class="fas fa-times"></i> @else {{number_format($data->kebersihan)}} @endif</td>
+                <td class="text-center">@if($data->dis_kebersihan == 0) <i class="fas fa-times"></i> @else <i class="fas fa-check"></i> @endif</td>
+                <td class="text-center">@if($data->trf_airkotor == NULL) <i class="fas fa-times"></i> @else {{number_format($data->airkotor)}} @endif</td>
+                <td class="text-center">@if($data->trf_lain == NULL) <i class="fas fa-times"></i> @else {{number_format($data->lain)}} @endif</td>
+                <td class="text-center">@if($data->stt_tempat == 1) &#10004; @else &#10060; @endif</td>
+                <td class="text-center">@if($data->stt_tempat == 1) Aktif @else {{$data->ket_tempat}} @endif</td>
                 <td class="text-left">{{$data->pemilik}}</td>
                 <td class="text-center">
                     <a
@@ -138,7 +72,7 @@
                         class="btn btn-sm btn-primary">Details</a>
                 </td>
                 <td class="text-center">
-                <a
+                    <a
                         href="{{url('tempatusaha/update',[$data->id])}}"
                         title="Edit">
                         <i class="fas fa-edit fa-sm"></i></a>
@@ -177,7 +111,7 @@
                     className: 'btn btn-success bg-gradient-success',
                     title: 'Data Tempat Usaha',
                     exportOptions: {
-                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
                     },
                     titleAttr: 'Download Excel'
                 }
@@ -189,7 +123,7 @@
             "scrollX": true,
             "scrollCollapse": true,
             "aoColumnDefs": [
-                { "bSortable": false, "aTargets": [16, 17] }
+                { "bSortable": false, "aTargets": [19,20] }
             ],
             "pageLength": 8,
             "order": [ 0, "asc" ]

@@ -168,6 +168,19 @@ $role = Session::get('role');
                                     <option value="{{$air->id}}">{{$air->kode}} - {{$air->nomor}} ({{$air->akhir}})</option>
                                     @endforeach
                                 </select>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            name="dis_airbersih"
+                                            id="dis_airbersih"
+                                            value="dis_airbersih">
+                                        <label class="form-check-label" for="dis_airbersih">
+                                            Bebas Bayar
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
 
 
@@ -190,6 +203,19 @@ $role = Session::get('role');
                                     <option value="{{$listrik->id.','.$listrik->daya}}">{{$listrik->kode}} - {{$listrik->nomor}} ({{$listrik->akhir}}) - {{$listrik->daya}} W</option>
                                     @endforeach
                                 </select>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            name="dis_listrik"
+                                            id="dis_listrik"
+                                            value="dis_airbersih">
+                                        <label class="form-check-label" for="dis_listrik">
+                                            Bebas Bayar
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
 
 
@@ -212,6 +238,19 @@ $role = Session::get('role');
                                     <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
                                     @endforeach
                                 </select>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            name="dis_keamananipk"
+                                            id="dis_keamananipk"
+                                            value="dis_keamananipk">
+                                        <label class="form-check-label" for="dis_keamananipk">
+                                            Diskon
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
 
 
@@ -234,6 +273,19 @@ $role = Session::get('role');
                                     <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
                                     @endforeach
                                 </select>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            name="dis_kebersihan"
+                                            id="dis_kebersihan"
+                                            value="dis_kebersihan">
+                                        <label class="form-check-label" for="dis_kebersihan">
+                                            Diskon
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
 
                             <hr class="sidebar-divider d-none d-md-block">
@@ -284,7 +336,7 @@ $role = Session::get('role');
 
                     <!-- Pembayaran -->
                     <div class="form-group row col-lg-12">
-                        <div class="col-sm-2">Metode Pembayaran</div>
+                        <div class="col-sm-2">Metode</div>
                         <div class="col-sm-10">
                             <div class="form-check">
                                 <input
@@ -306,28 +358,8 @@ $role = Session::get('role');
                                     id="cicilan2"
                                     value="1">
                                 <label class="form-check-label" for="cicilan2">
-                                    Cicilan
+                                    Cicil
                                 </label>
-                            </div>
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="cicilan"
-                                    id="cicilan3"
-                                    value="2">
-                                <label class="form-check-label" for="cicilan3">
-                                    Diskon / Bebas Bayar
-                                </label>
-                            </div> 
-                            <div class="form-group" style="display:none" id="diskon">
-                                <label for="myDiv7">Kategori Tarif <span style="color:red;">*</span></label>
-                                <select class="form-control" name="trfDiskon" id="myDiv7">
-                                    <option disabled="disabled" selected="selected" hidden="hidden" value="">--- Pilih Tarif ---</option>
-                                    @foreach($trfDiskon as $tarif)
-                                    <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
-                                    @endforeach
-                                </select>
                             </div>
                         </div>
                     </div>
@@ -451,6 +483,34 @@ $("#los").on("input", function() {
 })
 </script>
 
+
+<!-- Status Button -->
+<script>
+    function statusTempat() {
+        if ($('#myStatus2').is(':checked')) {
+            document
+                .getElementById('ketStatus')
+                .style
+                .display = 'block';
+            document
+                .getElementById('ket_tempat')
+                .required = true;
+        }
+        else {
+            document
+                .getElementById('ketStatus')
+                .style
+                .display = 'none';
+            document
+                .getElementById('ket_tempat')
+                .required = false;
+        }
+    }
+    $('input[type="radio"]')
+        .click(statusTempat)
+        .each(statusTempat);
+</script>
+
 <!-- Fasilitas Button -->
 <script>
     function evaluate() {
@@ -560,69 +620,5 @@ $("#los").on("input", function() {
     $('input[type="checkbox"]')
         .click(checkLain)
         .each(checkLain);
-</script>
-
-<!-- Pembayaran -->
-<script>
-    function cicilan() {
-        if ($('#cicilan1').is(':checked')) {
-            document
-                .getElementById('diskon')
-                .style
-                .display = 'none';
-            document
-                .getElementById('myDiv7')
-                .required = false;
-        }
-        else if($('#cicilan2').is(':checked')) {
-            document
-                .getElementById('diskon')
-                .style
-                .display = 'none';
-            document
-                .getElementById('myDiv7')
-                .required = false;
-        }
-        else{
-            document
-                .getElementById('diskon')
-                .style
-                .display = 'block';
-            document
-                .getElementById('myDiv7')
-                .required = true;
-        }
-    }
-    $('input[type="radio"]')
-        .click(cicilan)
-        .each(cicilan);
-</script>
-
-
-<!-- Status Button -->
-<script>
-    function statusTempat() {
-        if ($('#myStatus1').is(':checked')) {
-            document
-                .getElementById('ketStatus')
-                .style
-                .display = 'none';
-            document
-                .getElementById('ket_tempat')
-                .required = false;
-        }
-        else {
-            document
-                .getElementById('ketStatus')
-                .style
-                .display = 'block';
-            document
-                .getElementById('ket_tempat')
-                .required = true;
-        }
-    }
-    $('input[type="radio"]')
-        .click(statusTempat)
-        .each(statusTempat);
 </script>
 @endsection

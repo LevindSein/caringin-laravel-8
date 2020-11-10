@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
+
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ManajerController;
@@ -23,21 +25,21 @@ use App\Http\Controllers\UserController;
 
 use App\Http\Controllers\Auth\LoginController;
 
-use Illuminate\Support\Facades\Session;
 use App\Models\Pedagang;
 use App\Models\TempatUsaha;
 use App\Models\HariLibur;
+use App\Models\Blok;
+use App\Models\User;
+
 use App\Models\TarifAirBersih;
 use App\Models\TarifListrik;
 use App\Models\TarifKeamananIpk;
 use App\Models\TarifKebersihan;
 use App\Models\TarifAirKotor;
 use App\Models\TarifLain;
-use App\Models\Blok;
+
 use App\Models\MeteranListrik;
 use App\Models\MeteranAir;
-use App\Models\User;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -96,7 +98,6 @@ Route::get('tempatusaha/data',function(){
         'trfKebersihan'=>TempatUsaha::trfKebersihan(),
         'trfAirKotor'=>TempatUsaha::trfAirKotor(),
         'trfLain'=>TempatUsaha::trfLain(),
-        'trfDiskon'=>TempatUsaha::trfDiskon(),
     ]);
 })->name('tempatdata');
 Route::post('tempatusaha/add',[TempatController::class, 'add']);
@@ -111,7 +112,6 @@ Route::get('tempatusaha/rekap/{blok}',[TempatController::class, 'rekapdetail']);
 Route::get('tagihan/index/{data}',[TagihanController::class, 'data'])->name('tagihandata');
 Route::get('tagihan/update/{id}',[TagihanController::class, 'update']);
 Route::post('tagihan/store',[TagihanController::class, 'store']);
-Route::get('tagihan/delete/{id}',[TagihanController::class, 'delete']);
 Route::get('tagihan/{fasilitas}',[TagihanController::class, 'fasilitas'])->name('pedagangTagihan');
 Route::post('tagihan/store/{fasilitas}/{id}',[TagihanController::class, 'storeFasilitas']);
 Route::post('tagihan/edaran',[TagihanController::class, 'edaran']);
@@ -168,6 +168,7 @@ Route::get('rekap/pemakaian',[PemakaianController::class, 'index']);
 Route::get('rekap/pemakaian/{fasilitas}/{bulan}',[PemakaianController::class, 'fasilitas']);
 
 Route::get('data',[DataController::class, 'index']);
+Route::get('data/details/{data}/{bulan}',[DataController::class, 'details']);
 
 Route::get('user',function(){
     return view('user.index',[

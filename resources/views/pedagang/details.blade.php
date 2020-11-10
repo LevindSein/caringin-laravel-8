@@ -29,7 +29,7 @@ $role = Session::get('role');
                                 <?php $id = $d[2] ?>
                                 <button 
                                     onclick="location.href='{{url('tempatusaha/details',[$id])}}'"
-                                    class="form-control shadow"
+                                    class="form-control"
                                     aria-describedby="inputGroupPrepend"
                                     style="text-align:left;">{{$d[0]}}
                                 </button>

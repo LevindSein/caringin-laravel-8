@@ -65,7 +65,7 @@ use App\Models\Tagihan;
                         Aktif
                     @elseif($data->ket_tempat == NULL && $data->stt_tempat == NULL)
                         &mdash;
-                    @elseif($stt_tempat == 2)
+                    @elseif($data->stt_tempat == 2)
                         {{$data->ket_tempat}}
                     @endif
                 </td>

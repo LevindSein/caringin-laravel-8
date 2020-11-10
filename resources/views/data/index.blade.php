@@ -1,5 +1,24 @@
 <?php
 $role = Session::get('role');
+
+function indoBln($date){
+    $bulan = array (
+        1 =>   'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
+    );
+    $pecahkan = explode('-', $date);
+    return $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
+}
 ?>
 
 @extends( $role == 'master' ? 'layout.master' : 'layout.admin')
@@ -24,12 +43,12 @@ $role = Session::get('role');
         </li>
         <li class="nav-item">
             <a role="tab" class="nav-link" id="tab-c-2" data-toggle="tab" href="#tab-animated-2">
-                <span>Penghapusan</span>
+                <span>Bongkaran</span>
             </a>
         </li>
         <li class="nav-item">
             <a role="tab" class="nav-link" id="tab-c-3" data-toggle="tab" href="#tab-animated-3">
-                <span>Bongkaran</span>
+                <span>Penghapusan</span>
             </a>
         </li>
     </ul>
@@ -43,13 +62,13 @@ $role = Session::get('role');
             
             <div class="tab-content">
                 <div class="tab-pane active" id="tab-animated-0" role="tabpanel">
-                    Fahni
+                    @include('data.tagihan')
                 </div>
                 <div class="tab-pane" id="tab-animated-1" role="tabpanel">
-                    Amsyari
+                    @include('data.tunggakan')
                 </div>
                 <div class="tab-pane" id="tab-animated-2" role="tabpanel">
-                    Levindsein
+                    @include('data.bongkaran')
                 </div>
                 <div class="tab-pane" id="tab-animated-3" role="tabpanel">
                     Fahni Amsyari
