@@ -83,7 +83,7 @@
                     text: '<i class="fas fa-file-excel fa-lg"></i>',
                     extend: 'excel',
                     className: 'btn btn-success bg-gradient-success',
-                    title: 'Data Bongkaran',
+                    title: 'Data Bongkaran {{$sekarang}}',
                     exportOptions: {
                         columns: [0, 1, 2, 3, 4, 5]
                     },

@@ -58,7 +58,7 @@
                     text: '<i class="fas fa-file-excel fa-lg"></i>',
                     extend: 'excel',
                     className: 'btn btn-success bg-gradient-success',
-                    title: 'Pendapatan Bulanan',
+                    title: 'Pendapatan Bulanan {{$sekarang}}',
                     exportOptions: {
                         columns: [0,1,2]
                     },

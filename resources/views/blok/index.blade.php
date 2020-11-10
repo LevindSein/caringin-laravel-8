@@ -1,5 +1,8 @@
 <?php
 $role = Session::get('role');
+
+date_default_timezone_set('Asia/Jakarta');
+$sekarang = date("d-m-Y H:i:s",time());
 ?>
 
 @extends( $role == 'master' ? 'layout.master' : 'layout.admin')
@@ -126,7 +129,7 @@ $role = Session::get('role');
                     text: '<i class="fas fa-file-excel fa-lg"></i>',
                     extend: 'excel',
                     className: 'btn btn-success bg-gradient-success',
-                    title: 'Data Blok',
+                    title: 'Data Blok {{$sekarang}}',
                     exportOptions: {
                         columns: [ 0, 1, 2 ]
                     },

@@ -181,6 +181,13 @@ $username = Session::get('username');
                         <span>User</span></a>
                 </li>
 
+                <!-- Nav Item - Log -->
+                <li class="nav-item {{ (request()->is('log*')) ? 'active' : '' }}">
+                    <a class="nav-link" href="{{url('log')}}">
+                        <i class="fas fa-history"></i>
+                        <span>Riwayat Login</span></a>
+                </li>
+
                 <!-- Divider -->
                 <hr class="sidebar-divider d-none d-md-block">
 

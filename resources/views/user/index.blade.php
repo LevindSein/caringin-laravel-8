@@ -1,5 +1,7 @@
 <?php
 $role = Session::get('role');
+date_default_timezone_set('Asia/Jakarta');
+$sekarang = date("d-m-Y H:i:s",time());
 ?>
 
 @extends( $role == 'master' ? 'layout.master' : 'layout.admin')
@@ -32,6 +34,11 @@ $role = Session::get('role');
                 <span>Kasir</span>
             </a>
         </li>
+        <li class="nav-item">
+            <a role="tab" class="nav-link {{ (Session::get('user') == 'nasabah') ? 'active' : '' }}" id="tab-c-4" data-toggle="tab" href="#tab-animated-4">
+                <span>Nasabah</span>
+            </a>
+        </li>
     </ul>
 </div>
 <div class = "container-fluid">
@@ -62,6 +69,9 @@ $role = Session::get('role');
                 </div>
                 <div class="tab-pane  {{ (Session::get('user') == 'kasir') ? 'active' : '' }}" id="tab-animated-3" role="tabpanel">
                     @include('user.kasir')
+                </div>
+                <div class="tab-pane  {{ (Session::get('user') == 'nasabah') ? 'active' : '' }}" id="tab-animated-4" role="tabpanel">
+                    @include('user.nasabah')
                 </div>
             </div>
         </div>

@@ -1,3 +1,8 @@
+<?php
+date_default_timezone_set('Asia/Jakarta');
+$sekarang = date("d-m-Y H:i:s",time());
+?>
+
 @extends('tempat.index')
 @section('body')
 <title>Rekap Tempat Usaha | BP3C</title>
@@ -115,7 +120,7 @@
                     text: '<i class="fas fa-file-excel fa-lg"></i>',
                     extend: 'excel',
                     className: 'btn btn-success bg-gradient-success',
-                    title: 'Rekap Tempat Usaha',
+                    title: 'Rekap Tempat Usaha {{$sekarang}}',
                     exportOptions: {
                         columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
                     },

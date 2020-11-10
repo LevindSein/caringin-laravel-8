@@ -2,6 +2,9 @@
 $role = Session::get('role');
 $random = str_pad(mt_rand(1,99999999),8,'0',STR_PAD_LEFT);
 $no_anggota = "BP3C".$random;
+
+date_default_timezone_set('Asia/Jakarta');
+$sekarang = date("d-m-Y H:i:s",time());
 ?>
 
 @php
@@ -290,7 +293,7 @@ $(document).ready(function () {
                     text: '<i class="fas fa-file-excel fa-lg"></i>',
                     extend: 'excel',
                     className: 'btn btn-success bg-gradient-success',
-                    title: 'Data Pedagang',
+                    title: 'Data Pedagang {{$sekarang}}',
                     exportOptions: {
                         columns: [ 0, 1, 2, 3, 4, 5]
                     },

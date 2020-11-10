@@ -1,46 +1,40 @@
 <div class="table-responsive">
     <table 
         class="table table-bordered" 
-        id="alat_air"
+        id="userNasabah"
         cellspacing="0"
         width="100%"
         style="font-size:0.75rem;">
         <thead>
             <tr>
                 <th>No.</th>
-                <th>Kode</th>
-                <th>Nomor</th>
-                <th>Stand</th>
-                <th>Status</th>
+                <th>Username</th>
+                <th>Nama</th>
+                <th>KTP</th>
+                <th>HP</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
             <?php $i= 1; ?>
-            @foreach($airbersih as $data)
-            <?php 
-            $kontrol = DB::table('tempat_usaha')
-            ->where('tempat_usaha.id_meteran_air',$data->id)
-            ->select('kd_kontrol')
-            ->first();
-            
-            if($kontrol == NULL){
-                $kontrol = 'idle';
-            }
-            else{
-                $kontrol = $kontrol->kd_kontrol;
-            }
-            ?>
+            @foreach($nasabah as $data)
             <tr>
                 <td class="text-center">{{$i}}</td>
-                <td>{{$data->kode}}</td>
-                <td>{{$data->nomor}}</td>
-                <td>{{number_format($data->akhir)}}</td>
-                <td class="text-center" style="{{ ($kontrol == 'idle') ? 'color:green;' : '' }}" >{{$kontrol}}</td>
+                <td class="text-center">{{$data->username}}</td>
+                <td class="text-center">{{$data->nama}}</td>
+                <td class="text-center">{{$data->ktp}}</td>
+                <td class="text-center">{{$data->hp}}</td>
                 <td class="text-center">
                     <a
-                        href="{{url('utilities/meteran/delete',['airbersih',$data->id])}}"
-                        title="Hapus">
+                        href="{{url('user/reset',[$data->id])}}">
+                        <i class="fas fa-key fa-sm" style="color:orange;"></i></a>
+                    &nbsp;
+                    <a
+                        href="{{url('user/update',[$data->id])}}">
+                        <i class="fas fa-edit fa-sm"></i></a>
+                    &nbsp;
+                    <a
+                        href="{{url('user/delete',[$data->id])}}">
                         <i class="fas fa-trash-alt" style="color:#e74a3b;"></i></a>
                 </td>
             </tr>
@@ -54,7 +48,7 @@
 <script>
     $(document).ready(function () {
         $(
-            '#alat_air'
+            '#userNasabah'
         ).DataTable({
             "processing": true,
             "bProcessing": true,
@@ -73,9 +67,9 @@
                     text: '<i class="fas fa-file-excel fa-lg"></i>',
                     extend: 'excel',
                     className: 'btn btn-success bg-gradient-success',
-                    title: 'Daftar Alat Air Bersih {{$sekarang}}',
+                    title: 'Data Nasabah {{$sekarang}}',
                     exportOptions: {
-                        columns: [0, 1, 2, 3]
+                        columns: [0, 1, 2, 3, 4]
                     },
                     titleAttr: 'Download Excel'
                 }

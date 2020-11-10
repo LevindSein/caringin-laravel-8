@@ -59,7 +59,7 @@
                     text: '<i class="fas fa-file-excel fa-lg"></i>',
                     extend: 'excel',
                     className: 'btn btn-success bg-gradient-success',
-                    title: 'Tarif Kebersihan',
+                    title: 'Tarif Kebersihan {{$sekarang}}',
                     exportOptions: {
                         columns: [0, 1]
                     },

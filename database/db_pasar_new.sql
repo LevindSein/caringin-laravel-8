@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 10 Nov 2020 pada 07.16
+-- Waktu pembuatan: 10 Nov 2020 pada 17.18
 -- Versi server: 10.4.11-MariaDB
 -- Versi PHP: 7.4.1
 
@@ -118,6 +118,23 @@ INSERT INTO `hari_libur` (`id`, `tanggal`, `ket`, `updated_at`, `created-at`) VA
 (20, '2029-07-15', 'Hari Minggu', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (21, '2030-09-15', 'Hari Minggu', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (22, '2030-12-15', 'Hari Minggu', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `login_log`
+--
+
+CREATE TABLE `login_log` (
+  `id` int(11) NOT NULL,
+  `username` varchar(15) DEFAULT NULL,
+  `nama` varchar(50) DEFAULT NULL,
+  `role` varchar(10) DEFAULT NULL,
+  `ktp` varchar(20) DEFAULT NULL,
+  `hp` varchar(15) DEFAULT NULL,
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -10835,6 +10852,12 @@ ALTER TABLE `hari_libur`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indeks untuk tabel `login_log`
+--
+ALTER TABLE `login_log`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indeks untuk tabel `meteran_air`
 --
 ALTER TABLE `meteran_air`
@@ -10966,6 +10989,12 @@ ALTER TABLE `blok`
 --
 ALTER TABLE `hari_libur`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+
+--
+-- AUTO_INCREMENT untuk tabel `login_log`
+--
+ALTER TABLE `login_log`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT untuk tabel `meteran_air`

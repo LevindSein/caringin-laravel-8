@@ -68,4 +68,8 @@ class User extends Authenticatable
     public static function kasir(){
         return User::where('role','kasir')->get();
     }
+
+    public static function nasabah(){
+        return User::where('role','nasabah')->get();
+    }
 }

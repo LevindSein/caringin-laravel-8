@@ -40,6 +40,8 @@ use App\Models\TarifLain;
 
 use App\Models\MeteranListrik;
 use App\Models\MeteranAir;
+
+use App\Models\LoginLog;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -176,6 +178,7 @@ Route::get('user',function(){
         'keuangan'=>User::keuangan(),
         'manajer'=>User::manajer(),
         'kasir'=>User::kasir(),
+        'nasabah'=>User::nasabah(),
     ]);
 })->name('userindex');
 Route::post('user/add',[UserController::class, 'add']);
@@ -183,6 +186,12 @@ Route::get('user/update/{id}',[UserController::class, 'update']);
 Route::post('user/store/{id}',[UserController::class, 'store']);
 Route::get('user/delete/{id}',[UserController::class, 'delete']);
 Route::get('user/reset/{id}',[UserController::class, 'reset']);
+
+Route::get('log',function(){
+    return view('log.index',[
+        'dataset'=>LoginLog::orderBy('created_at','desc')->get()
+    ]);
+});
 
 //opsional
 Route::post('tagihan/pedagang/{fasilitas}',[TagihanController::class, 'pedagang']);

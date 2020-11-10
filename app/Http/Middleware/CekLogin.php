@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Support\Facades\Session;
 use Exception;
 use App\Models\User;
+use App\Models\LoginLog;
 
 class CekLogin
 {
@@ -18,6 +19,7 @@ class CekLogin
      */
     public function handle($request, Closure $next)
     {
+        date_default_timezone_set('Asia/Jakarta');
         $pass = md5($request->get('password'));
         $user = User::where([['username', $request->username],['password',$pass]])->first();
         try{
@@ -26,6 +28,19 @@ class CekLogin
             Session::put('tarif','listrik');
             Session::put('meteran','listrik');
             Session::put('user','admin');
+
+            if(LoginLog::count() > 5000){
+                LoginLog::truncate();
+            }
+
+            $loginLog = new LoginLog;
+            $loginLog->username = $user->username;
+            $loginLog->nama = $user->nama;
+            $loginLog->ktp = $user->ktp;
+            $loginLog->hp = $user->hp;
+            $loginLog->role = $user->role;
+            $loginLog->save();
+
             if ($user->role == 'master') {
                 return redirect()->route('masterindex')->with('success','Login Berhasil');
             }

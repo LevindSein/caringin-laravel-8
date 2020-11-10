@@ -1,5 +1,8 @@
 <?php
 use App\Models\Tagihan;
+
+date_default_timezone_set('Asia/Jakarta');
+$sekarang = date("d-m-Y H:i:s",time());
 ?>
 
 @extends('tempat.index')
@@ -133,7 +136,7 @@ use App\Models\Tagihan;
                     text: '<i class="fas fa-file-excel fa-lg"></i>',
                     extend: 'excel',
                     className: 'btn btn-success bg-gradient-success',
-                    title: 'Pemakai Fasilitas {{$fas}}',
+                    title: 'Pemakai Fasilitas {{$fas}} {{$sekarang}}',
                     exportOptions: {
                         columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
                     },

@@ -10,6 +10,8 @@
                 <th>No.</th>
                 <th>Username</th>
                 <th>Nama</th>
+                <th>KTP</th>
+                <th>HP</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -20,6 +22,8 @@
                 <td class="text-center">{{$i}}</td>
                 <td class="text-center">{{$data->username}}</td>
                 <td class="text-center">{{$data->nama}}</td>
+                <td class="text-center">{{$data->ktp}}</td>
+                <td class="text-center">{{$data->hp}}</td>
                 <td class="text-center">
                     <a
                         href="{{url('user/reset',[$data->id])}}">
@@ -63,9 +67,9 @@
                     text: '<i class="fas fa-file-excel fa-lg"></i>',
                     extend: 'excel',
                     className: 'btn btn-success bg-gradient-success',
-                    title: 'Data Kasir',
+                    title: 'Data Kasir {{$sekarang}}',
                     exportOptions: {
-                        columns: [0, 1, 2]
+                        columns: [0, 1, 2, 3, 4]
                     },
                     titleAttr: 'Download Excel'
                 }
