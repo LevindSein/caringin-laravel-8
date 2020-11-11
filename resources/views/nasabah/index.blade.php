@@ -1,49 +1,30 @@
+<?php
+date_default_timezone_set('Asia/Jakarta');
+$bulan = date("Y-m",time());
+$sekarang = date("d-m-Y H:i:s",time());
+
+function indoBln($date){
+    $bulan = array (
+        1 =>   'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
+    );
+    $pecahkan = explode('-', $date);
+    return $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
+}
+?>
+
 @extends('layout.nasabah')
 @section('content')
-<!-- Card -->
-<div class="row">
-    <div class="col-md-6 col-xl-4">
-        <div class="card mb-3 widget-content bg-midnight-bloom">
-            <div class="widget-content-wrapper text-white">
-                <div class="widget-content-left">
-                    <div class="widget-heading">Tagihan</div>
-                    <div class="widget-subheading">Juni 2020</div>
-                </div>
-                <div class="widget-content-right">
-                    <div class="widget-numbers text-white"><span>10,000,000</span></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-xl-4">
-        <div class="card mb-3 widget-content bg-arielle-smile">
-            <div class="widget-content-wrapper text-white">
-                <div class="widget-content-left">
-                    <div class="widget-heading">Tunggakan</div>
-                    <div class="widget-subheading">Juni 2020</div>
-                </div>
-                <div class="widget-content-right">
-                    <div class="widget-numbers text-white"><span>10,000,000</span></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 col-xl-4">
-        <div class="card mb-3 widget-content bg-grow-early">
-            <div class="widget-content-wrapper text-white">
-                <div class="widget-content-left">
-                    <div class="widget-heading">Denda</div>
-                    <div class="widget-subheading">Juni 2020</div>
-                </div>
-                <div class="widget-content-right">
-                    <div class="widget-numbers text-white"><span>10,000,000</span></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- End Card -->
-
 <!-- Rincian Tagihan -->
 <div class="row">
     <div class="col-md-12">
@@ -57,30 +38,27 @@
                     width="100%">
                     <thead>
                         <tr>
-                            <th style="text-align:center;">Kategori</th>
-                            <th style="text-align:center;">Tarif (Rp.)</th>
+                            <th style="text-align:center;">Tagihan</th>
+                            <th style="text-align:center;">Total (Rp.)</th>
+                            <th style="text-align:center;">Realisasi</th>
+                            <th style="text-align:center;">Selisih</th>
                             <th style="text-align:center;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $i= 1; ?>
-                        @foreach($keamananipk as $data)
+                        @foreach($dataset as $data)
                         <tr>
-                            <td style="text-align:center;">{{$i}}</td>
-                            <td style="text-align:right;">{{number_format($data->tarif)}}</td>
+                            <td style="text-align:center;">{{indoBln($data->bln_tagihan)}}</td>
+                            <td style="text-align:right;">{{number_format($data->tagihan)}}</td>
+                            <td style="text-align:right;">{{number_format($data->realisasi)}}</td>
+                            <td style="text-align:right;">{{number_format($data->selisih)}}</td>
                             <td class="text-center">
                                 <a
-                                    href="{{url('utilities/tarif/update',['keamananipk',$data->id])}}"
-                                    title="Edit">
-                                    <i class="fas fa-edit fa-sm"></i></a>
-                                &nbsp;
-                                <a
-                                    href="{{url('utilities/tarif/delete',['keamananipk',$data->id])}}"
-                                    title="Hapus">
-                                    <i class="fas fa-trash-alt" style="color:#e74a3b;"></i></a>
+                                    href="{{url('#')}}"
+                                    type="submit" 
+                                    class="btn btn-sm btn-primary">Details</a>
                             </td>
                         </tr>
-                        <?php $i++; ?>
                         @endforeach
                     </tbody>
                 </table>
@@ -104,7 +82,6 @@
                 'processing': '<i class="fas fa-spinner"></i>'
             },
             "scrollX": true,
-            "bSortable": false,
             "deferRender": true,
             "dom": "r<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'" +
                     "row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
@@ -114,14 +91,19 @@
                     text: '<i class="fas fa-file-excel fa-lg"></i>',
                     extend: 'excel',
                     className: 'btn btn-success bg-gradient-success',
-                    title: 'Tarif Keamanan IPK',
+                    title: 'Data Tagihan',
                     exportOptions: {
-                        columns: [0, 1]
+                        columns: [0, 1, 2, 3]
                     },
                     titleAttr: 'Download Excel'
                 }
             ],
-            responsive: true
+            "responsive": true,
+            order: [],
+            columnDefs: [ {
+                'targets': [0,4], /* column index [0,1,2,3]*/
+                'orderable': false, /* true or false */
+            }],
         });
         new $.fn.dataTable.FixedHeader(table);
     });
