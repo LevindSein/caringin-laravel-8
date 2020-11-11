@@ -77,6 +77,7 @@ $sekarang = date("d-m-Y H:i:s",time());
 <div
     class="modal fade"
     id="myModal"
+    tabIndex="-1"
     role="dialog"
     aria-labelledby="exampleModalLabel"
     aria-hidden="true">
