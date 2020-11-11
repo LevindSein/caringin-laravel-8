@@ -56,15 +56,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="app-header__menu">
-                    <span>
-                        <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
-                            <span class="btn-icon-wrapper">
-                                <i class="fa fa-ellipsis-v fa-w-6"></i>
-                            </span>
-                        </button>
-                    </span>
-                </div>
+                <div class="app-header__menu"></div>
             </div>        
             <div class="app-main">
                 <div class="app-sidebar sidebar-shadow">
@@ -89,15 +81,6 @@
                             </button>
                         </div>
                     </div>
-                    <div class="app-header__menu">
-                        <span>
-                            <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
-                                <span class="btn-icon-wrapper">
-                                    <i class="fa fa-ellipsis-v fa-w-6"></i>
-                                </span>
-                            </button>
-                        </span>
-                    </div>    
                     <div class="scrollbar-sidebar">
                         <div class="app-sidebar__inner">
                             <br>
