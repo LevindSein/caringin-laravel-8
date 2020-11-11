@@ -12,10 +12,49 @@ use App\Models\TarifKebersihan;
 use App\Models\TarifAirKotor;
 use App\Models\TarifLain;
 
+use Exception;
+
 class TarifController extends Controller
 {
     public function add(Request $request){
-
+        if(empty($request->get('checkKeamananIpk')) && empty($request->get('checkKebersihan')) && empty($request->get('checkAirKotor')) && empty($request->get('checkLain'))){
+            return redirect()->back()->with('info','Pilih Tarif yang akan ditambah');
+        }
+        else{
+            if(empty($request->get('checkKeamananIpk')) == FALSE){
+                Session::put('tarif','keamananipk');
+                $tarif = explode(',',$request->get('keamananIpk'));
+                $tarif = implode('',$tarif);
+                $trf = new TarifKeamananIpk;
+                $trf->tarif = $tarif;
+                $trf->save();
+            }
+            if(empty($request->get('checkKebersihan')) == FALSE){
+                Session::put('tarif','kebersihan');
+                $tarif = explode(',',$request->get('kebersihan'));
+                $tarif = implode('',$tarif);
+                $trf = new TarifKebersihan;
+                $trf->tarif = $tarif;
+                $trf->save();
+            }
+            if(empty($request->get('checkAirKotor')) == FALSE){
+                Session::put('tarif','airkotor');
+                $tarif = explode(',',$request->get('airkotor'));
+                $tarif = implode('',$tarif);
+                $trf = new TarifAirKotor;
+                $trf->tarif = $tarif;
+                $trf->save();
+            }
+            if(empty($request->get('checkLain')) == FALSE){
+                Session::put('tarif','lain');
+                $tarif = explode(',',$request->get('lain'));
+                $tarif = implode('',$tarif);
+                $trf = new TarifLain;
+                $trf->tarif = $tarif;
+                $trf->save();
+            }
+            return redirect()->route('tarifindex')->with('success','Tarif Ditambah');
+        }
     }
 
     public function update(Request $request, $fasilitas, $id){
@@ -84,28 +123,115 @@ class TarifController extends Controller
         }
 
         if($fasilitas == 'keamananipk'){
-            Session::put('tarif','keamananipk');
-            echo 'keamananipk';
+            return view('tarif.update',[
+                'dataset'=>TarifKeamananIpk::find($id),
+                'fasilitas'=>$fasilitas,
+                'fas'=>'Keamanan IPK'
+            ]);
         }
 
         if($fasilitas == 'kebersihan'){
-            Session::put('tarif','kebersihan');
-            echo 'kebersihan';
+            return view('tarif.update',[
+                'dataset'=>TarifKebersihan::find($id),
+                'fasilitas'=>$fasilitas,
+                'fas'=>'Kebersihan'
+            ]);
         }
 
         if($fasilitas == 'airkotor'){
-            Session::put('tarif','airkotor');
-            echo 'airkotor';
-        }
-
-        if($fasilitas == 'diskon'){
-            Session::put('tarif','diskon');
-            echo 'diskon';
+            return view('tarif.update',[
+                'dataset'=>TarifAirKotor::find($id),
+                'fasilitas'=>$fasilitas,
+                'fas'=>'Air Kotor'
+            ]);
         }
 
         if($fasilitas == 'lain'){
-            Session::put('tarif','lain');
-            echo 'lain';
+            return view('tarif.update',[
+                'dataset'=>TarifLain::find($id),
+                'fasilitas'=>$fasilitas,
+                'fas'=>'Lain - Lain'
+            ]);
+        }
+    }
+
+    public function store(Request $request, $fasilitas, $id){
+        try{
+            if($fasilitas == 'keamananipk'){
+                Session::put('tarif','keamananipk');
+                $tarif = TarifKeamananIpk::find($id);
+                $trf = explode(',',$request->get('tarif'));
+                $trf = implode('',$trf);
+                $tarif->tarif = $trf;
+                $tarif->save();
+            }
+    
+            if($fasilitas == 'kebersihan'){
+                Session::put('tarif','kebersihan');
+                $tarif = TarifKebersihan::find($id);
+                $trf = explode(',',$request->get('tarif'));
+                $trf = implode('',$trf);
+                $tarif->tarif = $trf;
+                $tarif->save();
+            }
+    
+            if($fasilitas == 'airkotor'){
+                Session::put('tarif','airkotor');
+                $tarif = TarifAirKotor::find($id);
+                $trf = explode(',',$request->get('tarif'));
+                $trf = implode('',$trf);
+                $tarif->tarif = $trf;
+                $tarif->save();
+            }
+    
+            if($fasilitas == 'lain'){
+                Session::put('tarif','lain');
+                $tarif = TarifLain::find($id);
+                $trf = explode(',',$request->get('tarif'));
+                $trf = implode('',$trf);
+                $tarif->tarif = $trf;
+                $tarif->save();
+            }
+            return redirect()->route('tarifindex')->with('success','Tarif diupdate');
+        }
+        catch(\Exception $e){
+            return redirect()->back()->with('error','Kesalahan Sistem');
+        }
+    }
+
+    public function delete($fasilitas, $id){
+        try{
+            if($fasilitas == 'keamananipk'){
+                Session::put('tarif','keamananipk');
+                $tarif = TarifKeamananIpk::find($id);
+                $nama = $tarif->tarif;
+                $tarif->delete();
+            }
+
+            if($fasilitas == 'kebersihan'){
+                Session::put('tarif','kebersihan');
+                $tarif = TarifKebersihan::find($id);
+                $nama = $tarif->tarif;
+                $tarif->delete();
+            }
+
+            if($fasilitas == 'airkotor'){
+                Session::put('tarif','airkotor');
+                $tarif = TarifAirKotor::find($id);
+                $nama = $tarif->tarif;
+                $tarif->delete();
+            }
+
+            if($fasilitas == 'lain'){
+                Session::put('tarif','lain');
+                $tarif = TarifLain::find($id);
+                $nama = $tarif->tarif;
+                $tarif->delete();
+            }
+
+            return redirect()->route('tarifindex')->with('success','Tarif '.number_format($nama).' Dihapus');
+        }catch(\Exception $e){
+            return redirect()->back()->with('error','Tarif '.number_format($nama).' Tidak Dapat Dihapus - Tarif Digunakan');
         }
     }
 }

@@ -190,35 +190,6 @@ $sekarang = date("d-m-Y H:i:s",time());
                                         aria-describedby="inputGroupPrepend">
                                 </div>
                             </div>
-
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="checkbox"
-                                    name="checkDiskon"
-                                    id="myCheck4"
-                                    data-related-item="myDiv4">
-                                <label class="form-check-label" for="myCheck4">
-                                    Diskon
-                                </label>
-                            </div>
-                            <div class="form-group" style="display:none">
-                                <div class="input-group" id="myDiv4">
-                                    <input 
-                                        type="number"
-                                        max="100"
-                                        min="0" 
-                                        autocomplete="off" 
-                                        class="form-control"
-                                        name="diskon"
-                                        id="diskon"
-                                        placeholder="Masukkan Diskon Baru"
-                                        aria-describedby="inputGroupPrepend">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" id="inputGroupPrepend">%</span>
-                                    </div>
-                                </div>
-                            </div>
                             
                             <div class="form-check">
                                 <input
@@ -299,5 +270,68 @@ document
         'input',
         event => event.target.value = (parseInt(event.target.value.replace(/[^\d]+/gi, '')) || 0).toLocaleString('en-US')
     );
+</script>
+<!-- Checking -->
+<script>
+    function checkKeamananIpk() {
+        if ($('#myCheck1').is(':checked')) {
+            document
+                .getElementById('keamananIpk')
+                .required = true;
+        } else {
+            document
+                .getElementById('keamananIpk')
+                .required = false;
+        }
+    }
+    $('input[type="checkbox"]')
+        .click(checkKeamananIpk)
+        .each(checkKeamananIpk);
+
+    
+    function checkKebersihan() {
+        if ($('#myCheck2').is(':checked')) {
+            document
+                .getElementById('kebersihan')
+                .required = true;
+        } else {
+            document
+                .getElementById('kebersihan')
+                .required = false;
+        }
+    }
+    $('input[type="checkbox"]')
+        .click(checkKebersihan)
+        .each(checkKebersihan);
+
+    function checkAirKotor() {
+        if ($('#myCheck3').is(':checked')) {
+            document
+                .getElementById('airkotor')
+                .required = true;
+        } else {
+            document
+                .getElementById('airkotor')
+                .required = false;
+        }
+    }
+    $('input[type="checkbox"]')
+        .click(checkAirKotor)
+        .each(checkAirKotor);
+
+    function checkLain() {
+        if ($('#myCheck5').is(':checked')) {
+            document
+                .getElementById('lain')
+                .required = true;
+        } else {
+            document
+                .getElementById('lain')
+                .required = false;
+        }
+    }
+    $('input[type="checkbox"]')
+        .click(checkLain)
+        .each(checkLain);
 </script>
 @endsection
