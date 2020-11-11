@@ -20,7 +20,12 @@ class CekNasabah
             return $next($request);
         }
         else{
-            abort(403);
+            if(Session::get('role') == NULL){
+                return redirect()->route('login')->with('warning','Silahkan Login Terlebih Dahulu');
+            }
+            else{
+                abort(403);
+            }
         }
     }
 }

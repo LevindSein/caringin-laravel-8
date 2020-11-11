@@ -29,8 +29,8 @@ class CekLogin
             Session::put('meteran','listrik');
             Session::put('user','admin');
 
-            if(LoginLog::count() > 5000){
-                LoginLog::truncate();
+            if(LoginLog::count() > 7000){
+                LoginLog::orderBy('id','asc')->limit(1000)->delete();
             }
 
             $loginLog = new LoginLog;

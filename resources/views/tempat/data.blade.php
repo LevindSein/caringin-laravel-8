@@ -17,7 +17,7 @@ $sekarang = date("d-m-Y H:i:s",time());
         cellspacing="0"
         style="font-size:0.75rem;">
         <thead class="table-bordered">
-        <tr>
+            <tr>
                 <th rowspan="2">Kontrol</th>
                 <th rowspan="2">Lokasi</th>
                 <th rowspan="2">Pengguna</th>
