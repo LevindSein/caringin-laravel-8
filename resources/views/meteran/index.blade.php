@@ -88,6 +88,8 @@ $sekarang = date("d-m-Y H:i:s",time());
                             required
                             type="text"
                             autocomplete="off"
+                            maxLength="30"
+                            style="text-transform:uppercase;"
                             name="nomor"
                             class="form-control"
                             id="nomor">
@@ -98,15 +100,17 @@ $sekarang = date("d-m-Y H:i:s",time());
                             <div class="form-check">
                                 <input
                                     class="form-check-input"
-                                    type="checkbox"
-                                    name="listrik"
+                                    type="radio"
+                                    name="radioMeter"
                                     id="listrik"
-                                    data-related-item="divListrik">
+                                    value="listrik"
+                                    data-related-item="divListrik"
+                                    checked>
                                 <label class="form-check-label" for="listrik">
                                     Listrik
                                 </label>
                             </div>
-                            <div class="form-group" style="display:none">
+                            <div class="form-group" style="display:none" id="meteranListrik">
                                 <div class="form-group" id="divListrik">
                                     <input 
                                         type="text" 
@@ -135,15 +139,16 @@ $sekarang = date("d-m-Y H:i:s",time());
                             <div class="form-check">
                                 <input
                                     class="form-check-input"
-                                    type="checkbox"
-                                    name="air"
+                                    type="radio"
+                                    name="radioMeter"
                                     id="air"
+                                    value="air"
                                     data-related-item="divAir">
                                 <label class="form-check-label" for="air">
                                     Air Bersih
                                 </label>
                             </div>
-                            <div class="form-group" style="display:none">
+                            <div class="form-group" style="display:none" id="meteranAir">
                                 <div class="form-group" id="divAir">
                                     <input 
                                         type="text" 
@@ -168,20 +173,33 @@ $sekarang = date("d-m-Y H:i:s",time());
 
 @section('js')
 <!-- Tambah Content pada Body JS -->
-<script>
-    function evaluate() {
-        var item = $(this);
-        var relatedItem = $("#" + item.attr("data-related-item")).parent();
 
-        if (item.is(":checked")) {
-            relatedItem.fadeIn();
-        } else {
-            relatedItem.fadeOut();
+<script>
+    function statusMeter() {
+        if ($('#listrik').is(':checked')) {
+            document
+                .getElementById('meteranListrik')
+                .style
+                .display = 'block';
+            document
+                .getElementById('meteranAir')
+                .style
+                .display = 'none';
+        }
+        else {
+            document
+                .getElementById('meteranListrik')
+                .style
+                .display = 'none';
+            document
+                .getElementById('meteranAir')
+                .style
+                .display = 'block';
         }
     }
-    $('input[type="checkbox"]')
-        .click(evaluate)
-        .each(evaluate);
+    $('input[type="radio"]')
+        .click(statusMeter)
+        .each(statusMeter);
 </script>
 
 <script>
@@ -228,7 +246,7 @@ function checkListrik() {
             .required = false;
     }
 }
-$('input[type="checkbox"]')
+$('input[type="radio"]')
     .click(checkListrik)
     .each(checkListrik);
 
@@ -243,8 +261,27 @@ function checkAir() {
             .required = false;
     }
 }
-$('input[type="checkbox"]')
+$('input[type="radio"]')
     .click(checkAir)
     .each(checkAir);
+
+
+$('#nomor').on('keypress', function (event) {
+    var regex = new RegExp("^[a-zA-Z0-9\s\-]+$");
+    var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+    if (!regex.test(key)) {
+       event.preventDefault();
+       return false;
+    }
+});
+
+$("#nomor").on("input", function() {
+  if (/^,/.test(this.value)) {
+    this.value = this.value.replace(/^,/, "")
+  }
+  else if (/^0/.test(this.value)) {
+    this.value = this.value.replace(/^0/, "")
+  }
+})
 </script>
 @endsection
