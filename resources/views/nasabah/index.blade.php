@@ -29,7 +29,7 @@ function indoBln($date){
 <div class="row">
     <div class="col-md-12">
         <div class="main-card mb-3 card">
-            <div class="card-header">History Tagihan</div>
+            <div class="card-header">Riwayat Tagihan</div>
             <div class="table-responsive card-body">
                 <table 
                     id="tableTest" 
@@ -99,6 +99,7 @@ function indoBln($date){
                 }
             ],
             "responsive": true,
+            pageLength: 12,
             order: [],
             columnDefs: [ {
                 'targets': [0,4], /* column index [0,1,2,3]*/

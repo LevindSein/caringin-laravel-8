@@ -64,42 +64,6 @@
                             </span>
                         </button>
                     </span>
-                </div>    
-                <div class="app-header__content">
-                    <div class="app-header-right">
-                        <div class="header-btn-lg pr-0">
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left">
-                                        <div class="btn-group">
-                                            <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
-                                                <img width="42" class="rounded-circle" src="{{asset('img/icon_user.png')}}" alt="">
-                                                <i class="fa fa-angle-down ml-2 opacity-8"></i>
-                                            </a>
-                                            <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-                                                <a
-                                                    class="dropdown-item"
-                                                    href="#"
-                                                    data-toggle="modal"
-                                                    data-target="#logoutModal">
-                                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                                    Logout
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="widget-content-left  ml-3 header-user-info">
-                                        <div class="widget-heading">
-                                            {{strtoupper(Session::get('username'))}}
-                                        </div>
-                                        <div class="widget-subheading">
-                                            Nasabah
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>        
-                    </div>
                 </div>
             </div>        
             <div class="app-main">
@@ -136,15 +100,31 @@
                     </div>    
                     <div class="scrollbar-sidebar">
                         <div class="app-sidebar__inner">
-                            <ul class="vertical-nav-menu">
-                                <li class="app-sidebar__heading">Dashboards</li>
-                                <li>
-                                    <a href="index.html" class="mm-active">
-                                        <i class="metismenu-icon pe-7s-users"></i>
-                                        Nasabah
+                            <br>
+                            <div style="text-align:center;" >
+                                <img width="200" class="rounded-circle shadow"src="{{asset('images/avatars/profil.png')}}" alt="">
+                                <br><br>
+                                <hr class="sidebar-divider my-0">
+                                <br>
+                                <span style="font-weight:900;color:#213770;">{{strtoupper(Session::get('username'))}}</span>
+                                <br>
+                                <div class="justify-content-between">
+                                    <a
+                                        class="btn"
+                                        href="#">
+                                        <i class="fas fa-cog"></i>
+                                        Settings
                                     </a>
-                                </li>
-                            </ul>
+                                    <a
+                                        class="btn"
+                                        href="#"
+                                        data-toggle="modal"
+                                        data-target="#logoutModal">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                        Logout
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
