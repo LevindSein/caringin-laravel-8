@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 10 Nov 2020 pada 17.18
+-- Waktu pembuatan: 11 Nov 2020 pada 07.48
 -- Versi server: 10.4.11-MariaDB
 -- Versi PHP: 7.4.1
 
@@ -88,14 +88,14 @@ CREATE TABLE `hari_libur` (
   `tanggal` date NOT NULL,
   `ket` text NOT NULL,
   `updated_at` datetime NOT NULL DEFAULT current_timestamp(),
-  `created-at` datetime NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `hari_libur`
 --
 
-INSERT INTO `hari_libur` (`id`, `tanggal`, `ket`, `updated_at`, `created-at`) VALUES
+INSERT INTO `hari_libur` (`id`, `tanggal`, `ket`, `updated_at`, `created_at`) VALUES
 (1, '2020-03-15', 'Hari Minggu', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (2, '2020-11-15', 'Hari Minggu', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (3, '2021-07-15', 'Hari Minggu', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
