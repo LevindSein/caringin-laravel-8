@@ -119,6 +119,7 @@ $sekarang = date("d-m-Y H:i:s",time());
                             autocomplete="off"
                             name="nama"
                             class="form-control"
+                            style="text-transform: capitalize;"
                             id="nama"
                             placeholder="Nama Sesuai KTP">
                     </div>
@@ -131,7 +132,8 @@ $sekarang = date("d-m-Y H:i:s",time());
                                     type="radio"
                                     name="role"
                                     id="roleAdmin"
-                                    value="admin">
+                                    value="admin"
+                                    checked>
                                 <label class="form-check-label" for="roleAdmin">
                                     Admin
                                 </label>
@@ -201,4 +203,14 @@ $sekarang = date("d-m-Y H:i:s",time());
 
 @section('js')
 <!-- Tambah Content pada Body JS -->
+
+<script>
+$('[type=tel]').on('change', function(e) {
+  $(e.target).val($(e.target).val().replace(/[^\d\.]/g, ''))
+})
+$('[type=tel]').on('keypress', function(e) {
+  keys = ['0','1','2','3','4','5','6','7','8','9']
+  return keys.indexOf(event.key) > -1
+})
+</script>
 @endsection

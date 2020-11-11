@@ -12,6 +12,8 @@
                 <th>Nama</th>
                 <th>KTP</th>
                 <th>HP</th>
+                <th>Email</th>
+                <th>Anggota</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -24,18 +26,13 @@
                 <td class="text-center">{{$data->nama}}</td>
                 <td class="text-center">{{$data->ktp}}</td>
                 <td class="text-center">{{$data->hp}}</td>
+                <td class="text-center">{{$data->email}}</td>
+                <td class="text-center">{{$data->anggota}}</td>
                 <td class="text-center">
                     <a
-                        href="{{url('user/reset',[$data->id])}}">
+                        href="{{url('user/reset',[$data->id])}}"
+                        title="Reset Password">
                         <i class="fas fa-key fa-sm" style="color:orange;"></i></a>
-                    &nbsp;
-                    <a
-                        href="{{url('user/update',[$data->id])}}">
-                        <i class="fas fa-edit fa-sm"></i></a>
-                    &nbsp;
-                    <a
-                        href="{{url('user/delete',[$data->id])}}">
-                        <i class="fas fa-trash-alt" style="color:#e74a3b;"></i></a>
                 </td>
             </tr>
             <?php $i++; ?>
@@ -69,7 +66,7 @@
                     className: 'btn btn-success bg-gradient-success',
                     title: 'Data Nasabah {{$sekarang}}',
                     exportOptions: {
-                        columns: [0, 1, 2, 3, 4]
+                        columns: [0, 1, 2, 3, 4, 5, 6]
                     },
                     titleAttr: 'Download Excel'
                 }

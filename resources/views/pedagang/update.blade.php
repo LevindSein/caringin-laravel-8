@@ -116,7 +116,7 @@ $role = Session::get('role');
                             <div class="form-group col-lg-12">
                                 <label for="email">Email</label>
                                 <div class="input-group">
-                                    <input type="text" value="{{trim($dataset->email,'@gmail.com')}}" class="form-control" maxlength="20" name="email" id="email" placeholder="youremail" aria-describedby="inputGroupPrepend">
+                                    <input type="text" value="{{substr($dataset->email, 0, strpos($dataset->email, '@'))}}" class="form-control" maxlength="20" name="email" id="email" placeholder="youremail" aria-describedby="inputGroupPrepend">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="inputGroupPrepend">@gmail.com</span>
                                     </div>
