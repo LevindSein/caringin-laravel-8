@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Session;
 
 use App\Models\MeteranListrik;
 use App\Models\MeteranAir;
+use App\Models\TempatUsaha;
+use App\Models\Blok;
 
 use Exception;
 
@@ -73,6 +75,45 @@ class MeteranController extends Controller
     }
 
     public function print(){
-        
+        $blok = Blok::select('nama')->get();
+        $dataListrik = array();
+        $dataAir = array();
+        $i = 0;
+        $j = 0;
+        foreach($blok as $b){
+            $tempatListrik = TempatUsaha::where([['blok',$b->nama],['trf_listrik',1]])->count();
+            if($tempatListrik != 0){
+                $dataListrik[$i][0] = $b->nama;
+                $dataListrik[$i][1] = TempatUsaha::where([['tempat_usaha.blok', $b->nama],['trf_listrik',1]])
+                ->leftJoin('user as pengguna','tempat_usaha.id_pengguna','=','pengguna.id')
+                ->leftJoin('meteran_listrik','tempat_usaha.id_meteran_listrik','=','meteran_listrik.id')
+                ->select(
+                    'pengguna.nama as nama',
+                    'tempat_usaha.kd_kontrol as kontrol',
+                    'meteran_listrik.nomor as nomor',
+                    'meteran_listrik.akhir as lalu')
+                ->get();
+                $i++;
+            }
+
+            $tempatAir = TempatUsaha::where([['blok',$b->nama],['trf_airbersih',1]])->count();
+            if($tempatAir != 0){
+                $dataAir[$j][0] = $b->nama;
+                $dataAir[$j][1] = TempatUsaha::where([['tempat_usaha.blok', $b->nama],['trf_airbersih',1]])
+                ->leftJoin('user as pengguna','tempat_usaha.id_pengguna','=','pengguna.id')
+                ->leftJoin('meteran_air','tempat_usaha.id_meteran_air','=','meteran_air.id')
+                ->select(
+                    'pengguna.nama as nama',
+                    'tempat_usaha.kd_kontrol as kontrol',
+                    'meteran_air.nomor as nomor',
+                    'meteran_air.akhir as lalu')
+                ->get();
+                $j++;
+            }
+        }
+        $dataset = [$dataListrik,$dataAir];
+        return view('meteran.print',[
+            'dataset'=>$dataset
+        ]);
     }
 }

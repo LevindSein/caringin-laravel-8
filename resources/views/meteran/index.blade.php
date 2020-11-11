@@ -43,6 +43,7 @@ $sekarang = date("d-m-Y H:i:s",time());
                 <a 
                     href="{{url('utilities/meteran/print')}}"
                     type="submit" 
+                    target="_blank"
                     class="btn btn-sm btn-info"><b>
                     <i class="fas fa-fw fa-print fa-sm text-white-50"></i> Print Form</b></a>
             </div>
