@@ -38,8 +38,11 @@ $sekarang = date("d-m-Y H:i:s",time());
                     <thead class="table-bordered">
                         <tr>
                             <th>No</th>
-                            <th>Tanggal</th>
+                            <th>Blok</th>
                             <th>Jml.Los</th>
+                            <th>Keamanan (%)</th>
+                            <th>IPK (%)</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody class="table-bordered">
@@ -52,6 +55,19 @@ $sekarang = date("d-m-Y H:i:s",time());
                             <td class="text-center">{{$no}}</td>
                             <td class="text-center">{{$d->nama}}</td>
                             <td class="text-center">{{$pengguna}}</td>
+                            <td class="text-center">{{$d->prs_keamanan}}</td>
+                            <td class="text-center">{{$d->prs_ipk}}</td>
+                            <td class="text-center">
+                                <a
+                                    href="{{url('utilities/blok/update',[$d->id])}}"
+                                    title="Edit">
+                                    <i class="fas fa-edit fa-sm"></i></a>
+                                &nbsp;
+                                <a
+                                    href="{{url('utilities/blok/delete',[$d->id])}}"
+                                    title="Hapus">
+                                    <i class="fas fa-trash-alt" style="color:#e74a3b;"></i></a>
+                            </td>
                         </tr>
                         <?php $no++; ?>
                         @endforeach
@@ -83,16 +99,57 @@ $sekarang = date("d-m-Y H:i:s",time());
                 <div class="modal-body-short">
                     @csrf
                     <div class="form-group col-lg-12">
-                        <label for="ket">Blok <span style="color:red;">*</span></label>
+                        <label for="blokInput">Blok <span style="color:red;">*</span></label>
                         <input
                             required
                             autocomplete="off"
                             type="text"
-                            name="blok"
-                            maxlength="5"
+                            name="blokInput"
+                            id="blokInput"
+                            maxlength="8"
+                            style="text-transform:uppercase;"
                             class="form-control"
-                            id="blok"
-                            placeholder="misal : A-10">
+                            placeholder="EX : A-10">
+                    </div>
+                    <div class="keamananipk-persen">
+                        <div class="form-group col-lg-12">
+                            <label for="keamanan">Persentase Keamanan</label>
+                            <div class="input-group">
+                                <input 
+                                    type="number"
+                                    autocomplete="off"
+                                    min="0"
+                                    max="100"
+                                    class="form-control keamanan"
+                                    name="keamanan"
+                                    id="keamanan"
+                                    oninput="functionKeamanan()"
+                                    placeholder="Persentase Keamanan"
+                                    aria-describedby="inputGroupPrepend">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroupPrepend">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label for="ipk">Persentase IPK</label>
+                            <div class="input-group">
+                                <input 
+                                    type="number"
+                                    autocomplete="off"
+                                    min="0"
+                                    max="100"
+                                    class="form-control ipk"
+                                    name="ipk"
+                                    id="ipk"
+                                    oninput="functionIpk()"
+                                    placeholder="Persentase IPK"
+                                    aria-describedby="inputGroupPrepend">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroupPrepend">%</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -107,6 +164,26 @@ $sekarang = date("d-m-Y H:i:s",time());
 
 @section('js')
 <!-- Tambah Content pada Body JS -->
+<script>
+$('#blokInput').on('keypress', function (event) {
+    var regex = new RegExp("^[a-zA-Z0-9\s\-]+$");
+    var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+    if (!regex.test(key)) {
+       event.preventDefault();
+       return false;
+    }
+});
+
+$("#blokInput").on("input", function() {
+  if (/^,/.test(this.value)) {
+    this.value = this.value.replace(/^,/, "")
+  }
+  else if (/^0/.test(this.value)) {
+    this.value = this.value.replace(/^0/, "")
+  }
+})
+</script>
+
 <script>
     $(document).ready(function () {
         $(
@@ -131,12 +208,31 @@ $sekarang = date("d-m-Y H:i:s",time());
                     className: 'btn btn-success bg-gradient-success',
                     title: 'Data Blok {{$sekarang}}',
                     exportOptions: {
-                        columns: [ 0, 1, 2 ]
+                        columns: [ 0, 1, 2, 3, 4 ]
                     },
                     titleAttr: 'Download Excel'
                 }
             ],
         });
     });
+</script>
+
+<script>
+function functionKeamanan() {
+    $(".keamananipk-persen").each(function() { 
+        var keamanan = document.getElementById("keamanan").value;
+
+        var ipk = 100 - keamanan;
+        $(this).find('.ipk').val(ipk);
+    });
+}
+function functionIpk() {
+    $(".keamananipk-persen").each(function() { 
+        var ipk = document.getElementById("ipk").value;
+
+        var keamanan = 100 - ipk;
+        $(this).find('.keamanan').val(keamanan);
+    });
+}
 </script>
 @endsection

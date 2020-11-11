@@ -159,6 +159,9 @@ Route::get('utilities/blok',function(){
     ]);
 })->name('blokindex');
 Route::post('utilities/blok/add',[BlokController::class, 'add']);
+Route::get('utilities/blok/update/{id}',[BlokController::class, 'update']);
+Route::post('utilities/blok/store/{id}',[BlokController::class, 'store']);
+Route::get('utilities/blok/delete/{id}',[BlokController::class, 'delete']);
 
 Route::get('rekap/pendapatan',[PendapatanController::class, 'index']);
 Route::post('rekap/pendapatan/harian',[PendapatanController::class, 'harian']);
