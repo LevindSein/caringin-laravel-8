@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Tagihan;
 use App\Models\TempatUsaha;
+use App\Models\User;
 
 class MasterController extends Controller
 {
@@ -14,6 +15,8 @@ class MasterController extends Controller
 
         $pendapatan = Tagihan::pendapatan($thn);
         $akumulasi = Tagihan::akumulasi($thn);
+
+        $data = User::where('role','nasabah')->get();
 
         return view('master.index',[
             'pengguna'=>TempatUsaha::pengguna(),

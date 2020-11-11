@@ -7,6 +7,6 @@ use Illuminate\Http\Request;
 class NasabahController extends Controller
 {
     public function index(){
-        return "Nasabah";
+        return view('nasabah.index');
     }
 }

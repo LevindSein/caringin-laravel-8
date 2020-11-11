@@ -23,7 +23,7 @@ class CekLogin
         $pass = md5($request->get('password'));
         $user = User::where([['username', $request->username],['password',$pass]])->first();
         try{
-            Session::put('username',$user->username);
+            Session::put('username',$user->nama);
             Session::put('role',$user->role);
             Session::put('tarif','listrik');
             Session::put('meteran','listrik');
