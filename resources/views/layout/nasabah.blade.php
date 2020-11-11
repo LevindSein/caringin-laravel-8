@@ -107,6 +107,15 @@
                                         Logout
                                     </a>
                                 </div>
+                                <br>
+                                <hr class="sidebar-divider my-0">
+                                <br>
+                                <span style="font-weight:500;color:#213770;">Customer Service :</span>
+                                <br>
+                                <div class="justify-content-center">
+                                    <p>Jl. Soekarno Hatta No. 220<br>Blok A1 No. 21-24<br>Pasar Induk Caringin, Bandung</p>
+                                    <div>(022) 540-4556 <i class="fas fa-phone"></i></div>
+                                </div>
                             </div>
                         </div>
                     </div>
