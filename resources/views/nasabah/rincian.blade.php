@@ -5,18 +5,18 @@ $sekarang = date("d-m-Y H:i:s",time());
 
 function indoBln($date){
     $bulan = array (
-        1 =>   'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
+        1 =>   'Januari',
+        'Februari',
+        'Maret',
+        'April',
         'Mei',
-        'Jun',
-        'Jul',
-        'Agu',
-        'Sep',
-        'Okt',
-        'Nov',
-        'Des'
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
     );
     $pecahkan = explode('-', $date);
     return $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
@@ -29,35 +29,40 @@ function indoBln($date){
 <div class="row">
     <div class="col-md-12">
         <div class="main-card mb-3 card">
-            <div class="card-header">Riwayat Tagihan</div>
+            <div class="card-header">Rincian Tagihan Bulan {{indoBln($bln)}}</div>
             <div class="table-responsive card-body">
                 <table 
-                    id="tableTest" 
+                    id="tableRincian" 
                     class="table table-bordered" 
                     cellspacing="0"
                     width="100%">
                     <thead>
                         <tr>
-                            <th style="text-align:center;">Tagihan</th>
-                            <th style="text-align:center;">Total (Rp.)</th>
+                            <th style="text-align:center;">Kontrol</th>
+                            <th style="text-align:center;">Total</th>
+                            <th style="text-align:center;">Listrik</th>
+                            <th style="text-align:center;">Air Bersih</th>
+                            <th style="text-align:center;">Keamanan IPK</th>
+                            <th style="text-align:center;">Kebersihan</th>
+                            <th style="text-align:center;">Air Kotor</th>
+                            <th style="text-align:center;">Lain Lain</th>
                             <th style="text-align:center;">Realisasi</th>
                             <th style="text-align:center;">Selisih</th>
-                            <th style="text-align:center;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($dataset as $data)
                         <tr>
-                            <td style="text-align:center;">{{indoBln($data->bln_pakai)}}</td>
-                            <td style="text-align:right;">{{number_format($data->tagihan)}}</td>
-                            <td style="text-align:right;">{{number_format($data->realisasi)}}</td>
-                            <td style="text-align:right;">{{number_format($data->selisih)}}</td>
-                            <td class="text-center">
-                                <a
-                                    href="{{url('nasabah/details',[$data->bln_pakai])}}"
-                                    type="submit" 
-                                    class="btn btn-sm btn-primary">Details</a>
-                            </td>
+                            <td style="text-align:center;">{{$data->kd_kontrol}}</td>
+                            <td style="text-align:right;">{{number_format($data->ttl_tagihan)}}</td>
+                            <td style="text-align:right;">{{number_format($data->ttl_listrik)}}</td>
+                            <td style="text-align:right;">{{number_format($data->ttl_airbersih)}}</td>
+                            <td style="text-align:right;">{{number_format($data->ttl_keamananipk)}}</td>
+                            <td style="text-align:right;">{{number_format($data->ttl_kebersihan)}}</td>
+                            <td style="text-align:right;">{{number_format($data->ttl_airkotor)}}</td>
+                            <td style="text-align:right;">{{number_format($data->ttl_lain)}}</td>
+                            <td style="text-align:right;">{{number_format($data->rea_tagihan)}}</td>
+                            <td style="text-align:right;">{{number_format($data->sel_tagihan)}}</td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -73,7 +78,7 @@ function indoBln($date){
 <script>
      $(document).ready(function () {
         var table = $(
-            '#tableTest'
+            '#tableRincian'
         ).DataTable({
             "processing": true,
             "bProcessing": true,
@@ -81,7 +86,6 @@ function indoBln($date){
                 'loadingRecords': '&nbsp;',
                 'processing': '<i class="fas fa-spinner"></i>'
             },
-            "scrollX": true,
             "deferRender": true,
             "dom": "r<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'" +
                     "row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
@@ -91,20 +95,14 @@ function indoBln($date){
                     text: '<i class="fas fa-file-excel fa-lg"></i>',
                     extend: 'excel',
                     className: 'btn btn-success bg-gradient-success',
-                    title: 'Data Tagihan',
+                    title: 'Rincian Tagihan {{indoBln($bln)}}',
                     exportOptions: {
-                        columns: [0, 1, 2, 3]
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
                     },
                     titleAttr: 'Download Excel'
                 }
             ],
             "responsive": true,
-            pageLength: 12,
-            order: [],
-            columnDefs: [ {
-                'targets': [0,4], /* column index [0,1,2,3]*/
-                'orderable': false, /* true or false */
-            }],
         });
         new $.fn.dataTable.FixedHeader(table);
     });

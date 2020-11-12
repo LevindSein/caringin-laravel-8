@@ -94,6 +94,12 @@
                                 <div class="justify-content-between">
                                     <a
                                         class="btn"
+                                        href="{{url('nasabah/index')}}">
+                                        <i class="fas fa-home"></i>
+                                        Home
+                                    </a>
+                                    <a
+                                        class="btn"
                                         href="#">
                                         <i class="fas fa-cog"></i>
                                         Settings
@@ -115,131 +121,120 @@
                                 <div class="justify-content-center">
                                     <p>Jl. Soekarno Hatta No. 220<br>Blok A1 No. 21-24<br>Pasar Induk Caringin, Bandung</p>
                                     <div>(022) 540-4556 <i class="fas fa-phone"></i></div>
+                                    <br>
+                                    <p>&copy;2020 PT Pengelola Pusat Perdagangan Caringin</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Menu Utama -->
-                <div class="app-main__outer">
-                    @include('message.flash-message') 
-                    <!-- Menu Dalam -->
-                    <div class="app-main__inner">
-                        <!-- Title -->
-                        <div class="app-page-title">
-                            <div class="page-title-wrapper">
-                                <div class="page-title-heading">
-                                    <div class="page-title-icon">
-                                        <i class="pe-7s-sun icon-gradient bg-mean-fruit"></i>
-                                    </div>
-                                    <div>AYO !
-                                        <div class="page-title-subheading">Bayar tagihanmu tepat Waktu &#128522;</div>
-                                    </div>
-                                </div>
-                                <div class="page-title-actions">
-                                    <div class="d-inline-block dropdown">
-                                        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-danger">
-                                            <span class="btn-icon-wrapper pr-2 opacity-7">
-                                                <i class="fa fa-credit-card fa-w-20"></i>
-                                            </span>
-                                            Bayar Tagihan
-                                        </button>
-                                        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-                                            <ul class="nav flex-column">
-                                                <li class="nav-item">
-                                                    <a href="#" class="nav-link">
-                                                        <img width="35" src="{{asset('img/bayar_bri.png')}}" alt="">
-                                                        &nbsp;
-                                                        <span>
-                                                            Bank BRI
-                                                        </span>
-                                                        <div class="ml-auto badge badge-pill badge-success">new!</div>
-                                                    </a>
-                                                    <a href="#" class="nav-link">
-                                                        <img width="35" src="{{asset('img/bayar_link.png')}}" alt="">
-                                                        &nbsp;
-                                                        <span>
-                                                            Link Aja
-                                                        </span>
-                                                        <div class="ml-auto badge badge-pill badge-success">new!</div>
-                                                    </a>
-                                                </li>
-                                            </ul>
+                
+                <!-- Menu Utama --> 
+                <div class="container-fluid">
+                    <!-- Menu Luar -->
+                    <div class="app-main__outer">
+                        @include('message.flash-message') 
+                        <!-- Menu Dalam -->
+                        <div class="app-main__inner">
+                            <!-- Title -->
+                            <div class="app-page-title">
+                                <div class="page-title-wrapper">
+                                    <div class="page-title-heading">
+                                        <div class="page-title-icon">
+                                            <i class="pe-7s-sun icon-gradient bg-mean-fruit"></i>
+                                        </div>
+                                        <div>AYO !
+                                            <div class="page-title-subheading">Bayar tagihanmu tepat Waktu &#128522;</div>
                                         </div>
                                     </div>
-                                </div>    
+                                    <div class="page-title-actions">
+                                        <div class="d-inline-block dropdown">
+                                            <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-danger">
+                                                <span class="btn-icon-wrapper pr-2 opacity-7">
+                                                    <i class="fa fa-credit-card fa-w-20"></i>
+                                                </span>
+                                                Bayar Tagihan
+                                            </button>
+                                            <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
+                                                <ul class="nav flex-column">
+                                                    <li class="nav-item">
+                                                        <a href="#" class="nav-link">
+                                                            <img width="35" src="{{asset('img/bayar_bri.png')}}" alt="">
+                                                            &nbsp;
+                                                            <span>
+                                                                Bank BRI
+                                                            </span>
+                                                            <div class="ml-auto badge badge-pill badge-success">new!</div>
+                                                        </a>
+                                                        <a href="#" class="nav-link">
+                                                            <img width="35" src="{{asset('img/bayar_link.png')}}" alt="">
+                                                            &nbsp;
+                                                            <span>
+                                                                Link Aja
+                                                            </span>
+                                                            <div class="ml-auto badge badge-pill badge-success">new!</div>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>    
+                                </div>
                             </div>
+                            <!-- End Title -->
+                            
+                            <!-- Card -->
+                            <div class="row">
+                                <div class="col-md-6 col-xl-4">
+                                    <div class="card mb-3 widget-content bg-midnight-bloom">
+                                        <div class="widget-content-wrapper text-white">
+                                            <div class="widget-content-left">
+                                                <div class="widget-heading">Total Tagihan</div>
+                                                <div class="widget-subheading">Perlu Dibayar</div>
+                                            </div>
+                                            <div class="widget-content-right">
+                                                <div class="widget-numbers text-white"><span>{{number_format($tagihan)}}</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-xl-4">
+                                    <div class="card mb-3 widget-content bg-arielle-smile">
+                                        <div class="widget-content-wrapper text-white">
+                                            <div class="widget-content-left">
+                                                <div class="widget-heading">Tempat Usaha</div>
+                                                <div class="widget-subheading">Unit Dimiliki</div>
+                                            </div>
+                                            <div class="widget-content-right">
+                                                <div class="widget-numbers text-white"><span>{{$pemilik}}</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-xl-4">
+                                    <div class="card mb-3 widget-content bg-grow-early">
+                                        <div class="widget-content-wrapper text-white">
+                                            <div class="widget-content-left">
+                                                <div class="widget-heading">Tempat Usaha</div>
+                                                <div class="widget-subheading">Unit Digunakan</div>
+                                            </div>
+                                            <div class="widget-content-right">
+                                                <div class="widget-numbers text-white"><span>{{$pengguna}}</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Card -->
+
+                            <!-- Content -->
+                            @yield('content')
+                            <!-- End Content -->
+
                         </div>
-                        <!-- End Title -->
-                        
-                        <!-- Card -->
-                        <div class="row">
-                            <div class="col-md-6 col-xl-4">
-                                <div class="card mb-3 widget-content bg-midnight-bloom">
-                                    <div class="widget-content-wrapper text-white">
-                                        <div class="widget-content-left">
-                                            <div class="widget-heading">Tagihan</div>
-                                            <div class="widget-subheading">{{indoBln($bulan)}}</div>
-                                        </div>
-                                        <div class="widget-content-right">
-                                            <div class="widget-numbers text-white"><span>{{number_format($tagihan)}}</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-xl-4">
-                                <div class="card mb-3 widget-content bg-arielle-smile">
-                                    <div class="widget-content-wrapper text-white">
-                                        <div class="widget-content-left">
-                                            <div class="widget-heading">Tempat Usaha</div>
-                                            <div class="widget-subheading">Unit Dimiliki</div>
-                                        </div>
-                                        <div class="widget-content-right">
-                                            <div class="widget-numbers text-white"><span>{{$pemilik}}</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-xl-4">
-                                <div class="card mb-3 widget-content bg-grow-early">
-                                    <div class="widget-content-wrapper text-white">
-                                        <div class="widget-content-left">
-                                            <div class="widget-heading">Tempat Usaha</div>
-                                            <div class="widget-subheading">Unit Digunakan</div>
-                                        </div>
-                                        <div class="widget-content-right">
-                                            <div class="widget-numbers text-white"><span>{{$pengguna}}</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Card -->
-
-                        <!-- Content -->
-                        @yield('content')
-                        <!-- End Content -->
-
+                        <!-- End Menu Dalam -->
                     </div>
-                    <!-- End Menu Dalam -->
-
-                    <!-- Footer -->
-                    <div class="app-wrapper-footer">
-                        <div class="app-footer">
-                            <div class="app-footer__inner">
-                                <div class="app-footer-left">
-                                    <ul class="nav">
-                                        <li class="nav-item">
-                                            <p>&copy;2020 PT Pengelola Pusat Perdagangan Caringin</p>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- End Footer -->
-
+                    <!-- End Menu Luar -->
                 </div>
                 <!-- End Menu Utama -->
             </div>

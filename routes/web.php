@@ -196,6 +196,9 @@ Route::get('log',function(){
     ]);
 });
 
+Route::get('nasabah/details/{bln}',[NasabahController::class, 'details']);
+Route::get('nasabah/rincian/{bln}',[NasabahController::class, 'rincian']);
+
 //opsional
 Route::post('tagihan/pedagang/{fasilitas}',[TagihanController::class, 'pedagang']);
 

@@ -31,11 +31,15 @@ class Nasabah extends Model
     }
 
     public static function data($id){
-        return Tagihan::groupBy('bln_tagihan')->where('id_pengguna',$id)->orderBy('bln_tagihan','desc')
-        ->select('bln_tagihan',
+        return Tagihan::groupBy('bln_pakai')->where('id_pengguna',$id)->orderBy('bln_pakai','desc')
+        ->select('bln_pakai',
             DB::raw('SUM(ttl_tagihan) as tagihan'),
             DB::raw('SUM(rea_tagihan) as realisasi'),
             DB::raw('SUM(sel_tagihan) as selisih'),)
         ->get();
+    }
+
+    public static function rincian($id, $bln){
+        return Tagihan::where([['id_pengguna',$id],['bln_pakai',$bln]])->orderBy('kd_kontrol','asc')->get();
     }
 }
