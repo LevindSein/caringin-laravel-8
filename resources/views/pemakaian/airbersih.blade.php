@@ -76,11 +76,11 @@ $selisih = 0;
                         <th class="tg-r8fv">No.</th>
                         <th class="tg-r8fv">Kontrol</th>
                         <th class="tg-r8fv">Pengguna</th>
-                        <th class="tg-r8fv">Daya</th>
                         <th class="tg-r8fv">M.Lalu</th>
                         <th class="tg-r8fv">M.Baru</th>
                         <th class="tg-r8fv">Pakai</th>
                         <th class="tg-r8fv">B.Pakai</th>
+                        <th class="tg-r8fv">B.Beban</th>
                         <th class="tg-r8fv">B.Pemeliharaan </th>
                         <th class="tg-r8fv">B.Air Kotor</th>
                         <th class="tg-r8fv">Tagihan</th>
@@ -110,8 +110,8 @@ $selisih = 0;
                     <tr>
                         <td class="tg-vbo4" style="text-align:center;" colspan="5">Total</td>
                         <td class="tg-8m6k">{{number_format($d->pakai)}}</td>
-                        <td class="tg-8m6k">{{number_format($d->beban)}}</td>
                         <td class="tg-8m6k">{{number_format($d->bPakai)}}</td>
+                        <td class="tg-8m6k">{{number_format($d->beban)}}</td>
                         <td class="tg-8m6k">{{number_format($d->pemeliharaan)}}</td>
                         <td class="tg-8m6k">{{number_format($d->arkot)}}</td>
                         <td class="tg-8m6k">{{number_format($d->tagihan)}}</td>
