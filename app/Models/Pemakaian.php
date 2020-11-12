@@ -10,9 +10,9 @@ use App\Models\Tagihan;
 class Pemakaian extends Model
 {
     public static function data(){
-        return Tagihan::select('bln_tagihan')
-        ->groupBy('bln_tagihan')
-        ->orderBy('bln_tagihan','desc')
+        return Tagihan::select('bln_pakai')
+        ->groupBy('bln_pakai')
+        ->orderBy('bln_pakai','desc')
         ->get();
     }
 
@@ -37,10 +37,9 @@ class Pemakaian extends Model
 
     public static function rekapListrik($bulan){
         return Tagihan::
-            leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
-            ->where([
-                    ['tagihan.bln_tagihan',$bulan],
-                    ['tempat_usaha.trf_listrik',1]
+            where([
+                    ['tagihan.bln_pakai',$bulan],
+                    ['tagihan.stt_listrik',1]
                 ])
             ->select(
                     'tagihan.blok',
@@ -91,10 +90,9 @@ class Pemakaian extends Model
 
     public static function rincianListrik($bulan){
         $blok = Tagihan::
-            leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
-            ->where([
-                ['tagihan.bln_tagihan',$bulan],
-                ['tempat_usaha.trf_listrik',1]
+            where([
+                ['tagihan.bln_pakai',$bulan],
+                ['tagihan.stt_listrik',1]
             ])
             ->select('tagihan.blok')
             ->orderBy('tagihan.blok','asc')
@@ -105,15 +103,14 @@ class Pemakaian extends Model
         for($i=0; $i<count($blok); $i++){
             $dataset[$i][0] = $blok[$i]->blok;
             $dataset[$i][1] = Tagihan::
-            leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
-            ->leftJoin('user','tagihan.id_pengguna','=','user.id')
+            leftJoin('user','tagihan.id_pengguna','=','user.id')
             ->where([
-                ['tagihan.bln_tagihan',$bulan],
-                ['tempat_usaha.trf_listrik',1],
+                ['tagihan.bln_pakai',$bulan],
+                ['tagihan.stt_listrik',1],
                 ['tagihan.blok',$blok[$i]->blok]
             ])
             ->select(
-                'tempat_usaha.kd_kontrol as kontrol',
+                'tagihan.kd_kontrol as kontrol',
                 'user.nama as pengguna',
                 'tagihan.daya_listrik as daya',
                 'tagihan.awal_listrik as lalu',
@@ -130,11 +127,10 @@ class Pemakaian extends Model
                 )
             ->get();
             $dataset[$i][2] = Tagihan::
-            leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
-            ->leftJoin('user','tagihan.id_pengguna','=','user.id')
+            leftJoin('user','tagihan.id_pengguna','=','user.id')
             ->where([
-                ['tagihan.bln_tagihan',$bulan],
-                ['tempat_usaha.trf_listrik',1],
+                ['tagihan.bln_pakai',$bulan],
+                ['tagihan.stt_listrik',1],
                 ['tagihan.blok',$blok[$i]->blok]
             ])
             ->select(
@@ -158,10 +154,9 @@ class Pemakaian extends Model
 
     public static function rekapAirBersih($bulan){
         return Tagihan::
-            leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
-            ->where([
-                    ['tagihan.bln_tagihan',$bulan],
-                    ['tempat_usaha.trf_airbersih',1]
+            where([
+                    ['tagihan.bln_pakai',$bulan],
+                    ['tagihan.stt_airbersih',1]
                 ])
             ->select(
                     'tagihan.blok',
@@ -212,10 +207,9 @@ class Pemakaian extends Model
 
     public static function rincianAirBersih($bulan){
         $blok = Tagihan::
-            leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
-            ->where([
-                ['tagihan.bln_tagihan',$bulan],
-                ['tempat_usaha.trf_airbersih',1]
+            where([
+                ['tagihan.bln_pakai',$bulan],
+                ['tagihan.stt_airbersih',1],
             ])
             ->select('tagihan.blok')
             ->orderBy('tagihan.blok','asc')
@@ -226,15 +220,14 @@ class Pemakaian extends Model
         for($i=0; $i<count($blok); $i++){
             $dataset[$i][0] = $blok[$i]->blok;
             $dataset[$i][1] = Tagihan::
-            leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
-            ->leftJoin('user','tagihan.id_pengguna','=','user.id')
+            leftJoin('user','tagihan.id_pengguna','=','user.id')
             ->where([
-                ['tagihan.bln_tagihan',$bulan],
-                ['tempat_usaha.trf_airbersih',1],
+                ['tagihan.bln_pakai',$bulan],
+                ['tagihan.stt_airbersih',1],
                 ['tagihan.blok',$blok[$i]->blok]
             ])
             ->select(
-                'tempat_usaha.kd_kontrol as kontrol',
+                'tagihan.kd_kontrol as kontrol',
                 'user.nama as pengguna',
                 'tagihan.awal_airbersih as lalu',
                 'tagihan.akhir_airbersih as baru',
@@ -249,11 +242,10 @@ class Pemakaian extends Model
                 )
             ->get();
             $dataset[$i][2] = Tagihan::
-            leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
-            ->leftJoin('user','tagihan.id_pengguna','=','user.id')
+            leftJoin('user','tagihan.id_pengguna','=','user.id')
             ->where([
-                ['tagihan.bln_tagihan',$bulan],
-                ['tempat_usaha.trf_airbersih',1],
+                ['tagihan.bln_pakai',$bulan],
+                ['tagihan.stt_airbersih',1],
                 ['tagihan.blok',$blok[$i]->blok]
             ])
             ->select(

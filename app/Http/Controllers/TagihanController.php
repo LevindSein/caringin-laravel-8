@@ -36,14 +36,17 @@ class TagihanController extends Controller
             return redirect()->back();
         }
 
-        return view('tagihan.data',[
-            'dataset'=>Tagihan::data($bln),
-            'month'=>$month,
-            'bulan'=>$bulan,
-            'tahun'=>$year,
-            'dataTahun'=>Tagihan::dataTahun(),
-            'blok'=>Blok::all()
-        ]);
+        //custom
+        Tagihan::hitungAir();
+
+        // return view('tagihan.data',[
+        //     'dataset'=>Tagihan::data($bln),
+        //     'month'=>$month,
+        //     'bulan'=>$bulan,
+        //     'tahun'=>$year,
+        //     'dataTahun'=>Tagihan::dataTahun(),
+        //     'blok'=>Blok::all()
+        // ]);
     }
 
     public function update($id){
