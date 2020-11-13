@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 use App\Models\Tagihan;
 use App\Models\Pedagang;
@@ -24,26 +25,26 @@ class TagihanController extends Controller
         $month = date("m", time());
         $year = date("Y", time());
 
-        if($data == "now"){
-            $bulan = Tagihan::indoBln($months);
-            $bln = $months;
-        }
-        else if($data == "periode"){
-            $bulan = Tagihan::indoBln($request->get('tahun').'-'.$request->get('bulan'));
-            $bln = $request->get('tahun').'-'.$request->get('bulan');
-        }
-        else{
-            return redirect()->back();
-        }
+        // if($data == "now"){
+        //     $bulan = Tagihan::indoBln($months);
+        //     $bln = $months;
+        // }
+        // else if($data == "periode"){
+        //     $bulan = Tagihan::indoBln($request->get('tahun').'-'.$request->get('bulan'));
+        //     $bln = $request->get('tahun').'-'.$request->get('bulan');
+        // }
+        // else{
+        //     return redirect()->back();
+        // }
 
-        return view('tagihan.data',[
-            'dataset'=>Tagihan::data($bln),
-            'month'=>$month,
-            'bulan'=>$bulan,
-            'tahun'=>$year,
-            'dataTahun'=>Tagihan::dataTahun(),
-            'blok'=>Blok::all()
-        ]);
+        // return view('tagihan.data',[
+        //     'dataset'=>Tagihan::data($bln),
+        //     'month'=>$month,
+        //     'bulan'=>$bulan,
+        //     'tahun'=>$year,
+        //     'dataTahun'=>Tagihan::dataTahun(),
+        //     'blok'=>Blok::all()
+        // ]);
     }
 
     public function update($id){
@@ -55,6 +56,14 @@ class TagihanController extends Controller
     }
 
     public function fasilitas($fasilitas){
+        //Check Tagihan
+        if(Session::get('tagihan') == 'checking1'){
+            Tagihan::checking1();
+        }
+        else if(Session::get('tagihan') == 'checking2'){
+            Tagihan::checking2();
+        }
+
         $dataset = Tagihan::tagihan($fasilitas);
         if($dataset == "Not Periode"){
             return redirect()->back()->with('info','Bukan Periode Penambahan Tagihan');
