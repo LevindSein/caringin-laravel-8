@@ -56,7 +56,9 @@ Route::post('storelogin')->middleware('ceklogin');
 
 //LOGOUT
 Route::get('logout',function(){
+    $tagihan = Session::get('tagihan');
     Session::flush();
+    Session::put('tagihan', $tagihan);
     Artisan::call('cache:clear');
     return redirect()->route('login')->with('success','Sampai Bertemu');
 });

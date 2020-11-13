@@ -14,10 +14,12 @@ use App\Models\TarifListrik;
 use App\Models\TarifKeamananIpk;
 use App\Models\TarifKebersihan;
 use App\Models\TarifLain;
+use App\Models\TarifAirKotor;
 use App\Models\TempatUsaha;
 use App\Models\HariLibur;
 use App\Models\MeteranAir;
 use App\Models\MeteranListrik;
+use App\Models\User;
 
 class Tagihan extends Model
 {
@@ -370,12 +372,9 @@ class Tagihan extends Model
     public static function tagihan($fasilitas){
         date_default_timezone_set('Asia/Jakarta');
         $now = date("Y-m-d",time());
-        $bln_tagihan = date("Y-m", time());
-        $thn_tagihan = date("Y", time());
-        $tgl_tagihan = date("Y-m-01",time());
-        $tgl_expired = date("Y-m-15",time());
+        $check = date("Y-m-15",time());
 
-        if($now < $tgl_expired){
+        if($now < $check){
             //Input
             date_default_timezone_set('Asia/Jakarta');
             $now = date("Y-m",time());
@@ -385,8 +384,7 @@ class Tagihan extends Model
                 ->leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
                 ->leftJoin('user','tagihan.id_pengguna','=','user.id')
                 ->where([
-                    ['tempat_usaha.trf_listrik','!=',NULL],
-                    ['tagihan.stt_listrik',NULL],
+                    ['tagihan.stt_listrik',0],
                     ['tagihan.bln_tagihan',$now],
                 ])
                 ->orderBy('tempat_usaha.kd_kontrol','asc')
@@ -405,7 +403,7 @@ class Tagihan extends Model
                     return $dataset;
                 }
                 else{
-                    return "Done";
+                    return "Listrik";
                 }
             }
             if($fasilitas == 'airbersih'){
@@ -413,8 +411,7 @@ class Tagihan extends Model
                 ->leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
                 ->leftJoin('user','tagihan.id_pengguna','=','user.id')
                 ->where([
-                    ['tempat_usaha.trf_airbersih','!=',NULL],
-                    ['tagihan.stt_airbersih',NULL],
+                    ['tagihan.stt_airbersih',0],
                     ['tagihan.bln_tagihan',$now],
                 ])
                 ->orderBy('tempat_usaha.kd_kontrol','asc')
@@ -432,147 +429,286 @@ class Tagihan extends Model
                     return $dataset;
                 }
                 else{
-                    return "Done";
+                    return "Air Bersih";
                 }
             }
         }
-        else{
-            return "Not Periode";
+        else if($now >= $check){
+            //Input
+            date_default_timezone_set('Asia/Jakarta');
+            $now = date("Y-m",time());
+
+            if($fasilitas == 'listrik'){
+                $dataset = DB::table('tagihan')
+                ->leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
+                ->leftJoin('user','tagihan.id_pengguna','=','user.id')
+                ->where([
+                    ['tagihan.stt_listrik',0],
+                    ['tagihan.bln_pakai',$now],
+                ])
+                ->orderBy('tempat_usaha.kd_kontrol','asc')
+                ->select(
+                    'tagihan.id as tagihanId',
+                    'tempat_usaha.id as tempatId',
+                    'tempat_usaha.kd_kontrol as kontrol',
+                    'user.nama as pengguna',
+                    'user.id as penggunaId',
+                    'user.ktp as ktp',
+                    'tagihan.awal_listrik as awal',
+                    'tagihan.daya_listrik as daya'
+                    )
+                ->first();
+                if($dataset != NULL){
+                    return $dataset;
+                }
+                else{
+                    return "Listrik";
+                }
+            }
+            if($fasilitas == 'airbersih'){
+                $dataset = DB::table('tagihan')
+                ->leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
+                ->leftJoin('user','tagihan.id_pengguna','=','user.id')
+                ->where([
+                    ['tagihan.stt_airbersih',0],
+                    ['tagihan.bln_pakai',$now],
+                ])
+                ->orderBy('tempat_usaha.kd_kontrol','asc')
+                ->select(
+                    'tagihan.id as tagihanId',
+                    'tempat_usaha.id as tempatId',
+                    'tempat_usaha.kd_kontrol as kontrol',
+                    'user.nama as pengguna',
+                    'user.id as penggunaId',
+                    'user.ktp as ktp',
+                    'tagihan.awal_airbersih as awal'
+                    )
+                ->first();
+                if($dataset != NULL){
+                    return $dataset;
+                }
+                else{
+                    return "Air Bersih";
+                }
+            }
         }
     }
 
     public static function checking1(){
-        //Tagihan antara tanggal 20 - akhir bulan
-
+        //Tagihan Bulan ini, Pemakaian sebelum tanggal 15 bulan ini dan setelah tanggal 15 bulan lalu
         date_default_timezone_set('Asia/Jakarta');
-        $now = date("Y-m-d",time());
-        $bln_tagihan = date("Y-m", time());
-        $thn_tagihan = date("Y", time());
+        $bln_tagihan = date("Y-m",time());
+        $time = strtotime($bln_tagihan);
+        $bln_pakai = date("Y-m", strtotime("-1 month", $time));
         $tgl_tagihan = date("Y-m-01",time());
         $tgl_expired = date("Y-m-15",time());
+        $thn_tagihan = date("Y", time());
 
-        $tempat = DB::table('tempat_usaha')->get();
-        $dataTempat = $tempat->count();
-        $dataTagihan = DB::table('tagihan')->where('bln_tagihan')->count();
-        if($dataTempat != $dataTagihan){
-            foreach($tempat as $t){
-                $tagihan = DB::table('tagihan')->where([['id_tempat',$t->id],['tgl_tagihan',$tgl_tagihan]])->first();
-                if($tagihan == NULL){
-                    //Deklarasi Tagihan
-                    $subtotal = 0;
-                    $record = TempatUsaha::find($t->id);
-                    $tagihan = new Tagihan;
+        $tempat = TempatUsaha::select('id')->orderBy('kd_kontrol','asc')->get();
+        foreach($tempat as $t){
+            $tagihan = Tagihan::where([['id_tempat',$t->id],['bln_tagihan',$bln_tagihan]])->select('id')->first();
+            if($tagihan == NULL){
+                $tagihan = new Tagihan;
+                $record = TempatUsaha::find($t->id);
+                $subtotal = 0;
 
-                    //--- Data Tagihan Global ---
-                    $tagihan->id_tempat = $t->id;
-                    $tagihan->id_pemilik = $t->id_pemilik;
-                    $tagihan->id_pengguna = $t->id_pengguna;
-                    $tagihan->blok = $t->blok;
-                    $tagihan->tgl_tagihan = $tgl_tagihan;
-                    $expired = "";
-                    do{
-                        $libur = HariLibur::where('tanggal', $tgl_expired)->first();
-                        if($libur == NULL){
-                            $expired = $tgl_expired;
-                            $done = TRUE;
-                        }
-                        else{
-                            $stop_date = new DateTime($tgl_expired);
-                            $stop_date->modify('+1 day');
-                            $expired = $stop_date->format('Y-m-d');
-                            $done = FALSE;
-                        }
+                //--- Data Tagihan Global ---
+                $tagihan->id_tempat = $record->id;
+                $tagihan->kd_kontrol = $record->kd_kontrol;
+                $tagihan->id_pemilik = $record->id_pemilik;
+                $tagihan->id_pengguna = $record->id_pengguna;
+                $pengguna = User::find($record->id_pengguna);
+                $tagihan->nama = $pengguna->nama;
+                $tagihan->blok = $record->blok;
+                $tagihan->bln_pakai = $bln_pakai;
+                $tagihan->tgl_tagihan = $tgl_tagihan;
+                $tagihan->bln_tagihan = $bln_tagihan;
+                $tagihan->thn_tagihan = $thn_tagihan;
+                $expired = $tgl_expired;
+                do{
+                    $libur = HariLibur::where('tanggal', $expired)->first();
+                    if ($libur != NULL){
+                        $stop_date = strtotime($expired);
+                        $expired = date("Y-m-d", strtotime("+1 day", $stop_date));
+                        $done = TRUE;
                     }
-                    while($done == TRUE);
-                    $tagihan->tgl_expired = $expired; //Perlu Cek Hari Libur
-                    $tagihan->bln_tagihan = $bln_tagihan;
-                    $tagihan->thn_tagihan = $thn_tagihan;
-                    $tagihan->stt_lunas = 0;
-                    $tagihan->stt_bayar = 0;
-                    $tagihan->stt_denda = 0;
-                    $tagihan->stt_kebersihan = 1;
-                    $tagihan->stt_keamananipk = 1;
-
-                    //inisiasi
-                    $jml_alamat = $record->jml_alamat;
-                    $diskon = 0;
-
-                    //--- Data Tagihan Khusus ---
-
-                    if($t->trf_airbersih == NULL){
-                        $tagihan->stt_airbersih = 1;
+                    else{
+                        $done = FALSE;
                     }
-                    
-                    if($t->trf_listrik == NULL){
-                        $tagihan->stt_listrik = 1;
-                    }
-                    
-                    //Air Bersih
-                    if($t->trf_airbersih != NULL){
-                        $meter = MeteranAir::find($t->id_meteran_air);
-                        $tagihan->awal_airbersih = $meter->akhir;
-                    }
-
-                    //Listrik
-                    if($t->trf_listrik != NULL){
-                        $meter = MeteranListrik::find($t->id_meteran_listrik);
-                        $tagihan->daya_listrik = $meter->daya;
-                        $tagihan->awal_listrik = $meter->akhir;
-                    }
-
-                    //Tarif Keamanan & IPK
-                    if($t->trf_keamananipk != NULL){
-                        $tarif = TarifKeamananIpk::find($t->trf_keamananipk);
-                        $tagihan->ttl_keamananipk = $tarif->tarif * $jml_alamat;
-                        $tagihan->sel_keamananipk = $tarif->tarif * $jml_alamat;
-                        $subtotal = $subtotal + $tarif->tarif * $jml_alamat;
-                    }
-
-                    // Tarif Kebersihan
-                    if($t->trf_kebersihan != NULL){
-                        $tarif = TarifKebersihan::find($t->trf_kebersihan);
-                        $tagihan->ttl_kebersihan = $tarif->tarif * $jml_alamat;
-                        $tagihan->sel_kebersihan = $tarif->tarif * $jml_alamat;
-                        $subtotal = $subtotal + $tarif->tarif * $jml_alamat;
-                    }
-
-                    // Tarif Kebersihan
-                    if($t->trf_airkotor != NULL){
-                        $tarif = TarifAirKotor::find($t->trf_airkotor);
-                        $tagihan->ttl_airkotor = $tarif->tarif;
-                        $tagihan->sel_airkotor = $tarif->tarif;
-                        $subtotal = $subtotal + $tarif->tarif;
-                    }
-                    
-                    // Tarif Lain Lain
-                    if($t->trf_lain != NULL){
-                        $tarif = TarifLain::find($t->trf_lain);
-                        $tagihan->ttl_lain = $tarif->tarif;
-                        $tagihan->sel_lain = $tarif->tarif;
-                        $subtotal = $subtotal + $tarif->tarif;
-                    }
-
-                    //Sub Total 
-                    $subtotal = round($subtotal);
-                    $tagihan->ttl_tagihan_seb = $subtotal;
-                    //Diskon
-                    $diskon = round(($diskon * $subtotal) / 100);
-                    $tagihan->diskon_tagihan = $diskon;
-                    //TOTAL
-                    $tagihan->ttl_tagihan = $subtotal - $diskon;
-                    $tagihan->rea_tagihan = 0;
-                    $tagihan->den_tagihan = 0;
-                    $tagihan->sel_tagihan = $subtotal - $diskon;
-
-                    $tagihan->save();
                 }
+                while($done == TRUE);
+                $tagihan->tgl_expired = $expired;
+                $tagihan->stt_lunas = 0;
+                $tagihan->stt_bayar = 0;
+                $tagihan->stt_denda = 0;
+
+                if($record->trf_keamananipk != NULL){
+                    $tarif = TarifKeamananIpk::find($record->trf_keamananipk);
+                    $tagihan->stt_keamananipk = 1;
+                    $jumlah = $record->jml_alamat * $tarif->tarif;
+                    $tagihan->sub_keamananipk = $jumlah;
+                    $tagihan->ttl_keamananipk = $jumlah - $tagihan->dis_keamananipk;
+                    $tagihan->sel_keamananipk = $tagihan->ttl_keamananipk - $tagihan->rea_keamananipk;
+                    $subtotal = $subtotal + $tagihan->sub_keamananipk;
+                }
+
+                if($record->trf_kebersihan != NULL){
+                    $tarif = TarifKebersihan::find($record->trf_kebersihan);
+                    $tagihan->stt_kebersihan = 1;
+                    $jumlah = $record->jml_alamat * $tarif->tarif;
+                    $tagihan->sub_kebersihan = $jumlah;
+                    $tagihan->ttl_kebersihan = $jumlah - $tagihan->dis_kebersihan;
+                    $tagihan->sel_kebersihan = $tagihan->ttl_kebersihan - $tagihan->rea_kebersihan;
+                    $subtotal = $subtotal + $tagihan->sub_kebersihan;
+                }
+
+                if($record->trf_airkotor != NULL){
+                    $tarif = TarifAirKotor::find($record->trf_airkotor);
+                    $tagihan->stt_airkotor = 1;
+                    $tagihan->ttl_airkotor = $tarif->tarif;
+                    $tagihan->sel_airkotor = $tarif->tarif;
+                    $subtotal = $subtotal + $tagihan->ttl_airkotor;
+                }
+                
+                if($record->trf_lain != NULL){
+                    $tarif = TarifLain::find($record->trf_lain);
+                    $tagihan->stt_lain = 1;
+                    $tagihan->ttl_lain = $tarif->tarif;
+                    $tagihan->sel_lain = $tarif->tarif;
+                    $subtotal = $subtotal + $tagihan->ttl_lain;
+                }
+                
+                if($record->trf_listrik != NULL){
+                    $tarif = MeteranListrik::find($record->id_meteran_listrik);
+                    $tagihan->awal_listrik = $tarif->akhir;
+                    $tagihan->daya_listrik = $tarif->daya;
+                    $tagihan->stt_listrik = 0;
+                }
+                  
+                if($record->trf_airbersih != NULL){
+                    $tarif = MeteranAir::find($record->id_meteran_air);
+                    $tagihan->awal_airbersih = $tarif->akhir;
+                    $tagihan->stt_airbersih = 0;
+                }
+
+                $tagihan->sub_tagihan = $subtotal;
+                $tagihan->ttl_tagihan = $tagihan->sub_tagihan - $tagihan->dis_tagihan;
+                $tagihan->sel_tagihan = $tagihan->ttl_tagihan - $tagihan->rea_tagihan;
+
+                $tagihan->save();
             }
         }
         Session::put('tagihan','done');
     }
 
     public static function checking2(){
-        //tagihan antara awal bulan - tanggal 15
+        //tagihan setelah tanggal 15 bulan ini//Tagihan Bulan ini, Pemakaian sebelum tanggal 15 bulan ini dan setelah tanggal 15 bulan lalu
+        date_default_timezone_set('Asia/Jakarta');
+        $now = date("Y-m-01",time());
+        $expired = date("Y-m-15",time());
+        $bln_pakai = date("Y-m",time());
+        $time = strtotime($bln_pakai);
+        $bln_tagihan = date("Y-m", strtotime("+1 month", $time));
+        $time = strtotime($now);
+        $tgl_tagihan = date("Y-m-01", strtotime("+1 month", $time));
+        $time = strtotime($expired);
+        $tgl_expired = date("Y-m-15", strtotime("+1 month", $time));
+        $thn_tagihan = date("Y",  strtotime("+1 month", $time));
+
+        $tempat = TempatUsaha::select('id')->orderBy('kd_kontrol','asc')->get();
+        foreach($tempat as $t){
+            $tagihan = Tagihan::where([['id_tempat',$t->id],['bln_pakai',$bln_pakai]])->select('id')->first();
+            if($tagihan == NULL){
+                $tagihan = new Tagihan;
+                $record = TempatUsaha::find($t->id);
+                $subtotal = 0;
+
+                //--- Data Tagihan Global ---
+                $tagihan->id_tempat = $record->id;
+                $tagihan->kd_kontrol = $record->kd_kontrol;
+                $tagihan->id_pemilik = $record->id_pemilik;
+                $tagihan->id_pengguna = $record->id_pengguna;
+                $pengguna = User::find($record->id_pengguna);
+                $tagihan->nama = $pengguna->nama;
+                $tagihan->blok = $record->blok;
+                $tagihan->bln_pakai = $bln_pakai;
+                $tagihan->tgl_tagihan = $tgl_tagihan;
+                $tagihan->bln_tagihan = $bln_tagihan;
+                $tagihan->thn_tagihan = $thn_tagihan;
+                $expired = $tgl_expired;
+                do{
+                    $libur = HariLibur::where('tanggal', $expired)->first();
+                    if ($libur != NULL){
+                        $stop_date = strtotime($expired);
+                        $expired = date("Y-m-d", strtotime("+1 day", $stop_date));
+                        $done = TRUE;
+                    }
+                    else{
+                        $done = FALSE;
+                    }
+                }
+                while($done == TRUE);
+                $tagihan->tgl_expired = $expired;
+                $tagihan->stt_lunas = 0;
+                $tagihan->stt_bayar = 0;
+                $tagihan->stt_denda = 0;
+
+                if($record->trf_keamananipk != NULL){
+                    $tarif = TarifKeamananIpk::find($record->trf_keamananipk);
+                    $tagihan->stt_keamananipk = 1;
+                    $jumlah = $record->jml_alamat * $tarif->tarif;
+                    $tagihan->sub_keamananipk = $jumlah;
+                    $tagihan->ttl_keamananipk = $jumlah - $tagihan->dis_keamananipk;
+                    $tagihan->sel_keamananipk = $tagihan->ttl_keamananipk - $tagihan->rea_keamananipk;
+                    $subtotal = $subtotal + $tagihan->sub_keamananipk;
+                }
+
+                if($record->trf_kebersihan != NULL){
+                    $tarif = TarifKebersihan::find($record->trf_kebersihan);
+                    $tagihan->stt_kebersihan = 1;
+                    $jumlah = $record->jml_alamat * $tarif->tarif;
+                    $tagihan->sub_kebersihan = $jumlah;
+                    $tagihan->ttl_kebersihan = $jumlah - $tagihan->dis_kebersihan;
+                    $tagihan->sel_kebersihan = $tagihan->ttl_kebersihan - $tagihan->rea_kebersihan;
+                    $subtotal = $subtotal + $tagihan->sub_kebersihan;
+                }
+
+                if($record->trf_airkotor != NULL){
+                    $tarif = TarifAirKotor::find($record->trf_airkotor);
+                    $tagihan->stt_airkotor = 1;
+                    $tagihan->ttl_airkotor = $tarif->tarif;
+                    $tagihan->sel_airkotor = $tarif->tarif;
+                    $subtotal = $subtotal + $tagihan->ttl_airkotor;
+                }
+                
+                if($record->trf_lain != NULL){
+                    $tarif = TarifLain::find($record->trf_lain);
+                    $tagihan->stt_lain = 1;
+                    $tagihan->ttl_lain = $tarif->tarif;
+                    $tagihan->sel_lain = $tarif->tarif;
+                    $subtotal = $subtotal + $tagihan->ttl_lain;
+                }
+                
+                if($record->trf_listrik != NULL){
+                    $tarif = MeteranListrik::find($record->id_meteran_listrik);
+                    $tagihan->awal_listrik = $tarif->akhir;
+                    $tagihan->daya_listrik = $tarif->daya;
+                    $tagihan->stt_listrik = 0;
+                }
+                  
+                if($record->trf_airbersih != NULL){
+                    $tarif = MeteranAir::find($record->id_meteran_air);
+                    $tagihan->awal_airbersih = $tarif->akhir;
+                    $tagihan->stt_airbersih = 0;
+                }
+
+                $tagihan->sub_tagihan = $subtotal;
+                $tagihan->ttl_tagihan = $tagihan->sub_tagihan - $tagihan->dis_tagihan;
+                $tagihan->sel_tagihan = $tagihan->ttl_tagihan - $tagihan->rea_tagihan;
+
+                $tagihan->save();
+            }
+        }
         Session::put('tagihan','done');
     }
 
@@ -618,21 +754,27 @@ class Tagihan extends Model
         $tagihan->blok2_listrik = $blok2_listrik;
         $tagihan->beban_listrik = $beban_listrik;
         $tagihan->bpju_listrik = $bpju_listrik;
-        $tagihan->ttl_listrik = $ttl_listrik;
-        $tagihan->sel_listrik = $ttl_listrik - $tagihan->rea_listrik;
+        $tagihan->sub_listrik = round($ttl_listrik);
+        $tempat = TempatUsaha::find($tagihan->id_tempat);
+        if($tempat->dis_listrik != NULL){
+            $diskon = round($ttl_listrik);
+        }
+        else{
+            $diskon = $tagihan->dis_listrik;
+        }
+        $tagihan->ttl_listrik = $tagihan->sub_listrik - $tagihan->dis_listrik;
+        $tagihan->sel_listrik = $tagihan->ttl_listrik - $tagihan->rea_listrik;
         
         //Subtotal
-        $subtotal = round($tagihan->ttl_tagihan_seb + $ttl_listrik);
-        $tagihan->ttl_tagihan_seb = $subtotal;
+        $subtotal = $tagihan->sub_tagihan + $tagihan->sub_listrik;
+        $tagihan->sub_tagihan = $subtotal;
         
         //Diskon
-        $diskon = $tagihan->prs_diskon;
-        $diskon = round(($diskon * $subtotal) / 100);
-        $tagihan->diskon_tagihan = $diskon;
+        $tagihan->dis_tagihan = $diskon;
 
         //TOTAL
         $tagihan->ttl_tagihan = $subtotal - $diskon;
-        $tagihan->sel_tagihan = $subtotal - $diskon - $tagihan->rea_tagihan;
+        $tagihan->sel_tagihan = $tagihan->ttl_tagihan - $tagihan->rea_tagihan;
 
         $tagihan->stt_listrik = 1;
         $tagihan->save();
@@ -675,21 +817,27 @@ class Tagihan extends Model
         $tagihan->pemeliharaan_airbersih = $pemeliharaan_airbersih;
         $tagihan->beban_airbersih = $beban_airbersih;
         $tagihan->arkot_airbersih = $arkot_airbersih;
-        $tagihan->ttl_airbersih = round($ttl_airbersih);
-        $tagihan->sel_airbersih = round($ttl_airbersih - $tagihan->rea_airbersih);
-
+        $tagihan->sub_airbersih = round($ttl_airbersih);
+        $tempat = TempatUsaha::find($tagihan->id_tempat);
+        if($tempat->dis_airbersih != NULL){
+            $diskon = round($ttl_airbersih);
+        }
+        else{
+            $diskon = $tagihan->dis_airbersih;
+        }
+        $tagihan->ttl_airbersih = $tagihan->sub_airbersih - $tagihan->dis_airbersih;
+        $tagihan->sel_airbersih = $tagihan->ttl_airbersih - $tagihan->rea_airbersih;
+        
         //Subtotal
-        $subtotal = round($tagihan->ttl_tagihan_seb + $ttl_airbersih);
-        $tagihan->ttl_tagihan_seb = $subtotal;
+        $subtotal = $tagihan->sub_tagihan + $tagihan->sub_airbersih;
+        $tagihan->sub_tagihan = $subtotal;
         
         //Diskon
-        $diskon = $tagihan->prs_diskon;
-        $diskon = round(($diskon * $subtotal) / 100);
-        $tagihan->diskon_tagihan = $diskon;
+        $tagihan->dis_tagihan = $diskon;
 
         //TOTAL
         $tagihan->ttl_tagihan = $subtotal - $diskon;
-        $tagihan->sel_tagihan = $subtotal - $diskon - $tagihan->rea_tagihan;
+        $tagihan->sel_tagihan = $tagihan->ttl_tagihan - $tagihan->rea_tagihan;
 
         $tagihan->stt_airbersih = 1;
         $tagihan->save();

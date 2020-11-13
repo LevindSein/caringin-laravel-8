@@ -20,31 +20,62 @@ class TagihanController extends Controller
     public function data(Request $request, $data){
         //inisialisasi
         date_default_timezone_set('Asia/Jakarta');
-        $date = date("Y-m-01", time());
-        $months = date("Y-m", time());
+
+        //Penting
         $month = date("m", time());
-        $year = date("Y", time());
+        $tahun = date("Y", time());
+        //End Penting
 
-        // if($data == "now"){
-        //     $bulan = Tagihan::indoBln($months);
-        //     $bln = $months;
-        // }
-        // else if($data == "periode"){
-        //     $bulan = Tagihan::indoBln($request->get('tahun').'-'.$request->get('bulan'));
-        //     $bln = $request->get('tahun').'-'.$request->get('bulan');
-        // }
-        // else{
-        //     return redirect()->back();
-        // }
+        $now = date("Y-m-d",time());
+        $time = strtotime($now);
+        $check = date("Y-m-20",time());
 
-        // return view('tagihan.data',[
-        //     'dataset'=>Tagihan::data($bln),
-        //     'month'=>$month,
-        //     'bulan'=>$bulan,
-        //     'tahun'=>$year,
-        //     'dataTahun'=>Tagihan::dataTahun(),
-        //     'blok'=>Blok::all()
-        // ]);
+        if($now < $check){
+            $months = date("Y-m", time());
+        }
+        else if($now >= $check){
+            $sekarang = date("Y-m", time());     
+            $time = strtotime($sekarang);
+            $months = date("Y-m", strtotime("+1 month", $time));
+        }
+
+        if($data == "now"){
+            $bulan = Tagihan::indoBln($months);
+            $bln = $months;
+            
+            $now = date("Y-m-d",time());
+            $check = date("Y-m-15",time());
+
+            Session::put('tagihan','uncheck');
+            if(Session::get('tagihan') != 'done'){
+                if($now < $check){
+                    //Check Tagihan Pemakaian Bulan Lalu
+                    Tagihan::checking1();
+                }
+                else if($now >= $check){
+                    //Check Tagihan Pemakaian Bulan Lalu
+                    Tagihan::checking2();
+                }
+            }
+        }
+        else if($data == "periode"){
+            $bulan = Tagihan::indoBln($request->get('tahun').'-'.$request->get('bulan'));
+            $bln = $request->get('tahun').'-'.$request->get('bulan');
+        }
+        else{
+            return redirect()->back();
+        }
+
+
+
+        return view('tagihan.data',[
+            'dataset'=>Tagihan::data($bln),
+            'month'=>$month,
+            'bulan'=>$bulan,
+            'tahun'=>$tahun,
+            'dataTahun'=>Tagihan::dataTahun(),
+            'blok'=>Blok::all()
+        ]);
     }
 
     public function update($id){
@@ -56,21 +87,13 @@ class TagihanController extends Controller
     }
 
     public function fasilitas($fasilitas){
-        //Check Tagihan
-        if(Session::get('tagihan') == 'checking1'){
-            Tagihan::checking1();
-        }
-        else if(Session::get('tagihan') == 'checking2'){
-            Tagihan::checking2();
-        }
-
         $dataset = Tagihan::tagihan($fasilitas);
-        if($dataset == "Not Periode"){
-            return redirect()->back()->with('info','Bukan Periode Penambahan Tagihan');
+        if($dataset == "Air Bersih"){
+            return redirect()->route('tagihandata','now')->with('success','Update Tagihan Air Bersih Selesai');
         }
-        else if($dataset == "Done"){
-            return redirect()->route('tagihandata','now')->with('success','Update Data Tagihan Berhasil');
-        }else{}
+        if($dataset == "Listrik"){
+            return redirect()->route('tagihandata','now')->with('success','Update Tagihan Listrik Selesai');
+        }
 
         if($fasilitas == 'listrik'){
             return view('tagihan.listrik',[
@@ -88,7 +111,6 @@ class TagihanController extends Controller
     }
 
     public function storeFasilitas(Request $request,$fasilitas, $id){
-        $tagihanId = $request->get('tagihanId');
         $tempatId = $request->get('tempatId');
         $tempat = TempatUsaha::find($tempatId);
         $penggunaId = $request->get('namaPengguna');
@@ -102,8 +124,10 @@ class TagihanController extends Controller
 
         //Update Pengguna
         $tempat->id_pengguna = $penggunaId;
-        $tagihan = Tagihan::find($tagihanId);
+        $tempat->id_pemilik = $penggunaId;
+        $tagihan = Tagihan::find($id);
         $tagihan->id_pengguna = $penggunaId;
+        $tagihan->id_pemilik = $penggunaId;
 
         if($akhir < $awal){
             return redirect()->back()->with('error','Data Akhir Lebih Kecil dari Data Awal');
@@ -124,7 +148,7 @@ class TagihanController extends Controller
             $meter->save();
 
             //Update Tagihan
-            Tagihan::listrik($awal,$akhir,$daya,$tagihanId);
+            Tagihan::listrik($awal,$akhir,$daya,$id);
         }
 
         if($fasilitas == 'airbersih'){
@@ -134,7 +158,7 @@ class TagihanController extends Controller
             $meter->save();
 
             //Update Tagihan
-            Tagihan::airBersih($awal,$akhir,$tagihanId);
+            Tagihan::airBersih($awal,$akhir,$id);
         }
         
         $tagihan->save();

@@ -75,7 +75,6 @@
             class="form-control"
             id="daya">
     </div>
-    <input type="hidden" name="tagihanId" id="tagihanId" value="{{$dataset->tagihanId}}">
     <input type="hidden" name="tempatId" id="tempatId" value="{{$dataset->tempatId}}">
     <div class="form-group col-lg-12">
         <Input type="submit" value="Tambah Tagihan" class="btn btn-primary btn-user btn-block">
