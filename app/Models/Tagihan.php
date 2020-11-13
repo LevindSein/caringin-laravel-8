@@ -30,7 +30,6 @@ class Tagihan extends Model
         'id_pemilik',
         'id_pengguna',
         'nama',
-        'user',
         'blok',
         'kd_kontrol',
         'bln_pakai',
@@ -103,6 +102,9 @@ class Tagihan extends Model
         'stt_airkotor',
         'stt_lain',
         'ket',
+        'via_bayar',
+        'via_tambah',
+        'stt_publish',
         'updated_at',
         'created_at'
     ];

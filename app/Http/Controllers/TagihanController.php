@@ -46,7 +46,6 @@ class TagihanController extends Controller
             $now = date("Y-m-d",time());
             $check = date("Y-m-15",time());
 
-            Session::put('tagihan','uncheck');
             if(Session::get('tagihan') != 'done'){
                 if($now < $check){
                     //Check Tagihan Pemakaian Bulan Lalu
@@ -169,6 +168,10 @@ class TagihanController extends Controller
         date_default_timezone_set('Asia/Jakarta');
         $month = date("Y-m", time());
         return view('tagihan.edaran',['dataset'=>Tagihan::where([['blok',$request->get('blok')],['bln_tagihan',$month]])->get()]);
+    }
+
+    public function publish(){
+        return redirect()->back()->with('success','Tagihan di Publish');
     }
 
     //opsional

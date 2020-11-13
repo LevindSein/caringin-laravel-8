@@ -12,7 +12,7 @@ use App\Models\TempatUsaha;
 class Nasabah extends Model
 {
     public static function tagihan($id){
-        $tagihan = Tagihan::where([['id_pengguna',$id],['stt_lunas',0]])
+        $tagihan = Tagihan::where([['id_pengguna',$id],['stt_lunas',0],['stt_publish',1]])
         ->select(DB::raw('SUM(sel_tagihan) as tagihan'))
         ->get();
         return $tagihan[0]->tagihan;
@@ -31,7 +31,7 @@ class Nasabah extends Model
     }
 
     public static function data($id){
-        return Tagihan::groupBy('bln_pakai')->where('id_pengguna',$id)->orderBy('bln_pakai','desc')
+        return Tagihan::groupBy('bln_pakai')->where([['id_pengguna',$id],['stt_publish',1]])->orderBy('bln_pakai','desc')
         ->select('bln_pakai',
             DB::raw('SUM(ttl_tagihan) as tagihan'),
             DB::raw('SUM(rea_tagihan) as realisasi'),
@@ -40,6 +40,6 @@ class Nasabah extends Model
     }
 
     public static function rincian($id, $bln){
-        return Tagihan::where([['id_pengguna',$id],['bln_pakai',$bln]])->orderBy('kd_kontrol','asc')->get();
+        return Tagihan::where([['id_pengguna',$id],['bln_pakai',$bln],['stt_publish',1]])->orderBy('kd_kontrol','asc')->get();
     }
 }

@@ -29,6 +29,15 @@ $role = Session::get('role');
                     <i class="fas fa-fw fa-plus fa-sm text-white-50"></i> Air Bersih</b>
                 </a>
                 &nbsp;
+                <a 
+                    href="#" 
+                    data-toggle="modal"
+                    data-target="#myPublish" 
+                    type="submit" 
+                    class="btn btn-sm btn-danger"><b>
+                    <i class="fas fa-fw fa-paper-plane fa-sm text-white-50"></i> Publish</b>
+                </a>
+                &nbsp;
                 <div class="dropdown no-arrow" style="display:inline-block">
                     <a 
                         class="dropdown-toggle btn btn-sm btn-success" 
@@ -73,6 +82,36 @@ $role = Session::get('role');
 
 @section('modal')
 <!-- Tambah Content pada Body modal -->
+<div
+    class="modal fade"
+    id="myPublish"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Publish Tagihan {{$bulan}} ?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body-short">
+                <div class="text-center">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <br>Pastikan Tagihan benar, sebelum melakukan publish. 
+                    <br>Tagihan yang telah di-publish tidak dapat diedit.
+                </div> 
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary" type="submit" href="{{url('tagihan/publish/now')}}">Publish</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div
     class="modal fade"
     id="myModal"
@@ -141,7 +180,7 @@ $role = Session::get('role');
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form class="user" action="{{url('tagihan/edaran')}}" target="_blank" method="POST">
+            <form class="user" action="{{url('tagihan/print/edaran')}}" target="_blank" method="POST">
                 <div class="modal-body-short">
                     @csrf
                     <div class="form-group">

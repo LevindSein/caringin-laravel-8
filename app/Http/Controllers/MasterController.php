@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use App\Models\Tagihan;
 use App\Models\TempatUsaha;
 use App\Models\User;
@@ -17,6 +18,13 @@ class MasterController extends Controller
         $akumulasi = Tagihan::akumulasi($thn);
 
         $data = User::where('role','nasabah')->get();
+
+        $dataset = Tagihan::all();
+        foreach($dataset as $data){
+            $data->via_tambah = Session::get('username');
+            $data->stt_publish = 1;
+            $data->save();
+        }
 
         return view('master.index',[
             'pengguna'=>TempatUsaha::pengguna(),
