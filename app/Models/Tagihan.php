@@ -844,4 +844,16 @@ class Tagihan extends Model
         $tagihan->stt_airbersih = 1;
         $tagihan->save();
     }
+
+    public static function listrikBadge(){
+        return Tagihan::where([['tagihan.stt_listrik',0],['tempat_usaha.trf_listrik',1]])
+        ->leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
+        ->count();
+    }
+    
+    public static function airBersihBadge(){
+        return Tagihan::where([['tagihan.stt_airbersih',0],['tempat_usaha.trf_airbersih',1]])
+        ->leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
+        ->count();
+    }
 }

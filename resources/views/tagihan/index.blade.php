@@ -19,14 +19,14 @@ $role = Session::get('role');
                     href="{{url('tagihan/listrik')}}"
                     type="submit"
                     class="btn btn-sm btn-warning"><b>
-                    <i class="fas fa-fw fa-plus fa-sm text-white-50"></i> Listrik</b>
+                    <i class="fas fa-fw fa-plus fa-sm text-white-50"></i> Listrik </b> <span class="badge badge-pill badge-light">{{$listrikBadge}}</span>
                 </a>
                 &nbsp;
                 <a 
                     href="{{url('tagihan/airbersih')}}"  
                     type="submit"
                     class="btn btn-sm btn-info"><b>
-                    <i class="fas fa-fw fa-plus fa-sm text-white-50"></i> Air Bersih</b>
+                    <i class="fas fa-fw fa-plus fa-sm text-white-50"></i> Air Bersih </b> <span class="badge badge-pill badge-light">{{$airBersihBadge}}</span>
                 </a>
                 &nbsp;
                 <a 

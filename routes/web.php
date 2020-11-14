@@ -192,6 +192,11 @@ Route::get('log',function(){
 Route::get('nasabah/details/{bln}',[NasabahController::class, 'details']);
 Route::get('nasabah/rincian/{bln}',[NasabahController::class, 'rincian']);
 
+Route::post('kasir/cari/transaksi',[KasirController::class, 'cari']);
+Route::post('kasir/bayar/{id}',[KasirController::class, 'bayar']);
+Route::get('kasir/details/{id}',[KasirController::class, 'details']);
+Route::get('kasir/penerimaan',[KasirController::class, 'penerimaan']);
+
 //opsional
 Route::post('tagihan/pedagang/{fasilitas}',[TagihanController::class, 'pedagang']);
 

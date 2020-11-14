@@ -19,6 +19,8 @@ class PasangAlat extends Model
         'ttl_pasang',
         'rea_pasang',
         'sel_pasang',
+        'stt_bayar',
+        'stt_lunas',
         'updated_at',
         'created_at'];
 }

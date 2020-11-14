@@ -89,7 +89,7 @@
                 <!-- Footer -->
                 <footer class="container my-auto">
                     <div class="copyright text-center text-gray-100 my-auto">
-                        <span>Copyright &copy; PT. Pengelola Pusat Perdagangan Caringin</span>
+                        <span>Copyright &copy;2020 PT. Pengelola Pusat Perdagangan Caringin</span>
                     </div>
                 </footer>
                 <!-- End of Footer -->

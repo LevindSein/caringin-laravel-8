@@ -73,7 +73,9 @@ class TagihanController extends Controller
             'bulan'=>$bulan,
             'tahun'=>$tahun,
             'dataTahun'=>Tagihan::dataTahun(),
-            'blok'=>Blok::all()
+            'blok'=>Blok::all(),
+            'listrikBadge'=>Tagihan::listrikBadge(),
+            'airBersihBadge'=>Tagihan::airBersihBadge(),
         ]);
     }
 

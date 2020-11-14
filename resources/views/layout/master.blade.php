@@ -297,7 +297,7 @@ $username = Session::get('username');
                     <footer class="sticky-footer bg-white">
                         <div class="container my-auto">
                             <div class="copyright text-center my-auto">
-                                <span>Copyright &copy;PT Pengelola Pusat Perdagangan Caringin</span>
+                                <span>Copyright &copy;2020 PT Pengelola Pusat Perdagangan Caringin</span>
                             </div>
                         </div>
                     </footer>
@@ -308,11 +308,6 @@ $username = Session::get('username');
 
             </div>
             <!-- End of Page Wrapper -->
-
-            <!-- Scroll to Top Button-->
-            <a class="scroll-to-top rounded" href="#page-top">
-                <i class="fas fa-angle-up"></i>
-            </a>
         </div>
 
         @yield('modal')
