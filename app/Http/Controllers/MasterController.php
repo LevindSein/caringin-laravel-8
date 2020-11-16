@@ -26,6 +26,8 @@ class MasterController extends Controller
             $data->save();
         }
 
+        // Tagihan::hitungListrik();
+
         return view('master.index',[
             'pengguna'=>TempatUsaha::pengguna(),
             'penggunaAktif'=>TempatUsaha::penggunaAktif(),

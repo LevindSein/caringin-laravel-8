@@ -48,45 +48,7 @@
 @endsection
 
 @section('modal')
-<div
-    class="modal fade"
-    id="myModal"
-    tabIndex="-1"
-    role="dialog"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Cari Transaksi</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <form class="user" action="{{url('kasir/cari/transaksi')}}" method="POST">
-                <div class="modal-body-short">
-                    @csrf
-                    <div class="form-group col-lg-12">
-                        <br>
-                        <input
-                            required
-                            autocomplete="off"
-                            type="text"
-                            style="text-transform:uppercase;"
-                            name="kode"
-                            maxlength="10"
-                            class="form-control"
-                            id="kode"
-                            placeholder="Masukkan 10 Digit Kode Pembayaran">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary btn-sm">Cari</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
 @endsection
 
 @section('js')

@@ -856,4 +856,67 @@ class Tagihan extends Model
         ->leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
         ->count();
     }
+
+    public static function hitungListrik(){
+        //Hitung Tagihan
+        $dataset = Tagihan::where([['bln_pakai','2020-06'],['daya_listrik','!=',NULL]])->get();
+        $tarif = TarifListrik::find(1);
+        foreach($dataset as $tagihan){
+            $daya = $tagihan->daya_listrik;
+            $akhir = $tagihan->akhir_listrik;
+            $awal = $tagihan->awal_listrik;
+
+            $batas_rekmin = round(18 * $daya /1000);
+            $pakai_listrik = $akhir - $awal;
+
+            $a = round(($daya * $tarif->trf_standar) / 1000);
+            $blok1_listrik = $tarif->trf_blok1 * $a;
+
+            $b = $pakai_listrik - $a;
+            $blok2_listrik = $tarif->trf_blok2 * $b;
+            $beban_listrik = $daya * $tarif->trf_beban;
+
+            $c = $blok1_listrik + $blok2_listrik + $beban_listrik;
+            $rekmin_listrik = 53.44 * $daya;
+
+            if($pakai_listrik <= $batas_rekmin){
+                $bpju_listrik = ($tarif->trf_bpju / 100) * $rekmin_listrik;
+                $blok1_listrik = 0;
+                $blok2_listrik = 0;
+                $beban_listrik = 0;
+                $byr_listrik = $bpju_listrik + $rekmin_listrik;
+                $ppn = ($tarif->trf_ppn / 100) * $byr_listrik;
+                $ttl_listrik = $byr_listrik + $ppn;
+            }
+            else{
+                $bpju_listrik = ($tarif->trf_bpju / 100) * $c;
+                $rekmin_listrik = 0;
+                $byr_listrik = $bpju_listrik + $blok1_listrik + $blok2_listrik + $beban_listrik;
+                $ppn = ($tarif->trf_ppn / 100) * $byr_listrik;
+                $ttl_listrik = $byr_listrik + $ppn;
+            }
+
+            $tagihan->pakai_listrik = $pakai_listrik;
+            $tagihan->byr_listrik = $byr_listrik;
+            $tagihan->rekmin_listrik = $rekmin_listrik;
+            $tagihan->blok1_listrik = $blok1_listrik;
+            $tagihan->blok2_listrik = $blok2_listrik;
+            $tagihan->beban_listrik = $beban_listrik;
+            $tagihan->bpju_listrik = $bpju_listrik;
+            $tagihan->sub_listrik = round($ttl_listrik);
+            $tempat = TempatUsaha::find($tagihan->id_tempat);
+            $tempat->daya = $tagihan->daya_listrik;
+            $meter = MeteranListrik::find($tempat->id_meteran_listrik);
+            $meter->daya = $tagihan->daya_listrik;
+
+            $tagihan->ttl_listrik = $tagihan->sub_listrik - $tagihan->dis_listrik;
+            $tagihan->sel_listrik = $tagihan->ttl_listrik - $tagihan->rea_listrik;
+
+            $tagihan->stt_listrik = 1;
+            $tagihan->save();
+            $tempat->save();
+            $meter->save();
+        }
+        echo "done";
+    }
 }

@@ -10,6 +10,10 @@ use App\Models\MeteranAir;
 use App\Models\TempatUsaha;
 use App\Models\Blok;
 
+use App\Models\Item;
+use Mike42\Escpos\Printer;
+use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
+
 use Exception;
 
 class MeteranController extends Controller

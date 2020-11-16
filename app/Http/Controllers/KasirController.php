@@ -31,4 +31,8 @@ class KasirController extends Controller
     public function penerimaan(){
         
     }
+
+    public function scan(){
+        return view('kasir.qr-code');
+    }
 }

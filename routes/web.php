@@ -195,7 +195,8 @@ Route::get('nasabah/rincian/{bln}',[NasabahController::class, 'rincian']);
 Route::post('kasir/cari/transaksi',[KasirController::class, 'cari']);
 Route::post('kasir/bayar/{id}',[KasirController::class, 'bayar']);
 Route::get('kasir/details/{id}',[KasirController::class, 'details']);
-Route::get('kasir/penerimaan',[KasirController::class, 'penerimaan']);
+Route::post('kasir/penerimaan',[KasirController::class, 'penerimaan']);
+Route::get('kasir/scan',[KasirController::class, 'scan']);
 
 //opsional
 Route::post('tagihan/pedagang/{fasilitas}',[TagihanController::class, 'pedagang']);

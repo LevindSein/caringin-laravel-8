@@ -71,21 +71,31 @@
 											<div>
                                                 <a 
                                                     type="button"
-                                                    class="btn btn-outline-inverse-info btn-icon-text"
+                                                    class="btn btn-outline-inverse-info"
                                                     data-toggle="modal"
-                                                    data-target="#myModal">
-													Cari Transaksi
-													<i class="mdi mdi-credit-card btn-icon-append"></i>  
+                                                    data-target="#myModal"
+                                                    title="Cari Transaksi">
+                                                    <i class="mdi mdi-magnify btn-icon-append"></i>
                                                 </a>
                                             </div>&nbsp;
                                             <div>
                                                 <a 
-                                                    href="{{url('kasir/penerimaan')}}"
+                                                    type="button"
+                                                    class="btn btn-outline-inverse-info"
+                                                    data-toggle="modal"
+                                                    data-target="#myPenerimaan"
+                                                    title="Cetak Penerimaan">
+													<i class="mdi mdi-printer btn-icon-append"></i>  
+                                                </a>
+											</div>&nbsp;
+                                            <div>
+                                                <a 
+                                                    href="{{url('kasir/scan')}}"
                                                     target="_blank"
                                                     type="button"
-                                                    class="btn btn-outline-inverse-info btn-icon-text">
-													Penerimaan
-													<i class="mdi mdi-printer btn-icon-append"></i>  
+                                                    class="btn btn-outline-inverse-info"
+                                                    title="Scan Qrcode">
+													<i class="mdi mdi-qrcode-scan btn-icon-append"></i>  
                                                 </a>
 											</div>
 										</div>
@@ -131,13 +141,90 @@
             </div>
         </div>
 
+        <div
+            class="modal fade"
+            id="myModal"
+            tabIndex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Cari Transaksi</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <form class="user" action="{{url('kasir/cari/transaksi')}}" method="POST">
+                        <div class="modal-body-short">
+                            @csrf
+                            <div class="form-group col-lg-12">
+                                <br>
+                                <input
+                                    required
+                                    autocomplete="off"
+                                    type="text"
+                                    style="text-transform:uppercase;"
+                                    name="kode"
+                                    maxlength="10"
+                                    class="form-control"
+                                    id="kode"
+                                    placeholder="Masukkan 10 Digit Kode Pembayaran">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary btn-sm">Cari</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="modal fade"
+            id="myPenerimaan"
+            tabIndex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Cetak Penerimaan Harian</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <form class="user" action="{{url('kasir/penerimaan')}}" method="POST">
+                        <div class="modal-body-short">
+                            @csrf
+                            <div class="form-group col-lg-12">
+                                <br>
+                                <input
+                                    required
+                                    placeholder="Date" class="form-control" type="text" onfocus="(this.type='date')"
+                                    autocomplete="off"
+                                    type="date"
+                                    name="tanggal"
+                                    id="tanggal">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary btn-sm">Cetak</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         @yield('modal')
 
         <script>
-            $(window).load(function () {
+            $(window).on('load',function () {
                 $(".se-pre-con")
-                    .fadeIn("slow")
-                    .fadeOut("slow");;
+                    .fadeIn("fast")
+                    .fadeOut("fast");;
             });
         </script>
 
