@@ -125,7 +125,9 @@ class Pemakaian extends Model
                 'tagihan.rea_listrik as realisasi',
                 'tagihan.sel_listrik as selisih'
                 )
+            ->orderBy('tagihan.kd_kontrol','asc')
             ->get();
+
             $dataset[$i][2] = Tagihan::
             leftJoin('user','tagihan.id_pengguna','=','user.id')
             ->where([
@@ -240,7 +242,9 @@ class Pemakaian extends Model
                 'tagihan.rea_airbersih as realisasi',
                 'tagihan.sel_airbersih as selisih'
                 )
+            ->orderBy('tagihan.kd_kontrol','asc')
             ->get();
+            
             $dataset[$i][2] = Tagihan::
             leftJoin('user','tagihan.id_pengguna','=','user.id')
             ->where([
