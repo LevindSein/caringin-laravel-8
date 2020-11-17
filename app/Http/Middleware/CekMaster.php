@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Session;
+use App\Models\User;
+use Exception;
 
 class CekMaster
 {
@@ -16,16 +18,25 @@ class CekMaster
      */
     public function handle($request, Closure $next)
     {
-        if(Session::get('role') == 'master'){
-            return $next($request);
-        }
-        else{
-            if(Session::get('role') == NULL){
-                return redirect()->route('login')->with('warning','Silahkan Login Terlebih Dahulu');
+        $user = User::where([['nama', Session::get('username')],['role','master']])->first();
+        try{
+            if(Session::get('role') == 'master' && $user != NULL){
+                return $next($request);
             }
             else{
-                abort(403);
+                if(Session::get('role') == NULL){
+                    Session::flush();
+                    return redirect()->route('login')->with('info','Silahkan Login Terlebih Dahulu');
+                }
+                else{
+                    Session::flush();
+                    return redirect()->route('login')->with('info','Silahkan Login Terlebih Dahulu');
+                }
             }
+        }
+        catch(\Exception $e){
+            Session::flush();
+            return redirect()->route('login')->with('info','Silahkan Login Terlebih Dahulu');
         }
     }
 }

@@ -51,7 +51,7 @@
                                             @include('message.flash-message')
                                             <h1 class="h4 text-gray-900 mb-4">Login</h1>
                                         </div>
-                                        <form class="user" action="storelogin" method="POST" id="sample_form">
+                                        <form class="user" action="{{url('storelogin')}}" method="POST" id="sample_form">
                                             @csrf
                                             <div class="form-group">
                                                 <input

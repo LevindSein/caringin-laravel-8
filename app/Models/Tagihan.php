@@ -859,7 +859,7 @@ class Tagihan extends Model
 
     public static function hitungListrik(){
         //Hitung Tagihan
-        $dataset = Tagihan::where([['bln_pakai','2020-07'],['daya_listrik','!=',NULL]])->get();
+        $dataset = Tagihan::where([['bln_pakai','2020-08'],['daya_listrik','!=',NULL]])->get();
 
         // foreach($dataset as $data){
         //     $tempat = TempatUsaha::find($data->id_tempat);

@@ -9,16 +9,6 @@ use App\Models\Nasabah;
 
 class NasabahController extends Controller
 {
-    public function index(){
-        $id = Session::get('userId');
-        return view('nasabah.index',[
-            'tagihan'=>Nasabah::tagihan($id),
-            'pemilik'=>Nasabah::pemilik($id),
-            'pengguna'=>Nasabah::pengguna($id),
-            'dataset'=>Nasabah::data($id),
-        ]);
-    }
-
     public function details($bln){
         $id = Session::get('userId');
         return view('nasabah.details',[

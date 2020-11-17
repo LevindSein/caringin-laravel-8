@@ -10,12 +10,6 @@ use App\Models\Tagihan;
 
 class KasirController extends Controller
 {
-    public function index(){
-        return view('kasir.index',[
-            'dataset'=>Kasir::tagihan(),
-        ]);
-    }
-
     public function bayar($id){
 
     }

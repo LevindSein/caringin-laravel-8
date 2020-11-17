@@ -43,6 +43,9 @@ use App\Models\MeteranAir;
 
 use App\Models\LoginLog;
 
+use App\Models\Nasabah;
+use App\Models\Kasir;
+
 //Home
 Route::get('/', function(){
     return redirect()->route('login');
@@ -67,8 +70,22 @@ Route::get('master/dashboard',[MasterController::class, 'index'])->name('masteri
 Route::get('admin/dashboard',[AdminController::class, 'index'])->name('adminindex')->middleware('cekadmin');
 Route::get('manajer/dashboard',[ManajerController::class, 'index'])->name('manajerindex')->middleware('cekmanajer');
 Route::get('keuangan/index',[KeuanganController::class, 'index'])->name('keuanganindex')->middleware('cekkeuangan');
-Route::get('kasir/index',[KasirController::class, 'index'])->name('kasirindex')->middleware('cekkasir');
-Route::get('nasabah/index',[NasabahController::class, 'index'])->name('nasabahindex')->middleware('ceknasabah');
+
+Route::get('kasir/index',function(){
+    return view('kasir.index',[
+        'dataset'=>Kasir::tagihan(),
+    ]);
+})->name('kasirindex')->middleware('cekkasir');
+
+Route::get('nasabah/index',function(){
+    $id = Session::get('userId');
+    return view('nasabah.index',[
+        'tagihan'=>Nasabah::tagihan($id),
+        'pemilik'=>Nasabah::pemilik($id),
+        'pengguna'=>Nasabah::pengguna($id),
+        'dataset'=>Nasabah::data($id),
+    ]);
+})->name('nasabahindex')->middleware('ceknasabah');
 
 Route::get('cari/blok',[SearchController::class, 'cariBlok']);
 Route::get('cari/nasabah',[SearchController::class, 'cariNasabah']);
