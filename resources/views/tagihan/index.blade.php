@@ -45,10 +45,55 @@ $role = Session::get('role');
                         role="button" 
                         data-toggle="dropdown"
                         aria-haspopup="true" 
-                        aria-expanded="false">
-                        <i class="fas fa-ellipsis-v fa-sm fa-fw"></i>
+                        aria-expanded="false"><b>
+                        Menu
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw"></i></b>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-header">Preview Tagihan:</div>
+                        <a 
+                            class="dropdown-item" 
+                            href="{{url('rekap/pemakaian',['listrik',$bulanPakai])}}"
+                            target="_blank"
+                            type="submit">
+                            <i class="fas fa-fw fa-bolt fa-sm text-gray-500"></i> Listrik
+                        </a>
+                        <a 
+                            class="dropdown-item" 
+                            href="{{url('rekap/pemakaian',['airbersih',$bulanPakai])}}"
+                            target="_blank"
+                            type="submit">
+                            <i class="fas fa-fw fa-tint fa-sm text-gray-500"></i> Air Bersih
+                        </a>
+                        <a 
+                            class="dropdown-item" 
+                            href="{{url('rekap/pemakaian',['keamananipk',$bulanPakai])}}"
+                            target="_blank"
+                            type="submit">
+                            <i class="fas fa-fw fa-lock fa-sm text-gray-500"></i> Keamanan IPK
+                        </a>
+                        <a 
+                            class="dropdown-item" 
+                            href="{{url('rekap/pemakaian',['kebersihan',$bulanPakai])}}"
+                            target="_blank"
+                            type="submit">
+                            <i class="fas fa-fw fa-leaf fa-sm text-gray-500"></i> Kebersihan
+                        </a>
+                        <a 
+                            class="dropdown-item" 
+                            href="{{url('rekap/pemakaian',['airkotor',$bulanPakai])}}"
+                            target="_blank"
+                            type="submit">
+                            <i class="fas fa-fw fa-fill-drip fa-sm text-gray-500"></i> Air Kotor
+                        </a>
+                        <a 
+                            class="dropdown-item" 
+                            href="{{url('rekap/pemakaian',['lain',$bulanPakai])}}"
+                            target="_blank"
+                            type="submit">
+                            <i class="fas fa-fw fa-credit-card fa-sm text-gray-500"></i> Lain - Lain
+                        </a>
+                        <div class="dropdown-divider"></div>
                         <div class="dropdown-header">Periode:</div>
                         <a 
                             class="dropdown-item" 
@@ -99,9 +144,11 @@ $role = Session::get('role');
             </div>
             <div class="modal-body-short">
                 <div class="text-center">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <br>Pastikan Tagihan benar, sebelum melakukan publish. 
-                    <br>Tagihan yang telah di-publish tidak dapat diedit.
+                    <i class="fas fa-exclamation-triangle" style="color:#f6c23e;"></i>
+                    <br>Pastikan Tagihan benar, sebelum melakukan 
+                    <b><i class="fas fa-fw fa-paper-plane fa-sm" style="color:#e74a3b;"></i><span style="color:#e74a3b;">Publish</span></b>. 
+                    <br>Lakukan <b>preview</b> pada opsi <b><span style="color:#1cc88a;">Menu</span><i class="fas fa-ellipsis-v fa-sm fa-fw" style="color:#1cc88a;"></i></b>
+                    <br>Tagihan yang telah di-publish <b>tidak dapat diedit</b>.
                 </div> 
             </div>
             <div class="modal-footer">

@@ -19,11 +19,17 @@
 
         <link rel="icon" href="{{asset('img/logo.png')}}">
 
+        <link rel="stylesheet" href="{{asset('css/styles.css')}}" />
+        <script src="{{asset('https://rawgit.com/sitepoint-editors/jsqrcode/master/src/qr_packed.js')}}"></script>
         <script src="{{asset('js/animate.min.js')}}"></script>
 
 	</head>
 	<body>
         <div class="se-pre-con"></div>
+        <div id="qr-result" hidden="">
+            <input hidden id="outputData"></input>
+        </div>
+        <canvas hidden="" id="qr-canvas"></canvas>
 		<div class="container-scroller">
 			<div class="horizontal-menu">
 				<nav class="navbar top-navbar col-lg-12 col-12 p-0">
@@ -67,38 +73,6 @@
 							<div class="col-lg-12 grid-margin stretch-card">
 								<div class="card shadow">
 									<div class="card-body">
-										<div class="form-group d-flex align-items-center justify-content-end">
-											<div>
-                                                <a 
-                                                    type="button"
-                                                    class="btn btn-outline-inverse-info"
-                                                    data-toggle="modal"
-                                                    data-target="#myModal"
-                                                    title="Cari Transaksi">
-                                                    <i class="mdi mdi-magnify btn-icon-append"></i>
-                                                </a>
-                                            </div>&nbsp;
-                                            <div>
-                                                <a 
-                                                    type="button"
-                                                    class="btn btn-outline-inverse-info"
-                                                    data-toggle="modal"
-                                                    data-target="#myPenerimaan"
-                                                    title="Cetak Penerimaan">
-													<i class="mdi mdi-printer btn-icon-append"></i>  
-                                                </a>
-											</div>&nbsp;
-                                            <div>
-                                                <a 
-                                                    href="{{url('kasir/scan')}}"
-                                                    target="_blank"
-                                                    type="button"
-                                                    class="btn btn-outline-inverse-info"
-                                                    title="Scan Qrcode">
-													<i class="mdi mdi-qrcode-scan btn-icon-append"></i>  
-                                                </a>
-											</div>
-										</div>
 										@yield('content')
 									</div>
 								</div>
@@ -203,7 +177,7 @@
                                 <br>
                                 <input
                                     required
-                                    placeholder="Date" class="form-control" type="text" onfocus="(this.type='date')"
+                                    placeholder="Masukkan Tanggal Penerimaan" class="form-control" type="text" onfocus="(this.type='date')"
                                     autocomplete="off"
                                     type="date"
                                     name="tanggal"

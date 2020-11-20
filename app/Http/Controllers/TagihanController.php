@@ -32,11 +32,14 @@ class TagihanController extends Controller
 
         if($now < $check){
             $months = date("Y-m", time());
+            $time = strtotime($months);
+            $bulanPakai = date("Y-m", strtotime("-1 month", $time));
         }
         else if($now >= $check){
-            $sekarang = date("Y-m", time());     
+            $sekarang = date("Y-m", time());
             $time = strtotime($sekarang);
             $months = date("Y-m", strtotime("+1 month", $time));
+            $bulanPakai = date("Y-m", time());
         }
 
         if($data == "now"){
@@ -72,6 +75,7 @@ class TagihanController extends Controller
             'month'=>$month,
             'bulan'=>$bulan,
             'tahun'=>$tahun,
+            'bulanPakai'=>$bulanPakai,
             'dataTahun'=>Tagihan::dataTahun(),
             'blok'=>Blok::all(),
             'listrikBadge'=>Tagihan::listrikBadge(),

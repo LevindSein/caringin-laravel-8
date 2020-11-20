@@ -1,5 +1,39 @@
 @extends('layout.kasir')
 @section('content')
+<div class="form-group d-flex align-items-center justify-content-end">
+    <div>
+        <a 
+            type="button"
+            class="btn btn-outline-inverse-info"
+            data-toggle="modal"
+            data-target="#myModal"
+            title="Cari Transaksi">
+            <i class="mdi mdi-magnify btn-icon-append"></i>
+        </a>
+    </div>&nbsp;
+    <div>
+        <a 
+            type="button"
+            class="btn btn-outline-inverse-info"
+            data-toggle="modal"
+            data-target="#myPenerimaan"
+            title="Cetak Penerimaan">
+            <i class="mdi mdi-printer btn-icon-append"></i>  
+        </a>
+    </div>
+    @if($platform == 'mobile')
+    &nbsp;
+    <div>
+        <a 
+            id="btn-scan-qr"
+            type="button"
+            class="btn btn-outline-inverse-info"
+            title="Scan Qrcode">
+            <i class="mdi mdi-qrcode-scan btn-icon-append"></i>  
+        </a>
+    </div>
+    @endif
+</div>
 <div class="row">
     <div class="table-responsive">
         <table 
@@ -13,7 +47,6 @@
                     <th style="text-align:center;"><b>Kontrol</b></th>
                     <th style="text-align:center;"><b>Pengguna</b></th>
                     <th style="text-align:center;"><b>Tagihan</b></th>
-                    <th style="text-align:center;"><b>Details</b></th>
                 </tr>
             </thead>
             <tbody>
@@ -21,23 +54,21 @@
                 @if($data[2] != 0)
                 <tr>
                     <td style="text-align:center;">
-                        <form action="{{url('kasir/bayar',$data[3])}}" method="POST">
-                            @csrf
-                            <button
-                                type="submit" 
-                                class="btn btn-sm btn-primary">Bayar
-                            </button>
-                        </form>
+                    @if($platform == 'mobile')
+                        <button
+                            onclick="ajax_print('{{url('/kasir/bayar',[$data[3]])}}',this)"
+                            class="btn btn-sm btn-warning">Bayar
+                        </button>
+                    @else
+                        <button
+                            onclick="window.location = '{{url('/kasir/bayar',[$data[3]])}}'"
+                            class="btn btn-sm btn-warning">Bayar
+                        </button>
+                    @endif
                     </td>
                     <td style="text-align:center;">{{$data[0]}}</td>
                     <td style="text-align:center;">{{$data[1]}}</td>
-                    <td style="text-align:right;">{{number_format($data[2])}}</td>
-                    <td style="text-align:center;">
-                        <a
-                            href="{{url('kasir/details',$data[3])}}"
-                            type="submit" 
-                            class="btn btn-sm btn-primary">Details</a>
-                    </td>
+                    <td style="text-align:center;color:green;"><b>{{number_format($data[2])}}</b></td>
                 </tr>
                 @endif
                 @endforeach
@@ -71,7 +102,7 @@
             pageLength: 3,
             order: [],
             columnDefs: [ {
-                'targets': [0,4], /* column index [0,1,2,3]*/
+                'targets': [0], /* column index [0,1,2,3]*/
                 'orderable': false, /* true or false */
             }],
         });
@@ -93,5 +124,22 @@ $('#kode').on('keypress', function (event) {
        return false;
     }
 });
+
+//Print Via Bluetooth
+function ajax_print(url, btn) {
+    b = $(btn);
+    b.attr('data-old', b.text());
+    b.text('wait');
+    $.get(url, function (data) {
+        window.location.href = data;  // main action
+    }).fail(function () {
+        alert("ajax error");
+    }).always(function () {
+        b.text(b.attr('data-old'));
+    })
+}
 </script>
+@if($platform == 'mobile')
+<script src="{{asset('js/qrCodeScanner.js')}}"></script>
+@endif
 @endsection

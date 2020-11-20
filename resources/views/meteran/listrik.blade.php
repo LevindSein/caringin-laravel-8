@@ -41,6 +41,11 @@
                 <td class="text-center" style="{{ ($kontrol == 'idle') ? 'color:green;' : '' }}" >{{$kontrol}}</td>
                 <td class="text-center">
                     <a
+                        href="{{url('utilities/meteran/qr',['listrik',$data->id])}}"
+                        title="Print QR">
+                        <i class="fas fa-qrcode"></i></a>
+                    &nbsp;
+                    <a
                         href="{{url('utilities/meteran/delete',['listrik',$data->id])}}"
                         title="Hapus">
                         <i class="fas fa-trash-alt" style="color:#e74a3b;"></i></a>

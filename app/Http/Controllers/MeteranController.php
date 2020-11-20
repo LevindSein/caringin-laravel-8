@@ -13,6 +13,8 @@ use App\Models\Blok;
 use App\Models\Item;
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
+use Mike42\Escpos\CapabilityProfile;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 use Exception;
 
@@ -119,5 +121,9 @@ class MeteranController extends Controller
         return view('meteran.print',[
             'dataset'=>$dataset
         ]);
+    }
+
+    public function qr($fasilitas,$id){
+        
     }
 }

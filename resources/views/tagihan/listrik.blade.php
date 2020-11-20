@@ -39,6 +39,18 @@
         </div>
     </div>
     <div class="form-group col-lg-12">
+        <label for="daya">Daya Listrik <span style="color:red;">*</span></label>
+        <input
+            required
+            value="{{number_format($dataset->daya)}}"
+            autocomplete="off"
+            type="text" 
+            pattern="^[\d,]+$"
+            name="daya"
+            class="form-control"
+            id="daya">
+    </div>
+    <div class="form-group col-lg-12">
         <label for="awalListrik">Stand Awal Listrik <span style="color:red;">*</span></label>
         <input
             required
@@ -61,19 +73,6 @@
             name="akhir"
             class="form-control"
             id="akhir">
-    </div>
-    <div class="form-group col-lg-12">
-        <label for="daya">Daya Listrik <span style="color:red;">*</span></label>
-        <input
-            autofocus
-            required
-            value="{{number_format($dataset->daya)}}"
-            autocomplete="off"
-            type="text" 
-            pattern="^[\d,]+$"
-            name="daya"
-            class="form-control"
-            id="daya">
     </div>
     <input type="hidden" name="tempatId" id="tempatId" value="{{$dataset->tempatId}}">
     <div class="form-group col-lg-12">

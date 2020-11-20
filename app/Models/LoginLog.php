@@ -15,6 +15,7 @@ class LoginLog extends Model
         'ktp',  
         'hp', 
         'role', 
+        'platform',
         'updated_at', 
         'created_at'
     ];

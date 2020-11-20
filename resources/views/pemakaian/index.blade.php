@@ -83,13 +83,6 @@ function tgl_indo($tanggal){
                                     <i class="fas fa-leaf" style="color:#1cc88a;"></i></a>
                                 &nbsp;
                                 <a
-                                    href="{{url('rekap/pemakaian',['diskon',$d->bln_pakai])}}"
-                                    target="_blank"
-                                    class="btn btn-light"
-                                    title="Diskon / Bebas Bayar">
-                                    <i class="fas fa-percent" style="color:#4e73df;"></i></a>
-                                &nbsp;
-                                <a
                                     href="{{url('rekap/pemakaian',['airkotor',$d->bln_pakai])}}"
                                     target="_blank"
                                     class="btn btn-light"

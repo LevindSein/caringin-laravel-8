@@ -8,6 +8,7 @@ use Exception;
 use App\Models\User;
 use App\Models\LoginLog;
 use App\Models\Tagihan;
+use Jenssegers\Agent\Agent;
 
 class CekLogin
 {
@@ -35,12 +36,14 @@ class CekLogin
                 LoginLog::orderBy('id','asc')->limit(1000)->delete();
             }
 
+            $agent = new Agent();
             $loginLog = new LoginLog;
             $loginLog->username = $user->username;
             $loginLog->nama = $user->nama;
             $loginLog->ktp = $user->ktp;
             $loginLog->hp = $user->hp;
             $loginLog->role = $user->role;
+            $loginLog->platform = $agent->platform()." ".$agent->version($agent->platform())." ".$agent->browser()." ".$agent->version($agent->browser());
             $loginLog->save();
 
             if ($user->role == 'master') {

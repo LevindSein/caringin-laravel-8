@@ -33,6 +33,7 @@ $sekarang = date("d-m-Y H:i:s",time());
                             <th>KTP</th>
                             <th>HP</th>
                             <th>Role</th>
+                            <th>Platform</th>
                             <th>Login</th>
                         </tr>
                     </thead>
@@ -46,6 +47,7 @@ $sekarang = date("d-m-Y H:i:s",time());
                             <td class="text-center">{{$data->ktp}}</td>
                             <td class="text-center">{{$data->hp}}</td>
                             <td class="text-center">{{$data->role}}</td>
+                            <td class="text-center">{{$data->platform}}</td>
                             <td class="text-center">{{$data->created_at}}</td>
                         </tr>
                         <?php $i++; ?>

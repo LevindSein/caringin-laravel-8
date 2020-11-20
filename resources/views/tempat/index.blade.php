@@ -26,13 +26,13 @@ $role = Session::get('role');
                 <a 
                     href="{{url('tempatusaha/data')}}" 
                     type="submit"
-                    class="btn btn-sm btn-info {{ (request()->is('tempatusaha/data')) ? 'disabled' : '' }}"><b> Data Tempat</b>
+                    class="btn btn-sm {{ (request()->is('tempatusaha/data')) ? 'disabled btn-light shadow' : 'btn-info' }}"><b> Data Tempat</b>
                 </a>
                 &nbsp;
                 <a 
                     href="{{url('tempatusaha/rekap')}}" 
                     type="submit"
-                    class="btn btn-sm btn-danger {{ (request()->is('tempatusaha/rekap')) ? 'disabled' : '' }}"><b>Rekap</b>
+                    class="btn btn-sm {{ (request()->is('tempatusaha/rekap')) ? 'disabled btn-light shadow' : 'btn-danger' }}"><b>Rekap</b>
                 </a>
                 &nbsp;
                 <div class="dropdown no-arrow" style="display:inline-block">
@@ -168,17 +168,130 @@ $role = Session::get('role');
                                     <option value="{{$air->id}}">{{$air->kode}} - {{$air->nomor}} ({{$air->akhir}})</option>
                                     @endforeach
                                 </select>
-                                <div class="col-sm-10">
+                                <div class="col-sm-12">
                                     <div class="form-check">
                                         <input
                                             class="form-check-input"
-                                            type="checkbox"
-                                            name="dis_airbersih"
+                                            type="radio"
+                                            name="radioAirBersih"
                                             id="dis_airbersih"
                                             value="dis_airbersih">
                                         <label class="form-check-label" for="dis_airbersih">
-                                            Bebas Bayar
+                                            Diskon
                                         </label>
+                                    </div>
+                                    <div class="form-group" style="display:none" id="diskonBayarAir">
+                                        <div class="col-sm-12">
+                                            <div class="input-group">
+                                                <input 
+                                                    type="number" 
+                                                    autocomplete="off" 
+                                                    class="form-control" 
+                                                    min="0"
+                                                    max="100"
+                                                    name="persenDiskonAir" 
+                                                    id="persenDiskonAir" 
+                                                    placeholder="Persen" 
+                                                    aria-describedby="inputGroupPrepend">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroupPrepend">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-check">
+                                        <input
+                                            class="form-check-input"
+                                            type="radio"
+                                            name="radioAirBersih"
+                                            id="hanya_airbersih"
+                                            value="hanya_airbersih">
+                                        <label class="form-check-label" for="hanya_airbersih">
+                                            Hanya Bayar
+                                        </label>
+                                    </div>
+                                    <div class="form-group" style="display:none" id="hanyaBayarAir">
+                                        <div class="col-sm-12">
+                                            <div class="form-check">
+                                                <input
+                                                    class="form-check-input"
+                                                    type="checkbox"
+                                                    name="hanyaPemakaianAir"
+                                                    id="hanyaPemakaianAir"
+                                                    value="hanyaPemakaianAir">
+                                                <label class="form-check-label" for="hanyaPemakaianAir">
+                                                    Pemakaian
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input
+                                                    class="form-check-input"
+                                                    type="checkbox"
+                                                    name="hanyaBebanAir"
+                                                    id="hanyaBebanAir"
+                                                    value="hanyaBebanAir">
+                                                <label class="form-check-label" for="hanyaBebanAir">
+                                                    Beban
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input
+                                                    class="form-check-input"
+                                                    type="checkbox"
+                                                    name="hanyaPemeliharaanAir"
+                                                    id="hanyaPemeliharaanAir"
+                                                    value="hanyaPemeliharaanAir">
+                                                <label class="form-check-label" for="hanyaPemeliharaanAir">
+                                                    Pemeliharaan
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input
+                                                    class="form-check-input"
+                                                    type="checkbox"
+                                                    name="hanyaArkotAir"
+                                                    id="hanyaArkotAir"
+                                                    value="hanyaArkotAir">
+                                                <label class="form-check-label" for="hanyaArkotAir">
+                                                    Air Kotor
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input
+                                                    class="form-check-input"
+                                                    type="checkbox"
+                                                    name="hanyaChargeAir"
+                                                    id="hanyaChargeAir"
+                                                    value="hanyaChargeAir"
+                                                    data-related-item="chargeAir">
+                                                <label class="form-check-label" for="hanyaChargeAir">
+                                                    Charge
+                                                </label>
+                                            </div>
+                                            <div class="form-group" style="display:none">
+                                                <div class="col-sm-12" id="chargeAir">
+                                                    <div class="input-group">
+                                                        <input 
+                                                            type="number" 
+                                                            autocomplete="off" 
+                                                            class="form-control" 
+                                                            min="0"
+                                                            max="100"
+                                                            name="persenChargeAir" 
+                                                            id="persenChargeAir" 
+                                                            placeholder="Persen" 
+                                                            aria-describedby="inputGroupPrepend">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" id="inputGroupPrepend">%</span>
+                                                        </div>
+                                                        <select class="form-control" name="chargeAir">
+                                                            <option selected value="tagihan">Tagihan</option>
+                                                            <option value="pemakaian">Pemakaian</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -203,17 +316,37 @@ $role = Session::get('role');
                                     <option value="{{$listrik->id.','.$listrik->daya}}">{{$listrik->kode}} - {{$listrik->nomor}} ({{$listrik->akhir}}) - {{$listrik->daya}} W</option>
                                     @endforeach
                                 </select>
-                                <div class="col-sm-10">
+                                <div class="col-sm-12">
                                     <div class="form-check">
                                         <input
                                             class="form-check-input"
                                             type="checkbox"
                                             name="dis_listrik"
                                             id="dis_listrik"
-                                            value="dis_airbersih">
+                                            value="dis_listrik"
+                                            data-related-item="diskonBayarListrik">
                                         <label class="form-check-label" for="dis_listrik">
-                                            Bebas Bayar
+                                            Diskon
                                         </label>
+                                    </div>
+                                    <div class="form-group" style="display:none">
+                                        <div class="col-sm-12" id="diskonBayarListrik">
+                                            <div class="input-group">
+                                                <input 
+                                                    type="number" 
+                                                    autocomplete="off" 
+                                                    class="form-control" 
+                                                    min="0"
+                                                    max="100"
+                                                    name="persenDiskonListrik" 
+                                                    id="persenDiskonListrik" 
+                                                    placeholder="Persen" 
+                                                    aria-describedby="inputGroupPrepend">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroupPrepend">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -238,17 +371,37 @@ $role = Session::get('role');
                                     <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
                                     @endforeach
                                 </select>
-                                <div class="col-sm-10">
+                                <div class="col-sm-12">
                                     <div class="form-check">
                                         <input
                                             class="form-check-input"
                                             type="checkbox"
                                             name="dis_keamananipk"
                                             id="dis_keamananipk"
-                                            value="dis_keamananipk">
+                                            value="dis_keamananipk"
+                                            data-related-item="diskonBayarKeamananIpk">
                                         <label class="form-check-label" for="dis_keamananipk">
                                             Diskon
                                         </label>
+                                    </div>
+                                    <div class="form-group" style="display:none">
+                                        <div class="col-sm-12" id="diskonBayarKeamananIpk">
+                                            <div class="input-group">
+                                                <input 
+                                                    type="number" 
+                                                    autocomplete="off" 
+                                                    class="form-control" 
+                                                    min="0"
+                                                    max="100"
+                                                    name="persenDiskonKeamananIpk" 
+                                                    id="persenDiskonKeamananIpk" 
+                                                    placeholder="Persen" 
+                                                    aria-describedby="inputGroupPrepend">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroupPrepend">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -273,17 +426,37 @@ $role = Session::get('role');
                                     <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
                                     @endforeach
                                 </select>
-                                <div class="col-sm-10">
+                                <div class="col-sm-12">
                                     <div class="form-check">
                                         <input
                                             class="form-check-input"
                                             type="checkbox"
                                             name="dis_kebersihan"
                                             id="dis_kebersihan"
-                                            value="dis_kebersihan">
+                                            value="dis_kebersihan"
+                                            data-related-item="diskonBayarKebersihan">
                                         <label class="form-check-label" for="dis_kebersihan">
                                             Diskon
                                         </label>
+                                    </div>
+                                    <div class="form-group" style="display:none">
+                                        <div class="col-sm-12" id="diskonBayarKebersihan">
+                                            <div class="input-group">
+                                                <input 
+                                                    type="number" 
+                                                    autocomplete="off" 
+                                                    class="form-control" 
+                                                    min="0"
+                                                    max="100"
+                                                    name="persenDiskonKebersihan" 
+                                                    id="persenDiskonKebersihan" 
+                                                    placeholder="Persen" 
+                                                    aria-describedby="inputGroupPrepend">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="inputGroupPrepend">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -483,6 +656,44 @@ $("#los").on("input", function() {
 })
 </script>
 
+<!-- Radio Bebas Bayar-->
+<script>
+    function radioAir() {
+        if ($('#hanya_airbersih').is(':checked')) {
+            document
+                .getElementById('hanyaBayarAir')
+                .style
+                .display = 'block';
+            document
+                .getElementById('diskonBayarAir')
+                .style
+                .display = 'none';
+        }
+        else if ($('#dis_airbersih').is(':checked')) {
+            document
+                .getElementById('hanyaBayarAir')
+                .style
+                .display = 'none';
+            document
+                .getElementById('diskonBayarAir')
+                .style
+                .display = 'block';
+        }
+        else {
+            document
+                .getElementById('hanyaBayarAir')
+                .style
+                .display = 'none';
+            document
+                .getElementById('diskonBayarAir')
+                .style
+                .display = 'none';
+        }
+    }
+    $('input[type="radio"]')
+        .click(radioAir)
+        .each(radioAir);
+</script>
 
 <!-- Status Button -->
 <script>

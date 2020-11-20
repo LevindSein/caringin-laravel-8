@@ -29,7 +29,7 @@ btnScanQR.onclick = () => {
   navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
       scanning = true;
       qrResult.hidden = true;
-      btnScanQR.hidden = true;
+      btnScanQR.hidden = false;
       canvasElement.hidden = false;
       video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
       video.srcObject = stream;
@@ -50,6 +50,7 @@ function tick() {
 function scan() {
   try {
     qrcode.decode();
+    window.location = '/kasir/scan/' + outputData.innerText;
   } catch (e) {
     setTimeout(scan, 300);
   }

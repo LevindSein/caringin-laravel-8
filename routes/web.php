@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use Jenssegers\Agent\Agent;
 
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\AdminController;
@@ -72,8 +73,16 @@ Route::get('manajer/dashboard',[ManajerController::class, 'index'])->name('manaj
 Route::get('keuangan/index',[KeuanganController::class, 'index'])->name('keuanganindex')->middleware('cekkeuangan');
 
 Route::get('kasir/index',function(){
+    $agent = new Agent();
+    if($agent->isDesktop()){
+        $platform = 'desktop';
+    }
+    else{
+        $platform = 'mobile';
+    }
     return view('kasir.index',[
         'dataset'=>Kasir::tagihan(),
+        'platform'=>$platform,
     ]);
 })->name('kasirindex')->middleware('cekkasir');
 
@@ -152,6 +161,7 @@ Route::get('utilities/meteran',function(){
 Route::post('utilities/meteran/add',[MeteranController::class, 'add']);
 Route::get('utilities/meteran/delete/{fasilitas}/{id}',[MeteranController::class, 'delete']);
 Route::get('utilities/meteran/print',[MeteranController::class, 'print']);
+Route::get('utilities/meteran/qr/{fasilitas}/{id}',[MeteranController::class, 'qr']);
 
 Route::get('utilities/hari/libur',function(){
     return view('harilibur.index',[
@@ -210,10 +220,9 @@ Route::get('nasabah/details/{bln}',[NasabahController::class, 'details']);
 Route::get('nasabah/rincian/{bln}',[NasabahController::class, 'rincian']);
 
 Route::post('kasir/cari/transaksi',[KasirController::class, 'cari']);
-Route::post('kasir/bayar/{id}',[KasirController::class, 'bayar']);
-Route::get('kasir/details/{id}',[KasirController::class, 'details']);
+Route::get('kasir/bayar/{id}',[KasirController::class, 'bayar']);
 Route::post('kasir/penerimaan',[KasirController::class, 'penerimaan']);
-Route::get('kasir/scan',[KasirController::class, 'scan']);
+Route::get('kasir/scan/{id}',[KasirController::class, 'scan']);
 
 //opsional
 Route::post('tagihan/pedagang/{fasilitas}',[TagihanController::class, 'pedagang']);
