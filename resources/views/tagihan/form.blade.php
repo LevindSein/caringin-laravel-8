@@ -4,7 +4,7 @@ $random = str_pad(mt_rand(1,99999999),8,'0',STR_PAD_LEFT);
 $no_anggota = "BP3C".$random;
 use App\Models\User;
 $ktp = User::count();
-$ktp = $ktp + 1;
+$ktp = $ktp + $ktp + 1;
 ?>
 
 @extends( $role == 'master' ? 'layout.master' : 'layout.admin')
@@ -14,7 +14,6 @@ $ktp = $ktp + 1;
 
 @section('content')
 <!-- Tambah Content Pada Body Utama -->
-<title>Tambah Tagihan | BP3C</title>
 <div class = "container-fluid">
     <div class="d-sm-flex align-items-center justify-content-center">
         @yield('title')
@@ -162,4 +161,6 @@ $ktp = $ktp + 1;
     var newOption = new Option(data.text, data.id, false, false);
     $('#namaPengguna').append(newOption).trigger('change');
 </script>
+
+@yield('jsplus')
 @endsection

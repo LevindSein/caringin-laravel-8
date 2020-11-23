@@ -13,6 +13,9 @@ use App\Models\MeteranListrik;
 use App\Models\TempatUsaha;
 use App\Models\Blok;
 
+use Mike42\Escpos\Printer;
+use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
+
 use Exception;
 
 class TagihanController extends Controller
@@ -68,8 +71,6 @@ class TagihanController extends Controller
             return redirect()->back();
         }
 
-
-
         return view('tagihan.data',[
             'dataset'=>Tagihan::data($bln),
             'month'=>$month,
@@ -84,7 +85,12 @@ class TagihanController extends Controller
     }
 
     public function update($id){
-
+        $fasilitas = 'update';
+        $dataset = Tagihan::updateTagihan($id);
+        return view('tagihan.update',[
+            'dataset'=>$dataset,
+            'fasilitas'=>$fasilitas
+        ]);
     }
     
     public function store(Request $request, $id){
@@ -173,7 +179,26 @@ class TagihanController extends Controller
     public function edaran(Request $request){
         date_default_timezone_set('Asia/Jakarta');
         $month = date("Y-m", time());
-        return view('tagihan.edaran',['dataset'=>Tagihan::where([['blok',$request->get('blok')],['bln_tagihan',$month]])->get()]);
+
+        $connector = new WindowsPrintConnector("EPSONLQ");
+                
+        $printer = new Printer($connector);
+
+        /* Name of shop */
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
+        $printer -> text("================================================\n");
+        $printer -> text("PT. Pengelola Pusat Perdagangan Caringin.\n");
+        $printer -> selectPrintMode();
+        $printer -> text("Jl. Soetta No.220 Blok A1 No.21-24\n");
+        $printer -> text("================================================\n");
+        $printer -> feed();
+
+        $printer -> text("Terimakasih telah melakukan Pembayaran\n");
+        $printer -> cut();
+        $printer -> pulse();
+
+        $printer -> close();
+        // return view('tagihan.edaran',['dataset'=>Tagihan::where([['blok',$request->get('blok')],['bln_tagihan',$month]])->get()]);
     }
 
     public function publish(){

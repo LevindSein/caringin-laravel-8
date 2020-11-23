@@ -124,6 +124,6 @@ class MeteranController extends Controller
     }
 
     public function qr($fasilitas,$id){
-        
+        return view('meteran.qr');
     }
 }

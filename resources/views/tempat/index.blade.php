@@ -368,9 +368,14 @@ $role = Session::get('role');
                                 <select class="form-control" name="trfKeamananIpk" id="myDiv3">
                                     <option disabled="disabled" selected="selected" hidden="hidden" value="">--- Pilih Tarif ---</option>
                                     @foreach($trfKeamananIpk as $tarif)
-                                    <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
+                                    <option value="{{$tarif->tarif}}">Rp. {{number_format($tarif->tarif)}}</option>
                                     @endforeach
                                 </select>
+                                <br>
+                                <div>
+                                    <span>Estimasi Tagihan : <span>
+                                    <span id="estimasiKeamananIpk">Belum Diketahui<span>
+                                </div>
                                 <div class="col-sm-12">
                                     <div class="form-check">
                                         <input
@@ -387,19 +392,17 @@ $role = Session::get('role');
                                     <div class="form-group" style="display:none">
                                         <div class="col-sm-12" id="diskonBayarKeamananIpk">
                                             <div class="input-group">
-                                                <input 
-                                                    type="number" 
-                                                    autocomplete="off" 
-                                                    class="form-control" 
-                                                    min="0"
-                                                    max="100"
-                                                    name="persenDiskonKeamananIpk" 
-                                                    id="persenDiskonKeamananIpk" 
-                                                    placeholder="Persen" 
-                                                    aria-describedby="inputGroupPrepend">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="inputGroupPrepend">%</span>
+                                                    <span class="input-group-text" id="inputGroupPrepend">Rp.</span>
                                                 </div>
+                                                <input 
+                                                    type="text" 
+                                                    autocomplete="off" 
+                                                    class="form-control"
+                                                    name="diskonKeamananIpk" 
+                                                    id="diskonKeamananIpk" 
+                                                    placeholder="Nominal" 
+                                                    aria-describedby="inputGroupPrepend">
                                             </div>
                                         </div>
                                     </div>
@@ -423,9 +426,14 @@ $role = Session::get('role');
                                 <select class="form-control" name="trfKebersihan" id="myDiv4">
                                     <option disabled="disabled" selected="selected" hidden="hidden" value="">--- Pilih Tarif ---</option>
                                     @foreach($trfKebersihan as $tarif)
-                                    <option value="{{$tarif->id}}">Rp. {{number_format($tarif->tarif)}}</option>
+                                    <option value="{{$tarif->tarif}}">Rp. {{number_format($tarif->tarif)}}</option>
                                     @endforeach
                                 </select>
+                                <br>
+                                <div>
+                                    <span>Estimasi Tagihan : <span>
+                                    <span id="estimasiKebersihan">Belum Diketahui<span>
+                                </div>
                                 <div class="col-sm-12">
                                     <div class="form-check">
                                         <input
@@ -442,19 +450,17 @@ $role = Session::get('role');
                                     <div class="form-group" style="display:none">
                                         <div class="col-sm-12" id="diskonBayarKebersihan">
                                             <div class="input-group">
-                                                <input 
-                                                    type="number" 
-                                                    autocomplete="off" 
-                                                    class="form-control" 
-                                                    min="0"
-                                                    max="100"
-                                                    name="persenDiskonKebersihan" 
-                                                    id="persenDiskonKebersihan" 
-                                                    placeholder="Persen" 
-                                                    aria-describedby="inputGroupPrepend">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="inputGroupPrepend">%</span>
+                                                    <span class="input-group-text" id="inputGroupPrepend">Rp.</span>
                                                 </div>
+                                                <input 
+                                                    type="text"
+                                                    autocomplete="off" 
+                                                    class="form-control"
+                                                    name="diskonKebersihan" 
+                                                    id="diskonKebersihan" 
+                                                    placeholder="Nominal" 
+                                                    aria-describedby="inputGroupPrepend">
                                             </div>
                                         </div>
                                     </div>
@@ -509,7 +515,7 @@ $role = Session::get('role');
 
                     <!-- Pembayaran -->
                     <div class="form-group row col-lg-12">
-                        <div class="col-sm-2">Metode</div>
+                        <div class="col-sm-2">Metode Bayar</div>
                         <div class="col-sm-10">
                             <div class="form-check">
                                 <input
@@ -533,6 +539,13 @@ $role = Session::get('role');
                                 <label class="form-check-label" for="cicilan2">
                                     Cicil
                                 </label>
+                            </div>
+                            <div class="form-group" style="display:none" id="ketCicil">
+                                <select class="form-control" name="ket_cicil" id="ket_cicil">
+                                    <option disabled="disabled" selected="selected" hidden="hidden" value="">--- Pilih Cicilan ---</option>
+                                    <option value="2">2x</option>
+                                    <option value="4">4x</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -589,6 +602,61 @@ $role = Session::get('role');
 @section('js')
 <!-- Tambah Content pada Body JS -->
 <script type="text/javascript">
+
+//Estimasi Tagihan
+$('#los').on('input',function(e){
+    var check = $(this).val();
+    var words = $(this).val().split(",");
+    if(check.slice(-1) == ','){
+        var words = words.length - 1;
+    }
+    else{
+        var words = words.length;
+    }
+    $('#myDiv3').on('input',function(e){
+        var tarif = $(this).val();
+        var estimasi = words * tarif;
+        document.getElementById("estimasiKeamananIpk").innerHTML = "Rp. " + estimasi.toLocaleString();
+    });
+
+    $('#myDiv4').on('input',function(e){
+        var tarif = $(this).val();
+        var estimasi = words * tarif;
+        document.getElementById("estimasiKebersihan").innerHTML = "Rp. " + estimasi.toLocaleString();
+    });
+});
+$('#myDiv3').on('input',function(e){
+    var tarif = $(this).val();
+    $('#los').on('input',function(e){
+        var check = $(this).val();
+        var words = $(this).val().split(",");
+        if(check.slice(-1) == ','){
+            var words = words.length - 1;
+        }
+        else{
+            var words = words.length;
+        }
+        var estimasi = words * tarif;
+        document.getElementById("estimasiKeamananIpk").innerHTML = "Rp. " + estimasi.toLocaleString();
+    });
+});
+$('#myDiv4').on('input',function(e){
+    var tarif = $(this).val();
+    $('#los').on('input',function(e){
+        var check = $(this).val();
+        var words = $(this).val().split(",");
+        if(check.slice(-1) == ','){
+            var words = words.length - 1;
+        }
+        else{
+            var words = words.length;
+        }
+        var estimasi = words * tarif;
+        document.getElementById("estimasiKebersihan").innerHTML = "Rp. " + estimasi.toLocaleString();
+    });
+});
+
+//Search
 $(document).ready(function () {
     $('.blok').select2({
         placeholder: '--- Pilih Blok ---',
@@ -654,6 +722,20 @@ $("#los").on("input", function() {
     this.value = this.value.replace(/^0/, "")
   }
 })
+
+
+document
+    .getElementById('diskonKeamananIpk')
+    .addEventListener(
+        'input',
+        event => event.target.value = (parseInt(event.target.value.replace(/[^\d]+/gi, '')) || 0).toLocaleString('en-US')
+    );
+document
+    .getElementById('diskonKebersihan')
+    .addEventListener(
+        'input',
+        event => event.target.value = (parseInt(event.target.value.replace(/[^\d]+/gi, '')) || 0).toLocaleString('en-US')
+    );
 </script>
 
 <!-- Radio Bebas Bayar-->
@@ -720,6 +802,33 @@ $("#los").on("input", function() {
     $('input[type="radio"]')
         .click(statusTempat)
         .each(statusTempat);
+</script>
+
+<!-- Metode Pembayaran -->
+<script>
+    function pembayaran() {
+        if ($('#cicilan2').is(':checked')) {
+            document
+                .getElementById('ketCicil')
+                .style
+                .display = 'block';
+            document
+                .getElementById('ket_cicil')
+                .required = true;
+        }
+        else {
+            document
+                .getElementById('ketCicil')
+                .style
+                .display = 'none';
+            document
+                .getElementById('ket_cicil')
+                .required = false;
+        }
+    }
+    $('input[type="radio"]')
+        .click(pembayaran)
+        .each(pembayaran);
 </script>
 
 <!-- Fasilitas Button -->

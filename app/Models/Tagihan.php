@@ -867,6 +867,29 @@ class Tagihan extends Model
         ->count();
     }
 
+    public static function updateTagihan($id){
+        return Tagihan::where('tagihan.id',$id)
+        ->leftJoin('user as pengguna','tagihan.id_pengguna','=','pengguna.id')
+        ->select(
+            'tagihan.kd_kontrol',
+            'pengguna.id as penggunaId',
+            'pengguna.nama as pengguna',
+            'pengguna.ktp as ktp',
+            'tagihan.awal_airbersih',
+            'tagihan.akhir_airbersih',
+            'tagihan.awal_listrik',
+            'tagihan.akhir_listrik',
+            'tagihan.daya_listrik',
+            'tagihan.stt_airbersih',
+            'tagihan.stt_listrik',
+            'tagihan.stt_keamananipk',
+            'tagihan.stt_kebersihan',
+            'tagihan.stt_airkotor',
+            'tagihan.stt_lain',
+        )
+        ->first();
+    }
+
     public static function hitungAir(){
         $dataset = Tagihan::where([['bln_pakai','2020-11'],['awal_airbersih','!=',NULL]])->get();
         foreach($dataset as $tagihan){

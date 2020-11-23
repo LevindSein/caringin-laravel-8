@@ -36,5 +36,9 @@ class PemakaianController extends Controller
                 'rincian'=>Pemakaian::rincianAirBersih($bulan),
             ]);
         }
+
+        if($fasilitas == 'keamananipk'){
+            
+        }
     }
 }

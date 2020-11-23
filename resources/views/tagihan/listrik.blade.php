@@ -1,6 +1,7 @@
 @extends('tagihan.form')
 @section('title')
 <h3 class="h3 mb-4 text-primary"><b>Tambah Tagihan Listrik</b></h3>
+<title>Tambah Tagihan | BP3C</title>
 @endsection
 @section('body')
 <form class="user" action="{{url('tagihan/store',[$fasilitas,$dataset->tagihanId])}}" method="POST">
