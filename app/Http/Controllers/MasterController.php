@@ -28,6 +28,7 @@ class MasterController extends Controller
 
         // Tagihan::hitungListrik();
         // Tagihan::hitungAir();
+        // Tagihan::cekMeter();
 
         return view('master.index',[
             'pengguna'=>TempatUsaha::pengguna(),

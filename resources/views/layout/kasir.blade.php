@@ -26,10 +26,6 @@
 	</head>
 	<body>
         <div class="se-pre-con"></div>
-        <div id="qr-result" hidden="">
-            <input hidden id="outputData"></input>
-        </div>
-        <canvas hidden="" id="qr-canvas"></canvas>
 		<div class="container-scroller">
 			<div class="horizontal-menu">
 				<nav class="navbar top-navbar col-lg-12 col-12 p-0">

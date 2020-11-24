@@ -42,6 +42,7 @@
                 <td class="text-center">
                     <a
                         href="{{url('utilities/meteran/qr',['listrik',$data->id])}}"
+                        target="_blank"
                         title="Print QR">
                         <i class="fas fa-qrcode"></i></a>
                     &nbsp;

@@ -34,6 +34,12 @@
     </div>
     @endif
 </div>
+<div id="container">
+    <div id="qr-result" hidden="">
+        <input hidden id="outputData"></input>
+    </div>
+    <canvas hidden="" id="qr-canvas"></canvas>
+</div>
 <div class="row">
     <div class="table-responsive">
         <table 

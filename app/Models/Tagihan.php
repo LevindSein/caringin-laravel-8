@@ -890,8 +890,72 @@ class Tagihan extends Model
         ->first();
     }
 
+    public static function hitungListrik(){
+        // $dataset = Tagihan::where('bln_pakai','2020-09')->get();
+        // foreach($dataset as $data){
+        //     $data->stt_listrik = NULL;
+        //     $data->save();
+        // }
+        $dataset = Tagihan::where([['bln_pakai','2020-09'],['awal_listrik','!=',NULL]])->get();
+        foreach($dataset as $tagihan){
+            $tarif = TarifListrik::find(1);
+            $awal = $tagihan->awal_listrik;
+            $akhir = $tagihan->akhir_listrik;
+            $daya = $tagihan->daya_listrik;
+
+            $pakai_listrik = $akhir - $awal;
+            $batas_rekmin = round(18 * $daya /1000);
+
+            $a = round(($daya * $tarif->trf_standar) / 1000);
+            $blok1_listrik = $tarif->trf_blok1 * $a;
+
+            $b = $pakai_listrik - $a;
+            $blok2_listrik = $tarif->trf_blok2 * $b;
+            $beban_listrik = $daya * $tarif->trf_beban;
+
+            $c = $blok1_listrik + $blok2_listrik + $beban_listrik;
+            $rekmin_listrik = 53.44 * $daya;
+
+            if($pakai_listrik <= $batas_rekmin){
+                $bpju_listrik = ($tarif->trf_bpju / 100) * $rekmin_listrik;
+                $blok1_listrik = 0;
+                $blok2_listrik = 0;
+                $beban_listrik = 0;
+                $byr_listrik = $bpju_listrik + $rekmin_listrik;
+                $ppn = ($tarif->trf_ppn / 100) * $byr_listrik;
+                $ttl_listrik = $byr_listrik + $ppn;
+            }
+            else{
+                $bpju_listrik = ($tarif->trf_bpju / 100) * $c;
+                $rekmin_listrik = 0;
+                $byr_listrik = $bpju_listrik + $blok1_listrik + $blok2_listrik + $beban_listrik;
+                $ppn = ($tarif->trf_ppn / 100) * $byr_listrik;
+                $ttl_listrik = $byr_listrik + $ppn;
+            }
+
+            $tagihan->pakai_listrik = $pakai_listrik;
+            $tagihan->byr_listrik = $byr_listrik;
+            $tagihan->rekmin_listrik = $rekmin_listrik;
+            $tagihan->blok1_listrik = $blok1_listrik;
+            $tagihan->blok2_listrik = $blok2_listrik;
+            $tagihan->beban_listrik = $beban_listrik;
+            $tagihan->bpju_listrik = $bpju_listrik;
+            $tagihan->sub_listrik = round($ttl_listrik);
+            $tempat = TempatUsaha::find($tagihan->id_tempat);
+            $meter = MeteranListrik::find($tempat->id_meteran_listrik);
+            $meter->akhir = $tagihan->akhir_listrik;
+            $meter->daya = $daya;
+            $meter->save();
+
+            $tagihan->ttl_listrik = $tagihan->sub_listrik - $tagihan->dis_listrik;
+            $tagihan->sel_listrik = $tagihan->ttl_listrik - $tagihan->rea_listrik;
+            $tagihan->stt_listrik = 1;
+            $tagihan->save();
+        }
+    }
+
     public static function hitungAir(){
-        $dataset = Tagihan::where([['bln_pakai','2020-11'],['awal_airbersih','!=',NULL]])->get();
+        $dataset = Tagihan::where([['bln_pakai','2020-09'],['awal_airbersih','!=',NULL]])->get();
         foreach($dataset as $tagihan){
             $tarif = TarifAirBersih::find(1);
             $awal = $tagihan->awal_airbersih;
@@ -937,8 +1001,30 @@ class Tagihan extends Model
 
             $tagihan->ttl_airbersih = $tagihan->sub_airbersih - $tagihan->dis_airbersih;
             $tagihan->sel_airbersih = $tagihan->ttl_airbersih - $tagihan->rea_airbersih;
-            $tagihan->stt_airbersih = 0;
+            $tagihan->stt_airbersih = 1;
             $tagihan->save();
+        }
+    }
+
+    public static function cekMeter(){
+        $air = MeteranAir::get();
+        $listrik = MeteranListrik::get();
+
+        foreach($air as $d){
+            $tempat = TempatUsaha::where('id_meteran_air',$d->id)->first();
+            if($tempat == NULL){
+                $d->stt_sedia = 0;
+                $d->stt_bayar = 0;
+                $d->save();
+            }
+        }
+        foreach($listrik as $d){
+            $tempat = TempatUsaha::where('id_meteran_listrik',$d->id)->first();
+            if($tempat == NULL){
+                $d->stt_sedia = 0;
+                $d->stt_bayar = 0;
+                $d->save();
+            }
         }
     }
 }

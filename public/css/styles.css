@@ -1,6 +1,11 @@
 html {
     height: 100%;
   }
+
+  #container {
+    text-align: center;
+    margin: 0;
+  }
   
   #qr-canvas {
     margin: auto;

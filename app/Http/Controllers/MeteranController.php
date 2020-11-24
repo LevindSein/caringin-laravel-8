@@ -124,6 +124,32 @@ class MeteranController extends Controller
     }
 
     public function qr($fasilitas,$id){
-        return view('meteran.qr');
+        if($fasilitas == 'listrik'){
+            $fasilitas = 'Listrik';
+            $kontrol = TempatUsaha::where('id_meteran_listrik',$id)->select('kd_kontrol')->first();
+            if($kontrol != NULL){
+                $kontrol = $kontrol->kd_kontrol;
+            }
+            else{
+                $kontrol = ' ';
+            }
+        }
+
+        if($fasilitas == 'airbersih'){
+            $fasilitas = 'Air Bersih';
+            $kontrol = TempatUsaha::where('id_meteran_air',$id)->select('kd_kontrol')->first();
+            if($kontrol != NULL){
+                $kontrol = $kontrol->kd_kontrol;
+            }
+            else{
+                $kontrol = ' ';
+            }
+        }
+
+        return view('meteran.qr',[
+            'id'=>$id,
+            'kontrol'=>$kontrol,
+            'fasilitas'=>$fasilitas
+        ]);
     }
 }

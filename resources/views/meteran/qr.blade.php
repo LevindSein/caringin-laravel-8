@@ -2,7 +2,7 @@
 <html lang="en">
 
     <head>
-
+        <title>Print QR Code</title>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta
@@ -43,18 +43,10 @@
 
     <body id="page-top">
         <div style="text-align:center">
-            <h1>Print Zebra ZPL commands from Javascript</h1>
+            <h1>Print QR Code Alat {{($fasilitas)}} untuk {{$kontrol}}</h1>
             <hr />
-            <label class="checkbox">
-                <input type="checkbox" id="useDefaultPrinter" /> <strong>Print to Default printer</strong>
-            </label>
-            <p>or...</p>
-            <div id="installedPrinters">
-                <label for="installedPrinterName">Select an installed Printer:</label>
-                <select name="installedPrinterName" id="installedPrinterName"></select>
-            </div>
-            <br /><br />
-            <button type="button" onclick="print();">Print Now...</button>
+            <button type="button" class="btn btn-primary" onclick="print();" id="printqr">Print</button><br><br>
+            <span id="spanqr"></span>
         </div>
 
         <script src="{{asset('js/printmanager/zip.js')}}"></script>
@@ -63,23 +55,10 @@
         <script src="{{asset('js/printmanager/JSPrintManager.js')}}"></script>
 
         <script>
- 
             //WebSocket settings
             JSPM.JSPrintManager.auto_reconnect = true;
             JSPM.JSPrintManager.start();
-            JSPM.JSPrintManager.WS.onStatusChanged = function () {
-                if (jspmWSStatus()) {
-                    //get client installed printers
-                    JSPM.JSPrintManager.getPrinters().then(function (myPrinters) {
-                        var options = '';
-                        for (var i = 0; i < myPrinters.length; i++) {
-                            options += '<option>' + myPrinters[i] + '</option>';
-                        }
-                        $('#installedPrinterName').html(options);
-                    });
-                }
-            };
-        
+
             //Check JSPM WebSocket status
             function jspmWSStatus() {
                 if (JSPM.JSPrintManager.websocket_status == JSPM.WSStatus.Open)
@@ -93,28 +72,34 @@
                     return false;
                 }
             }
-        
+
             //Do printing...
-            function print(o) {
+            function print() {
+                buttonPrint = $('#printqr');
+                statusPrint = $('#spanqr');
+                buttonPrint.text('Printing . . .');
                 if (jspmWSStatus()) {
+                    statusPrint.text('');
                     //Create a ClientPrintJob
                     var cpj = new JSPM.ClientPrintJob();
                     //Set Printer type (Refer to the help, there many of them!)
-                    if ($('#useDefaultPrinter').prop('checked')) {
-                        cpj.clientPrinter = new JSPM.DefaultPrinter();
-                    } else {
-                        cpj.clientPrinter = new JSPM.InstalledPrinter($('#installedPrinterName').val());
-                    }
+                    cpj.clientPrinter = new JSPM.InstalledPrinter('Feeling');
                     //Set content to print...
                     //Create Zebra ZPL commands for sample label
                     var cmds =  "^XA";
-                    cmds += "^FO150,30^ABB,30,18^BQN,2,10^FDQA 1 ^FS";
-                    cmds += "^FO185,265^ABN,25,9^FDA-1-001 LISTRIK^FS";
+                    cmds += "^FO150,30^ABB,30,18^BQN,2,10^FDQA {{$fasilitas}}bp3c{{$id}} ^FS";
+                    cmds += "^FO110,30^ABB,25,12^FD {{$fasilitas}} ^FS";
+                    cmds += "^FO70,30^ABB,25,12^FD {{$kontrol}} ^FS";
                     cmds += "^XZ";
                     
                     cpj.printerCommands = cmds;
                     //Send print job to printer!
                     cpj.sendToClient();
+                    window.close();
+                }
+                else{
+                    buttonPrint.text('Print');
+                    statusPrint.text('Printer Belum Siap, Klik lagi');
                 }
             }
         
