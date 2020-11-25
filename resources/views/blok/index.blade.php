@@ -40,8 +40,6 @@ $sekarang = date("d-m-Y H:i:s",time());
                             <th>No</th>
                             <th>Blok</th>
                             <th>Jml.Los</th>
-                            <th>Keamanan (%)</th>
-                            <th>IPK (%)</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -55,8 +53,6 @@ $sekarang = date("d-m-Y H:i:s",time());
                             <td class="text-center">{{$no}}</td>
                             <td class="text-center">{{$d->nama}}</td>
                             <td class="text-center">{{$pengguna}}</td>
-                            <td class="text-center">{{$d->prs_keamanan}}</td>
-                            <td class="text-center">{{$d->prs_ipk}}</td>
                             <td class="text-center">
                                 <a
                                     href="{{url('utilities/blok/update',[$d->id])}}"
@@ -85,6 +81,7 @@ $sekarang = date("d-m-Y H:i:s",time());
     class="modal fade"
     id="myModal"
     role="dialog"
+    tabIndex="-1"
     aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -111,7 +108,7 @@ $sekarang = date("d-m-Y H:i:s",time());
                             class="form-control"
                             placeholder="EX : A-10">
                     </div>
-                    <div class="keamananipk-persen">
+                    <!-- <div class="keamananipk-persen">
                         <div class="form-group col-lg-12">
                             <label for="keamanan">Persentase Keamanan</label>
                             <div class="input-group">
@@ -150,7 +147,7 @@ $sekarang = date("d-m-Y H:i:s",time());
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary btn-sm">Tambah</button>
@@ -217,7 +214,7 @@ $("#blokInput").on("input", function() {
     });
 </script>
 
-<script>
+<!-- <script>
 function functionKeamanan() {
     $(".keamananipk-persen").each(function() { 
         var keamanan = document.getElementById("keamanan").value;
@@ -234,5 +231,5 @@ function functionIpk() {
         $(this).find('.keamanan').val(keamanan);
     });
 }
-</script>
+</script> -->
 @endsection

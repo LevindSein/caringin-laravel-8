@@ -128,6 +128,7 @@ Route::get('tempatusaha/details/{id}',[TempatController::class, 'details']);
 Route::get('tempatusaha/fasilitas/{fas}',[TempatController::class, 'fasilitas']);
 Route::get('tempatusaha/rekap',[TempatController::class, 'rekap']);
 Route::get('tempatusaha/rekap/{blok}',[TempatController::class, 'rekapdetail']);
+Route::get('tempatusaha/qr/{id}',[TempatController::class, 'qr']);
 
 Route::get('tagihan/index/{data}',[TagihanController::class, 'data'])->name('tagihandata');
 Route::get('tagihan/update/{id}',[TagihanController::class, 'update']);

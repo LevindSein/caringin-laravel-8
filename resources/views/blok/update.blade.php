@@ -38,7 +38,7 @@ $role = Session::get('role');
                                     class="form-control"
                                     placeholder="EX : A-10">
                             </div>
-                            <div class="keamananipk-persen">
+                            <!-- <div class="keamananipk-persen">
                                 <div class="form-group col-lg-12">
                                     <label for="keamanan">Persentase Keamanan</label>
                                     <div class="input-group">
@@ -79,7 +79,7 @@ $role = Session::get('role');
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="form-group col-lg-12">
                                 <Button type="submit"class="btn btn-primary btn-user btn-block">Update</Button>
                             </div>
@@ -100,22 +100,22 @@ $role = Session::get('role');
 @section('js')
 <!-- Tambah Content pada Body JS -->
 <script>
-function functionKeamanan() {
-    $(".keamananipk-persen").each(function() { 
-        var keamanan = document.getElementById("keamanan").value;
+// function functionKeamanan() {
+//     $(".keamananipk-persen").each(function() { 
+//         var keamanan = document.getElementById("keamanan").value;
 
-        var ipk = 100 - keamanan;
-        $(this).find('.ipk').val(ipk);
-    });
-}
-function functionIpk() {
-    $(".keamananipk-persen").each(function() { 
-        var ipk = document.getElementById("ipk").value;
+//         var ipk = 100 - keamanan;
+//         $(this).find('.ipk').val(ipk);
+//     });
+// }
+// function functionIpk() {
+//     $(".keamananipk-persen").each(function() { 
+//         var ipk = document.getElementById("ipk").value;
 
-        var keamanan = 100 - ipk;
-        $(this).find('.keamanan').val(keamanan);
-    });
-}
+//         var keamanan = 100 - ipk;
+//         $(this).find('.keamanan').val(keamanan);
+//     });
+// }
 
 $('#blokInput').on('keypress', function (event) {
     var regex = new RegExp("^[a-zA-Z0-9\s\-]+$");

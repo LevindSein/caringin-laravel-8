@@ -43,7 +43,7 @@
 
     <body id="page-top">
         <div style="text-align:center">
-            <h1>Print QR Code Alat {{($fasilitas)}} untuk {{$kontrol}}</h1>
+            <h1>Print QR Code Alat {{$fasilitas}} untuk {{$kontrol}}</h1>
             <hr />
             <button type="button" class="btn btn-primary" onclick="print();" id="printqr">Print</button><br><br>
             <span id="spanqr"></span>

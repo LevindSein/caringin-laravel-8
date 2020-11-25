@@ -78,6 +78,12 @@ $sekarang = date("d-m-Y H:i:s",time());
                 </td>
                 <td class="text-center">
                     <a
+                        href="{{url('tempatusaha/qr',[$data->id])}}"
+                        target="_blank"
+                        title="Print QR">
+                        <i class="fas fa-qrcode"></i></a>
+                    &nbsp;
+                    <a
                         href="{{url('tempatusaha/update',[$data->id])}}"
                         title="Edit">
                         <i class="fas fa-edit fa-sm"></i></a>

@@ -14,14 +14,14 @@ class BlokController extends Controller
     public function add(Request $request){
         $blok = new Blok;
         $blok->nama = strtoupper($request->get('blokInput'));
-        $keamanan = $request->get('keamanan');
-        $ipk = $request->get('ipk');
-        if($keamanan != NULL){
-            $blok->prs_keamanan = $keamanan;
-        }
-        if($ipk != NULL){
-            $blok->prs_ipk = $keamanan;
-        }
+        // $keamanan = $request->get('keamanan');
+        // $ipk = $request->get('ipk');
+        // if($keamanan != NULL){
+        //     $blok->prs_keamanan = $keamanan;
+        // }
+        // if($ipk != NULL){
+        //     $blok->prs_ipk = $keamanan;
+        // }
         $blok->save();
         return redirect()->route('blokindex')->with('success','Blok Berhasil Ditambah');
     }
@@ -37,14 +37,14 @@ class BlokController extends Controller
         $blokLama = $blok->nama;
         $nama = strtoupper($request->get('blokInput'));
         $blok->nama = $nama;
-        $keamanan = $request->get('keamanan');
-        $ipk = $request->get('ipk');
-        if($keamanan != NULL){
-            $blok->prs_keamanan = $keamanan;
-        }
-        if($ipk != NULL){
-            $blok->prs_ipk = $ipk;
-        }
+        // $keamanan = $request->get('keamanan');
+        // $ipk = $request->get('ipk');
+        // if($keamanan != NULL){
+        //     $blok->prs_keamanan = $keamanan;
+        // }
+        // if($ipk != NULL){
+        //     $blok->prs_ipk = $ipk;
+        // }
 
         $blok->save();
 
