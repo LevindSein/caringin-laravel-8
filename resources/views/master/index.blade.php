@@ -102,7 +102,22 @@
             <div class="card shadow mb-4">
                 <div
                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Pendapatan Bulanan Tahun {{$thn}}</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Rincian Tagihan Tahun {{$thn}}</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area-new">
+                        <canvas id="rincianChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card shadow mb-4">
+                <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Pendapatan Tahun {{$thn}}</h6>
                 </div>
                 <div class="card-body">
                     <div class="chart-area-new">
@@ -117,7 +132,7 @@
             <div class="card shadow mb-4">
                 <div
                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Akumulasi Pendapatan Bulanan Tahun {{$thn}}</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Akumulasi Pendapatan Tahun {{$thn}}</h6>
                 </div>
                 <div class="card-body">
                     <div class="chart-area-new">
@@ -187,6 +202,149 @@
 
 @section('js')
 <script>
+    var rincianCanvas = document.getElementById("rincianChart");
+    Chart.defaults.global.defaultFontFamily = 'Nunito',
+    '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",' +
+            'Arial,sans-serif';
+    Chart.defaults.global.defaultFontColor = '#858796';
+    Chart.defaults.global.defaultFontSize = 10;
+
+    var data = {
+        labels: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "Mei",
+            "Jun",
+            "Jul",
+            "Agt",
+            "Sep",
+            "Okt",
+            "Nov",
+            "Des"
+        ],
+        datasets: [
+            {
+                label: "Listrik",
+                backgroundColor: "#f6c23e",
+                data: [
+                    {{$listrikJan}},
+                    {{$listrikFeb}},
+                    {{$listrikMar}},
+                    {{$listrikApr}},
+                    {{$listrikMei}},
+                    {{$listrikJun}},
+                    {{$listrikJul}},
+                    {{$listrikAgu}},
+                    {{$listrikSep}},
+                    {{$listrikOkt}},
+                    {{$listrikNov}},
+                    {{$listrikDes}}
+                ]
+            }, {
+                label: "Air Bersih",
+                backgroundColor: "#4e73df",
+                data: [
+                    {{$airJan}},
+                    {{$airFeb}},
+                    {{$airMar}},
+                    {{$airApr}},
+                    {{$airMei}},
+                    {{$airJun}},
+                    {{$airJul}},
+                    {{$airAgu}},
+                    {{$airSep}},
+                    {{$airOkt}},
+                    {{$airNov}},
+                    {{$airDes}}
+                ]
+            }, {
+                label: "Keamanan & IPK",
+                backgroundColor: "#36b9cc",
+                data: [
+                    {{$keamananipkJan}},
+                    {{$keamananipkFeb}},
+                    {{$keamananipkMar}},
+                    {{$keamananipkApr}},
+                    {{$keamananipkMei}},
+                    {{$keamananipkJun}},
+                    {{$keamananipkJul}},
+                    {{$keamananipkAgu}},
+                    {{$keamananipkSep}},
+                    {{$keamananipkOkt}},
+                    {{$keamananipkNov}},
+                    {{$keamananipkDes}}
+                ]
+            }, {
+                label: "Kebersihan",
+                backgroundColor: "#1cc88a",
+                data: [
+                    {{$kebersihanJan}},
+                    {{$kebersihanFeb}},
+                    {{$kebersihanMar}},
+                    {{$kebersihanApr}},
+                    {{$kebersihanMei}},
+                    {{$kebersihanJun}},
+                    {{$kebersihanJul}},
+                    {{$kebersihanAgu}},
+                    {{$kebersihanSep}},
+                    {{$kebersihanOkt}},
+                    {{$kebersihanNov}},
+                    {{$kebersihanDes}}
+                ]
+            }
+        ]
+    };
+    var rincianChart = new Chart(rincianCanvas, {
+        type: 'bar',
+        data: data,
+        options: {
+            tooltips: {
+                enabled: true,
+                callbacks: {
+                    // this callback is used to create the tooltip label
+                    label: function (tooltipItem, data) {
+                        // get the data label and data value to display convert the data value to local
+                        // string so it uses a comma seperated number
+                        var dataLabel = data.labels[tooltipItem.index];
+                        var value = ': Rp.' + data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index].toLocaleString();
+
+                        // make this isn't a multi-line label (e.g. [["label 1 - line 1, "line 2, ],
+                        // [etc...]])
+                        if (Chart.helpers.isArray(dataLabel)) {
+                            // show value on first line of multiline label need to clone because we are
+                            // changing the value
+                            dataLabel = dataLabel.slice();
+                            dataLabel[0] += value;
+                        } else {
+                            dataLabel += value;
+                        }
+
+                        // return the text to display on the tooltip
+                        return dataLabel;
+                    }
+                }
+            },
+            barValueSpacing: 20,
+            scales: {
+                xAxes: [
+                    {
+                        barPercentage: 1,
+                        categoryPercentage: 0.6
+                    }
+                ],
+                yAxes: [
+                    {
+                        ticks: {
+                            min: 0
+                        }
+                    }
+                ]
+            }
+        }
+    });
+
     var pendapatanCanvas = document.getElementById("pendapatanChart");
     Chart.defaults.global.defaultFontFamily = 'Nunito',
     '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",' +
@@ -313,7 +471,7 @@
         }
     });
 
-    var pendapatanCanvas = document.getElementById("akumulasiChart");
+    var akumulasiCanvas = document.getElementById("akumulasiChart");
     Chart.defaults.global.defaultFontFamily = 'Nunito',
     '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",' +
             'Arial,sans-serif';
@@ -390,7 +548,7 @@
             }
         ]
     };
-    var pendapatanChart = new Chart(pendapatanCanvas, {
+    var akumulasiChart = new Chart(akumulasiCanvas, {
         type: 'bar',
         data: data,
         options: {
@@ -439,6 +597,7 @@
         }
     });
 </script>
+
 <script>
     // Set new default font family and font color to mimic Bootstrap's default
     // styling

@@ -189,6 +189,73 @@ class Tagihan extends Model
         return $selisih[0]->selisih;
     }
 
+    public static function rincian($thn){
+        $listrik = array();
+        $airbersih = array();
+        $keamananipk = array();
+        $kebersihan = array();
+        $j = 0;
+
+        for($i=1; $i<=12; $i++){
+            if($i < 10){
+                $data = DB::table('tagihan')
+                ->where('bln_pakai',($thn."-0".$i))
+                ->select(
+                    DB::raw('SUM(ttl_listrik) as listrik'),
+                    DB::raw('SUM(ttl_airbersih) as airbersih'),
+                    DB::raw('SUM(ttl_keamananipk) as keamananipk'),
+                    DB::raw('SUM(ttl_kebersihan) as kebersihan'))
+                ->get();
+            }
+            else{
+                $data = DB::table('tagihan')
+                ->where('bln_pakai',($thn."-".$i))
+                ->select(
+                    DB::raw('SUM(ttl_listrik) as listrik'),
+                    DB::raw('SUM(ttl_airbersih) as airbersih'),
+                    DB::raw('SUM(ttl_keamananipk) as keamananipk'),
+                    DB::raw('SUM(ttl_kebersihan) as kebersihan'))
+                ->get();
+            }
+
+            if($data[0]->listrik == NULL){
+                $ttl_listrik = 0;
+            }
+            else{
+                $ttl_listrik = $data[0]->listrik;
+            }
+
+            if($data[0]->airbersih == NULL){
+                $ttl_airbersih = 0;
+            }
+            else{
+                $ttl_airbersih = $data[0]->airbersih;
+            }
+
+            if($data[0]->keamananipk == NULL){
+                $ttl_keamananipk = 0;
+            }
+            else{
+                $ttl_keamananipk = $data[0]->keamananipk;
+            }
+            
+            if($data[0]->kebersihan == NULL){
+                $ttl_kebersihan = 0;
+            }
+            else{
+                $ttl_kebersihan = $data[0]->kebersihan;
+            }
+            
+            $listrik[$j] = $ttl_listrik;
+            $airbersih[$j] = $ttl_airbersih;
+            $keamananipk[$j] = $ttl_keamananipk;
+            $kebersihan[$j] = $ttl_kebersihan;
+            $j++;
+        }
+        
+        return array($listrik,$airbersih,$keamananipk,$kebersihan);
+    }
+
     public static function pendapatan($thn){
         $tagihan = array();
         $realisasi = array();
@@ -206,7 +273,7 @@ class Tagihan extends Model
             }
             else{
                 $data = DB::table('tagihan')
-                ->where('bln_tagihan',($thn."-".$i))
+                ->where('bln_pakai',($thn."-".$i))
                 ->select(
                     DB::raw('SUM(ttl_tagihan) as tagihan'),
                     DB::raw('SUM(rea_tagihan) as realisasi'),
@@ -255,7 +322,7 @@ class Tagihan extends Model
         for($i=1; $i<=12; $i++){
             if($i < 10){
                 $data = DB::table('tagihan')
-                ->where('bln_tagihan',($thn."-0".$i))
+                ->where('bln_pakai',($thn."-0".$i))
                 ->select(
                     DB::raw('SUM(ttl_tagihan) as tagihan'),
                     DB::raw('SUM(rea_tagihan) as realisasi'),
@@ -264,7 +331,7 @@ class Tagihan extends Model
             }
             else{
                 $data = DB::table('tagihan')
-                ->where('bln_tagihan',($thn."-".$i))
+                ->where('bln_pakai',($thn."-".$i))
                 ->select(
                     DB::raw('SUM(ttl_tagihan) as tagihan'),
                     DB::raw('SUM(rea_tagihan) as realisasi'),
@@ -896,7 +963,7 @@ class Tagihan extends Model
         //     $data->stt_listrik = NULL;
         //     $data->save();
         // }
-        $dataset = Tagihan::where([['bln_pakai','2020-09'],['awal_listrik','!=',NULL]])->get();
+        $dataset = Tagihan::where([['bln_pakai','2020-08'],['awal_listrik','!=',NULL]])->get();
         foreach($dataset as $tagihan){
             $tarif = TarifListrik::find(1);
             $awal = $tagihan->awal_listrik;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 use App\Models\Tagihan;
 use App\Models\TempatUsaha;
 use App\Models\User;
@@ -14,17 +15,16 @@ class MasterController extends Controller
         date_default_timezone_set('Asia/Jakarta');
         $thn = date("Y", time());
 
+        $rincian = Tagihan::rincian($thn);
         $pendapatan = Tagihan::pendapatan($thn);
         $akumulasi = Tagihan::akumulasi($thn);
 
-        $data = User::where('role','nasabah')->get();
-
-        $dataset = Tagihan::all();
-        foreach($dataset as $data){
-            $data->via_tambah = Session::get('username');
-            $data->stt_publish = 1;
-            $data->save();
-        }
+        // $dataset = Tagihan::all();
+        // foreach($dataset as $data){
+        //     $data->via_tambah = Session::get('username');
+        //     $data->stt_publish = 1;
+        //     $data->save();
+        // }
 
         // Tagihan::hitungListrik();
         // Tagihan::hitungAir();
@@ -48,6 +48,54 @@ class MasterController extends Controller
             'selListrik'=>Tagihan::selListrik($thn),
             'selKeamananIpk'=>Tagihan::selKeamananIpk($thn),
             'selKebersihan'=>Tagihan::selKebersihan($thn),
+            'listrikJan'=>$rincian[0][0],
+            'listrikFeb'=>$rincian[0][1],
+            'listrikMar'=>$rincian[0][2],
+            'listrikApr'=>$rincian[0][3],
+            'listrikMei'=>$rincian[0][4],
+            'listrikJun'=>$rincian[0][5],
+            'listrikJul'=>$rincian[0][6],
+            'listrikAgu'=>$rincian[0][7],
+            'listrikSep'=>$rincian[0][8],
+            'listrikOkt'=>$rincian[0][9],
+            'listrikNov'=>$rincian[0][10],
+            'listrikDes'=>$rincian[0][11],
+            'airJan'=>$rincian[1][0],
+            'airFeb'=>$rincian[1][1],
+            'airMar'=>$rincian[1][2],
+            'airApr'=>$rincian[1][3],
+            'airMei'=>$rincian[1][4],
+            'airJun'=>$rincian[1][5],
+            'airJul'=>$rincian[1][6],
+            'airAgu'=>$rincian[1][7],
+            'airSep'=>$rincian[1][8],
+            'airOkt'=>$rincian[1][9],
+            'airNov'=>$rincian[1][10],
+            'airDes'=>$rincian[1][11],
+            'keamananipkJan'=>$rincian[2][0],
+            'keamananipkFeb'=>$rincian[2][1],
+            'keamananipkMar'=>$rincian[2][2],
+            'keamananipkApr'=>$rincian[2][3],
+            'keamananipkMei'=>$rincian[2][4],
+            'keamananipkJun'=>$rincian[2][5],
+            'keamananipkJul'=>$rincian[2][6],
+            'keamananipkAgu'=>$rincian[2][7],
+            'keamananipkSep'=>$rincian[2][8],
+            'keamananipkOkt'=>$rincian[2][9],
+            'keamananipkNov'=>$rincian[2][10],
+            'keamananipkDes'=>$rincian[2][11],
+            'kebersihanJan'=>$rincian[3][0],
+            'kebersihanFeb'=>$rincian[3][1],
+            'kebersihanMar'=>$rincian[3][2],
+            'kebersihanApr'=>$rincian[3][3],
+            'kebersihanMei'=>$rincian[3][4],
+            'kebersihanJun'=>$rincian[3][5],
+            'kebersihanJul'=>$rincian[3][6],
+            'kebersihanAgu'=>$rincian[3][7],
+            'kebersihanSep'=>$rincian[3][8],
+            'kebersihanOkt'=>$rincian[3][9],
+            'kebersihanNov'=>$rincian[3][10],
+            'kebersihanDes'=>$rincian[3][11],
             'tagihanJan'=>$pendapatan[0][0],
             'tagihanFeb'=>$pendapatan[0][1],
             'tagihanMar'=>$pendapatan[0][2],
