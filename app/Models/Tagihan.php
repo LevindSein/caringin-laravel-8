@@ -197,7 +197,7 @@ class Tagihan extends Model
         for($i=1; $i<=12; $i++){
             if($i < 10){
                 $data = DB::table('tagihan')
-                ->where('bln_tagihan',($thn."-0".$i))
+                ->where('bln_pakai',($thn."-0".$i))
                 ->select(
                     DB::raw('SUM(ttl_tagihan) as tagihan'),
                     DB::raw('SUM(rea_tagihan) as realisasi'),
@@ -955,7 +955,7 @@ class Tagihan extends Model
     }
 
     public static function hitungAir(){
-        $dataset = Tagihan::where([['bln_pakai','2020-09'],['awal_airbersih','!=',NULL]])->get();
+        $dataset = Tagihan::where([['bln_pakai','2020-10'],['awal_airbersih','!=',NULL]])->get();
         foreach($dataset as $tagihan){
             $tarif = TarifAirBersih::find(1);
             $awal = $tagihan->awal_airbersih;
