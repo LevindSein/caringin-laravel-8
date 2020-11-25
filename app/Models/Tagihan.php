@@ -1027,4 +1027,24 @@ class Tagihan extends Model
             }
         }
     }
+
+    public static function keamananIpk(){
+        $dataset = Tagihan::where('ttl_keamananipk','!=',0)->get();
+
+        foreach($dataset as $d){
+            $d->sub_keamananipk = $d->ttl_keamananipk;
+            $d->stt_keamananipk = 1;
+            $d->save();
+        }
+    }
+
+    public static function kebersihan(){
+        $dataset = Tagihan::where('ttl_kebersihan','!=',0)->get();
+
+        foreach($dataset as $d){
+            $d->sub_kebersihan = $d->ttl_kebersihan;
+            $d->stt_kebersihan = 1;
+            $d->save();
+        }
+    }
 }

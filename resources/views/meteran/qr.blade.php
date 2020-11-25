@@ -87,9 +87,9 @@
                     //Set content to print...
                     //Create Zebra ZPL commands for sample label
                     var cmds =  "^XA";
-                    cmds += "^FO150,30^ABB,30,18^BQN,2,10^FDQA {{$fasilitas}}bp3c{{$id}} ^FS";
-                    cmds += "^FO110,30^ABB,25,12^FD {{$fasilitas}} ^FS";
-                    cmds += "^FO70,30^ABB,25,12^FD {{$kontrol}} ^FS";
+                    cmds += "^FO150,50^ABB,30,18^BQN,2,10^FDQA {{$kode}} ^FS";
+                    cmds += "^FO110,50^ABB,25,12^FD {{$fasilitas}} ^FS";
+                    cmds += "^FO70,50^ABB,25,12^FD {{$kontrol}} ^FS";
                     cmds += "^XZ";
                     
                     cpj.printerCommands = cmds;

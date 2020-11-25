@@ -1,14 +1,3 @@
-<?php
-$pengguna = 0;
-$daya = 0;
-$pakai = 0;
-$beban = 0;
-$bpju = 0;
-$tagihan = 0;
-$realisasi = 0;
-$selisih = 0;
-?>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>

@@ -38,7 +38,25 @@ class PemakaianController extends Controller
         }
 
         if($fasilitas == 'keamananipk'){
-            
+            $rekap = Pemakaian::rekapKeamananIpk($bulan);
+
+            return view('pemakaian.keamananipk',[
+                'bln'=>Pemakaian::bulan($bulan),
+                'rekap'=>$rekap,
+                'ttlRekap'=>Pemakaian::ttlRekapKeamananIpk($rekap),
+                'rincian'=>Pemakaian::rincianKeamananIpk($bulan),
+            ]);
+        }
+
+        if($fasilitas == 'kebersihan'){
+            $rekap = Pemakaian::rekapKebersihan($bulan);
+
+            return view('pemakaian.kebersihan',[
+                'bln'=>Pemakaian::bulan($bulan),
+                'rekap'=>$rekap,
+                'ttlRekap'=>Pemakaian::ttlRekapKebersihan($rekap),
+                'rincian'=>Pemakaian::rincianKebersihan($bulan),
+            ]);
         }
     }
 }

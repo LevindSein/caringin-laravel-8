@@ -1,7 +1,7 @@
 @media print{
     @page {
       height: 28cm;
-      width: 36cm;
+      width: 37cm;
       size: landscape;
       border: 1px solid black;
     }
@@ -24,7 +24,7 @@
   
   body {
     position: relative;
-    width: 36cm;  
+    width: 37cm;  
     height: 28cm; 
     margin: auto; 
     color: #000;

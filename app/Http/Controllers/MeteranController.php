@@ -127,6 +127,8 @@ class MeteranController extends Controller
         if($fasilitas == 'listrik'){
             $fasilitas = 'Listrik';
             $kontrol = TempatUsaha::where('id_meteran_listrik',$id)->select('kd_kontrol')->first();
+            $kode = MeteranListrik::find($id);
+            $kode = 'IDENTITIY-BP3C-'.$kode->kode;
             if($kontrol != NULL){
                 $kontrol = $kontrol->kd_kontrol;
             }
@@ -138,6 +140,8 @@ class MeteranController extends Controller
         if($fasilitas == 'airbersih'){
             $fasilitas = 'Air Bersih';
             $kontrol = TempatUsaha::where('id_meteran_air',$id)->select('kd_kontrol')->first();
+            $kode = MeteranAir::find($id);
+            $kode = 'IDENTITY-BP3C-'.$kode->kode;
             if($kontrol != NULL){
                 $kontrol = $kontrol->kd_kontrol;
             }
@@ -148,6 +152,7 @@ class MeteranController extends Controller
 
         return view('meteran.qr',[
             'id'=>$id,
+            'kode'=>$kode,
             'kontrol'=>$kontrol,
             'fasilitas'=>$fasilitas
         ]);

@@ -54,7 +54,25 @@ class KasirController extends Controller
             return view('kasir.print');
         }
         else{
-            echo $id;
+            try{
+                $connector = new WindowsPrintConnector("EPSONLQ");
+                        
+                $printer = new Printer($connector);
+
+                $printer -> selectPrintMode();
+                $printer->setJustification(Printer::JUSTIFY_CENTER);
+                $printer -> feed();
+                $printer -> text("====================================================================\n");
+                $printer -> text("                           PT. Pengelola Pusat Perdagangan Caringin.\n");
+                $printer -> text("Jl. Soetta No.220 Blok A1 No.21-24\n");
+                $printer -> text("======================    ==========================================\n");
+                $printer -> feed();
+                
+            } catch (Exception $e) {
+                return redirect()->route('kasirindex')->with('error','Kesalahan Sistem');
+            } finally {
+                $printer->close();
+            }
         }
     }
 

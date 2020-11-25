@@ -15,6 +15,7 @@ use App\Models\Blok;
 
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
+use Mike42\Escpos\CapabilityProfile;
 
 use Exception;
 
@@ -180,22 +181,26 @@ class TagihanController extends Controller
         date_default_timezone_set('Asia/Jakarta');
         $month = date("Y-m", time());
 
+        // $profile = CapabilityProfile::load("default");
         $connector = new WindowsPrintConnector("EPSONLQ");
                 
         $printer = new Printer($connector);
 
         /* Name of shop */
-        $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> text("================================================\n");
-        $printer -> text("PT. Pengelola Pusat Perdagangan Caringin.\n");
         $printer -> selectPrintMode();
-        $printer -> text("Jl. Soetta No.220 Blok A1 No.21-24\n");
+        $printer -> setJustification(Printer::JUSTIFY_RIGHT);
         $printer -> text("================================================\n");
+        $printer -> text("       PT. Pengelola Pusat Perdagangan Caringin.\n");
+        $printer -> selectPrintMode();
+        $printer -> setJustification(Printer::JUSTIFY_RIGHT);
+        $printer -> text("Jl. Soetta No.220 Blok A1 No.21-24\n");
+        $printer -> text("======================    ======================\n");
         $printer -> feed();
 
         $printer -> text("Terimakasih telah melakukan Pembayaran\n");
-        $printer -> cut();
-        $printer -> pulse();
+        $printer -> feed();
+        // $printer -> cut();
+        // $printer -> pulse();
 
         $printer -> close();
         // return view('tagihan.edaran',['dataset'=>Tagihan::where([['blok',$request->get('blok')],['bln_tagihan',$month]])->get()]);
