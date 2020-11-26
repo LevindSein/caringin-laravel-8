@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class Blok extends Model
 {
     protected $table = 'blok';
-    protected $fillable = ['id','nama','prs_keamanan','prs_ipk','updated_at','created_at'];
+    protected $fillable = ['id','nama','otoritas','prs_keamanan','prs_ipk','updated_at','created_at'];
 }
