@@ -210,6 +210,8 @@ Route::get('user/update/{id}',[UserController::class, 'update']);
 Route::post('user/store/{id}',[UserController::class, 'store']);
 Route::get('user/delete/{id}',[UserController::class, 'delete']);
 Route::get('user/reset/{id}',[UserController::class, 'reset']);
+Route::get('user/otoritas/{id}',[UserController::class, 'otoritas']);
+Route::post('user/otoritas/store/{id}',[UserController::class, 'otoritasStore']);
 
 Route::get('log',function(){
     return view('log.index',[

@@ -143,4 +143,19 @@ class UserController extends Controller
 
         return redirect()->route('userindex')->with('successUpd','User '.$nama.' Direset, Username >> '.$username.' <<  ,Password >> '.$pass.' <<');
     }
+
+    public function otoritas($id){
+        $dataset = User::find($id);
+        Session::put('user',$dataset->role);
+
+        return view('user.otoritas',['dataset'=>$dataset]);
+    }
+
+    public function otoritasStore(Request $request,$id){
+        $kelola = $request->get('kelola');
+        var_dump($kelola);
+
+        $dataset = User::find($id);
+        Session::put('user',$dataset->role);
+    }
 }

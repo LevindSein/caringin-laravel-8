@@ -43,8 +43,8 @@ $role = Session::get('role');
                         data-toggle="dropdown"
                         aria-haspopup="true" 
                         aria-expanded="false"
-                        title="Menu Lainnya">
-                        <i class="fas fa-ellipsis-v fa-sm fa-fw"></i>
+                        title="Menu Lainnya"><b>Menu
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw"></i></b>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
                         <div class="dropdown-header">Pengguna Fasilitas:</div>

@@ -26,7 +26,7 @@ class MasterController extends Controller
         //     $data->save();
         // }
 
-        // Tagihan::hitungListrik();
+        Tagihan::hitungListrik();
         // Tagihan::hitungAir();
         // Tagihan::cekMeter();
         // Tagihan::keamananIpk();

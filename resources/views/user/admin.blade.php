@@ -28,6 +28,11 @@
                 <td class="text-center">{{$data->email}}</td>
                 <td class="text-center">
                     <a
+                        href="{{url('user/otoritas',[$data->id])}}"
+                        title="Otoritas">
+                        <i class="fas fa-hands-helping" style="color:#1cc88a;"></i></a>
+                    &nbsp;
+                    <a
                         href="{{url('user/reset',[$data->id])}}"
                         title="Reset Password">
                         <i class="fas fa-key fa-sm" style="color:orange;"></i></a>

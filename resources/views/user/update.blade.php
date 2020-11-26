@@ -9,7 +9,7 @@ $role = Session::get('role');
 
 @section('content')
 <!-- Tambah Content Pada Body Utama -->
-<title>Edit Data User| BP3C</title>
+<title>Edit Data User | BP3C</title>
 <div class = "container-fluid">
     <div class="d-sm-flex align-items-center justify-content-center">
         <h3 class="h3 mb-4 text-primary"><b>Edit Data User</b></h3>
@@ -39,7 +39,7 @@ $role = Session::get('role');
                                     placeholder="321xxxxx">
                             </div>
                             <div class="form-group col-lg-12">
-                                <label for="nomor">Nama  <span style="color:red;">*</span></label>
+                                <label for="nama">Nama  <span style="color:red;">*</span></label>
                                 <input
                                     required
                                     value="{{$dataset->nama}}"
