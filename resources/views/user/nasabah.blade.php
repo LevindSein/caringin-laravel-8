@@ -70,7 +70,11 @@
                     },
                     titleAttr: 'Download Excel'
                 }
-            ]
+            ],
+            "fixedColumns":   {
+                "leftColumns": 3,
+                "rightColumns": 1,
+            },
         });
     });
 </script>

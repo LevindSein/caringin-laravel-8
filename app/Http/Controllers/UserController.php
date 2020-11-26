@@ -146,16 +146,48 @@ class UserController extends Controller
 
     public function otoritas($id){
         $dataset = User::find($id);
-        Session::put('user',$dataset->role);
 
-        return view('user.otoritas',['dataset'=>$dataset]);
+        $pilihanKelola = array('pedagang','tempatusaha','tagihan','blok','pemakaian','pendapatan','datausaha','alatmeter','tarif','harilibur');
+        
+        if($dataset->otoritas != NULL){
+            $otoritas = json_decode($dataset->otoritas);
+        }
+        else{
+            $kelola[] = ['blok' => null];
+            for($i=0; $i<count($pilihanKelola); $i++){
+                $kelola[] = [$pilihanKelola[$i] => false];
+            }
+            $otoritas = json_encode($kelola);
+            $otoritas = json_decode($otoritas);
+        }
+
+        Session::put('user',$dataset->role);
+        if($dataset->role != 'admin'){
+            return redirect()->route('userindex')->with('info','Bukan Admin');
+        }
+        return view('user.otoritas',['dataset'=>$dataset,'otoritas'=>$otoritas]);
     }
 
     public function otoritasStore(Request $request,$id){
-        $kelola = $request->get('kelola');
-        var_dump($kelola);
+        $kelola[] = ['blok' => $request->get('blokOtoritas')];
+
+        $pilihanKelola = array('pedagang','tempatusaha','tagihan','blok','pemakaian','pendapatan','datausaha','alatmeter','tarif','harilibur');
+
+        for($i=0; $i<count($pilihanKelola); $i++){
+            if(in_array($pilihanKelola[$i],$request->get('kelola'))){
+                $kelola[] = [$pilihanKelola[$i] => true];
+            }
+            else{
+                $kelola[] = [$pilihanKelola[$i] => false];
+            }
+        }
+
+        $json = json_encode($kelola);
 
         $dataset = User::find($id);
+        $dataset->otoritas = $json;
+        $dataset->save();
         Session::put('user',$dataset->role);
+        return redirect()->route('userindex')->with('success','Otoritas Ditambah');
     }
 }

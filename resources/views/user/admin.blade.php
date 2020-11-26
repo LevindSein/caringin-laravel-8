@@ -13,6 +13,7 @@
                 <th>KTP</th>
                 <th>HP</th>
                 <th>Email</th>
+                <th>Otoritas</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -26,6 +27,13 @@
                 <td class="text-center">{{$data->ktp}}</td>
                 <td class="text-center">{{$data->hp}}</td>
                 <td class="text-center">{{$data->email}}</td>
+                <td class="text-center">
+                @if($data->otoritas != NULL)
+                    <i class="fas fa-check"></i>
+                @else
+                    <i class="fas fa-times"></i>
+                @endif
+                </td>
                 <td class="text-center">
                     <a
                         href="{{url('user/otoritas',[$data->id])}}"
@@ -83,7 +91,11 @@
                     },
                     titleAttr: 'Download Excel'
                 }
-            ]
+            ],
+            "fixedColumns":   {
+                "leftColumns": 3,
+                "rightColumns": 1,
+            },
         });
     });
 </script>

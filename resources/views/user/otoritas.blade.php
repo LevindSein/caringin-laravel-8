@@ -64,6 +64,7 @@
                                 <div>
                                     <div class="form-check">
                                         <input
+                                            <?php if($otoritas[1]->pedagang) { ?> checked <?php }?>
                                             class="form-check-input"
                                             type="checkbox"
                                             name="kelola[]"
@@ -75,6 +76,7 @@
                                     </div>
                                     <div class="form-check">
                                         <input
+                                            <?php if($otoritas[2]->tempatusaha) { ?> checked <?php }?>
                                             class="form-check-input"
                                             type="checkbox"
                                             name="kelola[]"
@@ -86,6 +88,7 @@
                                     </div>
                                     <div class="form-check">
                                         <input
+                                            <?php if($otoritas[3]->tagihan) { ?> checked <?php }?>
                                             class="form-check-input"
                                             type="checkbox"
                                             name="kelola[]"
@@ -97,6 +100,7 @@
                                     </div>
                                     <div class="form-check">
                                         <input
+                                            <?php if($otoritas[4]->blok) { ?> checked <?php }?>
                                             class="form-check-input"
                                             type="checkbox"
                                             name="kelola[]"
@@ -110,6 +114,7 @@
                                 <div>
                                     <div class="form-check">
                                         <input
+                                            <?php if($otoritas[5]->pemakaian) { ?> checked <?php }?>
                                             class="form-check-input"
                                             type="checkbox"
                                             name="kelola[]"
@@ -121,6 +126,7 @@
                                     </div>
                                     <div class="form-check">
                                         <input
+                                            <?php if($otoritas[6]->pendapatan) { ?> checked <?php }?>
                                             class="form-check-input"
                                             type="checkbox"
                                             name="kelola[]"
@@ -132,6 +138,7 @@
                                     </div>
                                     <div class="form-check">
                                         <input
+                                            <?php if($otoritas[7]->datausaha) { ?> checked <?php }?>
                                             class="form-check-input"
                                             type="checkbox"
                                             name="kelola[]"
@@ -145,6 +152,7 @@
                                 <div>
                                     <div class="form-check">
                                         <input
+                                            <?php if($otoritas[8]->alatmeter) { ?> checked <?php }?>
                                             class="form-check-input"
                                             type="checkbox"
                                             name="kelola[]"
@@ -156,6 +164,7 @@
                                     </div>
                                     <div class="form-check">
                                         <input
+                                            <?php if($otoritas[9]->tarif) { ?> checked <?php }?>
                                             class="form-check-input"
                                             type="checkbox"
                                             name="kelola[]"
@@ -167,6 +176,7 @@
                                     </div>
                                     <div class="form-check">
                                         <input
+                                            <?php if($otoritas[10]->harilibur) { ?> checked <?php }?>
                                             class="form-check-input"
                                             type="checkbox"
                                             name="kelola[]"
@@ -218,5 +228,14 @@ $(document).ready(function () {
         }
     });
 });
+
+var s1 = $("#blokOtoritas").select2();
+var valBlok = <?php echo json_encode($otoritas[0]->blok); ?>;
+
+valBlok.forEach(function(e){
+    if(!s1.find('option:contains(' + e + ')').length) 
+        s1.append($('<option>').text(e));
+});
+s1.val(valBlok).trigger("change"); 
 </script>
 @endsection
