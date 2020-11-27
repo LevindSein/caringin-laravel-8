@@ -38,10 +38,10 @@ class KasirController extends Controller
     
                 // Content
                 $printer->setJustification(Printer::JUSTIFY_CENTER);
-                $printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
                 $printer->text("Fahni Amsyari.\n");
                 $printer->selectPrintMode();
                 $printer->text("Levind Sein.\n");
+                $printer->feed();
             
                 //Print
                 $printer->cut();
@@ -55,18 +55,17 @@ class KasirController extends Controller
         }
         else{
             try{
-                $connector = new WindowsPrintConnector("PrinterPanda");
+                $profile = CapabilityProfile::load("POS-5890");
+                $connector = new RawbtPrintConnector();
                         
-                $printer = new Printer($connector);
+                $printer = new Printer($connector, $profile);
 
-                $printer -> selectPrintMode();
+                // Content
                 $printer->setJustification(Printer::JUSTIFY_CENTER);
-                $printer -> feed();
-                $printer -> text("ID nya adalah = ".$id);
-                $printer -> text("PT. Pengelola Pusat Perdagangan Caringin.\n");
-                $printer -> text("Jl. Soetta No.220 Blok A1 No.21-24\n");
-                $printer -> text("==============================\n");
-                $printer -> feed();
+                $printer->text("Fahni Amsyari.\n");
+                $printer->selectPrintMode();
+                $printer->text("Levind Sein.\n");
+                $printer->feed();
                 
             } catch (Exception $e) {
                 return redirect()->route('kasirindex')->with('error','Kesalahan Sistem');
@@ -102,7 +101,7 @@ class KasirController extends Controller
         $id = $request->get('tempatId');
         // $dataset = Tagihan::where('id_tempat')->get();
         
-        return redirect()->route('kasirindex','show')->with('success','Tagihan Dibayar');
+        return redirect()->route('kasirindex')->with('success','Tagihan Dibayar');
     }
 
     public function cari(Request $request){

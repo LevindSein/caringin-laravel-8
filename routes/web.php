@@ -72,7 +72,7 @@ Route::get('admin/dashboard',[AdminController::class, 'index'])->name('admininde
 Route::get('manajer/dashboard',[ManajerController::class, 'index'])->name('manajerindex')->middleware('cekmanajer');
 Route::get('keuangan/index',[KeuanganController::class, 'index'])->name('keuanganindex')->middleware('cekkeuangan');
 
-Route::get('kasir/index/',function(){
+Route::get('kasir/index',function(){
     $agent = new Agent();
     if($agent->isDesktop()){
         $platform = 'desktop';

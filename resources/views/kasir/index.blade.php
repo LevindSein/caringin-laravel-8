@@ -201,17 +201,30 @@
     });
 
     //Print Via Bluetooth atau USB
+    function pc_print(data){
+        var socket = new WebSocket("ws://127.0.0.1:40213/");
+        socket.bufferType = "arraybuffer";
+        socket.onerror = function(error) {
+    	  alert("Oops! Sistem gagal melakukan printing");
+        };			
+    	socket.onopen = function() {
+    		socket.send(data);
+    		socket.close(1000, "Work complete");
+    	};
+    }		
+    function android_print(data){
+        window.location.href = data;  
+    }
     function ajax_print(url, btn) {
-        b = $(btn);
-        b.attr('data-old', b.text());
-        b.text('wait');
         $.get(url, function (data) {
-            window.location.href = data;  // main action
-        }).fail(function () {
-            alert("Sistem tidak dapat melakukan printing struk");
-        }).always(function () {
-            b.text(b.attr('data-old'));
-        })
+    		var ua = navigator.userAgent.toLowerCase();
+    		var isAndroid = ua.indexOf("android") > -1; 
+    		if(isAndroid) {
+    		    android_print(data);
+    		}else{
+    		    pc_print(data);
+    		}
+        });
     }
 
     //Show Tagihan
@@ -259,7 +272,8 @@
 
     document.getElementById("printStruk").onclick = function strukPembayaran() {
         var id = document.getElementById("tempatId").value;
-        ajax_print('/kasir/bayar/' + id,this);
+        var btn = document.getElementById("printStruk");
+        ajax_print("{{url('kasir/bayar')}}" + "/" + id,btn);
     }
 </script>
 
