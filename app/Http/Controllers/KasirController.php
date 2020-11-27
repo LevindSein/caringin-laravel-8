@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 use App\Models\Kasir;
@@ -51,21 +52,20 @@ class KasirController extends Controller
             } finally {
                 $printer->close();
             }
-            return view('kasir.print');
         }
         else{
             try{
-                $connector = new WindowsPrintConnector("EPSONLQ");
+                $connector = new WindowsPrintConnector("PrinterPanda");
                         
                 $printer = new Printer($connector);
 
                 $printer -> selectPrintMode();
                 $printer->setJustification(Printer::JUSTIFY_CENTER);
                 $printer -> feed();
-                $printer -> text("====================================================================\n");
-                $printer -> text("                           PT. Pengelola Pusat Perdagangan Caringin.\n");
+                $printer -> text("ID nya adalah = ".$id);
+                $printer -> text("PT. Pengelola Pusat Perdagangan Caringin.\n");
                 $printer -> text("Jl. Soetta No.220 Blok A1 No.21-24\n");
-                $printer -> text("======================    ==========================================\n");
+                $printer -> text("==============================\n");
                 $printer -> feed();
                 
             } catch (Exception $e) {
@@ -74,6 +74,35 @@ class KasirController extends Controller
                 $printer->close();
             }
         }
+    }
+
+    public function rincian($id){
+        $dataset = Tagihan::where([['id_tempat',$id],['stt_lunas',0]])
+        ->select(
+            DB::raw('SUM(sel_listrik) as tagihanListrik'),
+            DB::raw('SUM(sel_airbersih) as tagihanAirBersih'),
+            DB::raw('SUM(sel_keamananipk) as tagihanKeamananIpk'),
+            DB::raw('SUM(sel_kebersihan) as tagihanKebersihan'))
+        ->get();
+
+        $listrik = number_format($dataset[0]->tagihanListrik);
+        $airbersih = number_format($dataset[0]->tagihanAirBersih);
+        $keamananipk = number_format($dataset[0]->tagihanKeamananIpk);
+        $kebersihan = number_format($dataset[0]->tagihanKebersihan);
+        return json_encode(array(
+            "id"=>$id,
+            "tagihanListrik"=>$listrik,
+            "tagihanAirBersih"=>$airbersih,
+            "tagihanKeamananIpk"=>$keamananipk,
+            "tagihanKebersihan"=>$kebersihan,
+        ));
+    }
+
+    public function bayarStore(Request $request){
+        $id = $request->get('tempatId');
+        // $dataset = Tagihan::where('id_tempat')->get();
+        
+        return redirect()->route('kasirindex','show')->with('success','Tagihan Dibayar');
     }
 
     public function cari(Request $request){

@@ -66,8 +66,9 @@
                             class="btn btn-sm btn-warning">Bayar
                         </button>
                     @else
+                        <?php $id = $data[3]; ?>
                         <button
-                            onclick="window.location = '{{url('/kasir/bayar',[$data[3]])}}'"
+                            onclick="ajax_tagihan({{$id}},'{{url('/kasir/rincian',[$id])}}')"
                             class="btn btn-sm btn-warning">Bayar
                         </button>
                     @endif
@@ -85,7 +86,75 @@
 @endsection
 
 @section('modal')
-
+<div
+    class="modal fade"
+    id="rincianTagihan"
+    tabIndex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLabel">Rincian</h3>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form class="user" action="{{url('kasir/bayar/store')}}" method="POST">
+                <div class="modal-body">
+                    @csrf
+                    <br>
+                    <input hidden id="tempatId" name="tempatId"></input>
+                    <div class="col-lg-12 justify-content-between" style="display: flex;flex-wrap: wrap;">
+                        <div>
+                            <span style="color:#3f6ad8;"><strong>Fasilitas</strong></span>
+                        </div>
+                        <div>
+                            <span style="color:#3f6ad8;"><strong>Nominal</strong></span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-group col-lg-12 justify-content-between" style="display:none;flex-wrap:wrap;" id="divListrik">
+                        <div>
+                            <span id="listrik">Listrik</span>
+                        </div>
+                        <div>
+                            <span id="nominalListrik"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-12 justify-content-between" style="display:none;flex-wrap:wrap;" id="divAirBersih">
+                        <div>
+                            <span id="airbersih">Air Bersih</span>
+                        </div>
+                        <div>
+                            <span id="nominalAirBersih"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-12 justify-content-between" style="display:none;flex-wrap:wrap;" id="divKeamananIpk">
+                        <div>
+                            <span id="keamananipk">Keamanan & IPK</span>
+                        </div>
+                        <div>
+                            <span id="nominalKeamananIpk"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-12 justify-content-between" style="display:none;flex-wrap:wrap;" id="divKebersihan">
+                        <div>
+                            <span id="kebersihan">Kebersihan</span>
+                        </div>
+                        <div>
+                            <span id="nominalKebersihan"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="printStruk" class="btn btn-primary btn-sm">Bayar Sekarang</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('js')
@@ -116,35 +185,84 @@
     });
 
     
-$(document).ready(function () {
-    $('#myModal').on('shown.bs.modal', function () {
-        $('#kode').trigger('focus');
+    $(document).ready(function () {
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#kode').trigger('focus');
+        });
     });
-});
 
-$('#kode').on('keypress', function (event) {
-    var regex = new RegExp("^[0-9]+$");
-    var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-    if (!regex.test(key)) {
-       event.preventDefault();
-       return false;
+    $('#kode').on('keypress', function (event) {
+        var regex = new RegExp("^[0-9]+$");
+        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        if (!regex.test(key)) {
+        event.preventDefault();
+        return false;
+        }
+    });
+
+    //Print Via Bluetooth atau USB
+    function ajax_print(url, btn) {
+        b = $(btn);
+        b.attr('data-old', b.text());
+        b.text('wait');
+        $.get(url, function (data) {
+            window.location.href = data;  // main action
+        }).fail(function () {
+            alert("Sistem tidak dapat melakukan printing struk");
+        }).always(function () {
+            b.text(b.attr('data-old'));
+        })
     }
-});
 
-//Print Via Bluetooth
-function ajax_print(url, btn) {
-    b = $(btn);
-    b.attr('data-old', b.text());
-    b.text('wait');
-    $.get(url, function (data) {
-        window.location.href = data;  // main action
-    }).fail(function () {
-        alert("ajax error");
-    }).always(function () {
-        b.text(b.attr('data-old'));
-    })
-}
+    //Show Tagihan
+    function ajax_tagihan(id,url){
+        document.getElementById("tempatId").value = id;
+        jQuery.ajax({
+            type: "GET",
+            url: url,
+            dataType: "json",
+            success: function(response) {
+                if(response.tagihanListrik != 0){
+                    document.getElementById("divListrik").style.display = "flex";
+                    document.getElementById("nominalListrik").innerHTML = response.tagihanListrik;
+                }
+                else{
+                    document.getElementById("divListrik").style.display = "none";
+                }
+                if(response.tagihanAirBersih != 0){
+                    document.getElementById("divAirBersih").style.display = "flex";
+                    document.getElementById("nominalAirBersih").innerHTML = response.tagihanAirBersih;
+                }
+                else{
+                    document.getElementById("divAirBersih").style.display = "none";
+                }
+                if(response.tagihanKeamananIpk != 0){
+                    document.getElementById("divKeamananIpk").style.display = "flex";
+                    document.getElementById("nominalKeamananIpk").innerHTML = response.tagihanKeamananIpk;
+                }
+                else{
+                    document.getElementById("divKeamananIpk").style.display = "none";
+                }
+                if(response.tagihanKebersihan != 0){
+                    document.getElementById("divKebersihan").style.display = "flex";
+                    document.getElementById("nominalKebersihan").innerHTML = response.tagihanKebersihan;
+                }
+                else{
+                    document.getElementById("divKebersihan").style.display = "none";
+                }
+            }
+        }).fail(function () {
+            alert("Oops! Terjadi Kesalahan Sistem");
+        });
+        $('#rincianTagihan').modal('show');
+    }
+
+    document.getElementById("printStruk").onclick = function strukPembayaran() {
+        var id = document.getElementById("tempatId").value;
+        ajax_print('/kasir/bayar/' + id,this);
+    }
 </script>
+
 @if($platform == 'mobile')
 <script src="{{asset('js/qrCodeScanner.js')}}"></script>
 @endif
