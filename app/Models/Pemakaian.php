@@ -103,15 +103,14 @@ class Pemakaian extends Model
         for($i=0; $i<count($blok); $i++){
             $dataset[$i][0] = $blok[$i]->blok;
             $dataset[$i][1] = Tagihan::
-            leftJoin('user','tagihan.id_pengguna','=','user.id')
-            ->where([
+            where([
                 ['tagihan.bln_pakai',$bulan],
                 ['tagihan.stt_listrik',1],
                 ['tagihan.blok',$blok[$i]->blok]
             ])
             ->select(
                 'tagihan.kd_kontrol as kontrol',
-                'user.nama as pengguna',
+                'tagihan.nama as pengguna',
                 'tagihan.daya_listrik as daya',
                 'tagihan.awal_listrik as lalu',
                 'tagihan.akhir_listrik as baru',
@@ -222,15 +221,14 @@ class Pemakaian extends Model
         for($i=0; $i<count($blok); $i++){
             $dataset[$i][0] = $blok[$i]->blok;
             $dataset[$i][1] = Tagihan::
-            leftJoin('user','tagihan.id_pengguna','=','user.id')
-            ->where([
+            where([
                 ['tagihan.bln_pakai',$bulan],
                 ['tagihan.stt_airbersih',1],
                 ['tagihan.blok',$blok[$i]->blok]
             ])
             ->select(
                 'tagihan.kd_kontrol as kontrol',
-                'user.nama as pengguna',
+                'tagihan.nama as pengguna',
                 'tagihan.awal_airbersih as lalu',
                 'tagihan.akhir_airbersih as baru',
                 'tagihan.pakai_airbersih as pakai',
@@ -275,10 +273,9 @@ class Pemakaian extends Model
                     ['tagihan.bln_pakai',$bulan],
                     ['tagihan.stt_keamananipk',1]
                 ])
-            ->leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
             ->select(
                     'tagihan.blok',
-                    DB::raw('SUM(tempat_usaha.jml_alamat) as pengguna'),
+                    DB::raw('SUM(tagihan.jml_alamat) as pengguna'),
                     DB::raw('SUM(tagihan.sub_keamananipk) as subtotal'),
                     DB::raw('SUM(tagihan.dis_keamananipk) as diskon'),
                     DB::raw('SUM(tagihan.ttl_keamananipk) as tagihan'),
@@ -335,12 +332,10 @@ class Pemakaian extends Model
                 ['tagihan.stt_keamananipk',1],
                 ['tagihan.blok',$blok[$i]->blok]
             ])
-            ->leftJoin('user','tagihan.id_pengguna','=','user.id')
-            ->leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
             ->select(
                 'tagihan.kd_kontrol as kontrol',
-                'user.nama as pengguna',
-                'tempat_usaha.jml_alamat as jumlah',
+                'tagihan.nama as pengguna',
+                'tagihan.jml_alamat as jumlah',
                 'tagihan.sub_keamananipk as subtotal',
                 'tagihan.dis_keamananipk as diskon',
                 'tagihan.ttl_keamananipk as tagihan',
@@ -356,10 +351,8 @@ class Pemakaian extends Model
                 ['tagihan.stt_keamananipk',1],
                 ['tagihan.blok',$blok[$i]->blok]
             ])
-            ->leftJoin('user','tagihan.id_pengguna','=','user.id')
-            ->leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
             ->select(
-                DB::raw('SUM(tempat_usaha.jml_alamat) as jumlah'),
+                DB::raw('SUM(tagihan.jml_alamat) as jumlah'),
                 DB::raw('SUM(tagihan.sub_keamananipk) as subtotal'),
                 DB::raw('SUM(tagihan.dis_keamananipk) as diskon'),
                 DB::raw('SUM(tagihan.ttl_keamananipk) as tagihan'),
@@ -377,10 +370,9 @@ class Pemakaian extends Model
                     ['tagihan.bln_pakai',$bulan],
                     ['tagihan.stt_kebersihan',1]
                 ])
-            ->leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
             ->select(
                     'tagihan.blok',
-                    DB::raw('SUM(tempat_usaha.jml_alamat) as pengguna'),
+                    DB::raw('SUM(tagihan.jml_alamat) as pengguna'),
                     DB::raw('SUM(tagihan.sub_kebersihan) as subtotal'),
                     DB::raw('SUM(tagihan.dis_kebersihan) as diskon'),
                     DB::raw('SUM(tagihan.ttl_kebersihan) as tagihan'),
@@ -437,12 +429,10 @@ class Pemakaian extends Model
                 ['tagihan.stt_kebersihan',1],
                 ['tagihan.blok',$blok[$i]->blok]
             ])
-            ->leftJoin('user','tagihan.id_pengguna','=','user.id')
-            ->leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
             ->select(
                 'tagihan.kd_kontrol as kontrol',
-                'user.nama as pengguna',
-                'tempat_usaha.jml_alamat as jumlah',
+                'tagihan.nama as pengguna',
+                'tagihan.jml_alamat as jumlah',
                 'tagihan.sub_kebersihan as subtotal',
                 'tagihan.dis_kebersihan as diskon',
                 'tagihan.ttl_kebersihan as tagihan',
@@ -458,10 +448,8 @@ class Pemakaian extends Model
                 ['tagihan.stt_kebersihan',1],
                 ['tagihan.blok',$blok[$i]->blok]
             ])
-            ->leftJoin('user','tagihan.id_pengguna','=','user.id')
-            ->leftJoin('tempat_usaha','tagihan.id_tempat','=','tempat_usaha.id')
             ->select(
-                DB::raw('SUM(tempat_usaha.jml_alamat) as jumlah'),
+                DB::raw('SUM(tagihan.jml_alamat) as jumlah'),
                 DB::raw('SUM(tagihan.sub_kebersihan) as subtotal'),
                 DB::raw('SUM(tagihan.dis_kebersihan) as diskon'),
                 DB::raw('SUM(tagihan.ttl_kebersihan) as tagihan'),

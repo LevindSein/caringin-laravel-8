@@ -71,6 +71,7 @@ class Tagihan extends Model
         'rea_listrik',
         'sel_listrik',
         'den_listrik',
+        'jml_alamat',
         'sub_keamananipk',
         'dis_keamananipk',
         'ttl_keamananipk',
@@ -1115,6 +1116,17 @@ class Tagihan extends Model
             $d->sub_kebersihan = $d->ttl_kebersihan;
             $d->stt_kebersihan = 1;
             $d->save();
+        }
+    }
+
+    public static function alamat(){
+        $dataset = Tagihan::where('ttl_keamananipk','!=',0)->orWhere('ttl_kebersihan','!=',0)->get();
+
+        foreach($dataset as $data){
+            $jml = TempatUsaha::find($data->id_tempat);
+            $jml = $jml->jml_alamat;
+            $data->jml_alamat = $jml;
+            $data->save();
         }
     }
 }
