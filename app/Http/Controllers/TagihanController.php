@@ -56,11 +56,11 @@ class TagihanController extends Controller
             if(Session::get('tagihan') != 'done'){
                 if($now < $check){
                     //Check Tagihan Pemakaian Bulan Lalu
-                    Tagihan::checking1();
+                    // Tagihan::checking1();
                 }
                 else if($now >= $check){
                     //Check Tagihan Pemakaian Bulan Lalu
-                    Tagihan::checking2();
+                    // Tagihan::checking2();
                 }
             }
         }
@@ -188,16 +188,13 @@ class TagihanController extends Controller
 
         /* Name of shop */
         $printer -> selectPrintMode();
-        $printer -> setJustification(Printer::JUSTIFY_RIGHT);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text("================================================\n");
         $printer -> text("       PT. Pengelola Pusat Perdagangan Caringin.\n");
         $printer -> selectPrintMode();
-        $printer -> setJustification(Printer::JUSTIFY_RIGHT);
+        $printer -> setJustification(Printer::JUSTIFY_CENTER);
         $printer -> text("Jl. Soetta No.220 Blok A1 No.21-24\n");
         $printer -> text("======================    ======================\n");
-        $printer -> feed();
-
-        $printer -> text("Terimakasih telah melakukan Pembayaran\n");
         $printer -> feed();
         // $printer -> cut();
         // $printer -> pulse();

@@ -147,6 +147,47 @@
                             <span id="nominalKebersihan"></span>
                         </div>
                     </div>
+                    <div class="form-group col-lg-12 justify-content-between" style="display:none;flex-wrap:wrap;" id="divAirKotor">
+                        <div>
+                            <span id="airkotor">Air Kotor</span>
+                        </div>
+                        <div>
+                            <span id="nominalAirKotor"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-12 justify-content-between" style="display:none;flex-wrap:wrap;" id="divTunggakan">
+                        <div>
+                            <span id="tunggakan">Tunggakan</span>
+                        </div>
+                        <div>
+                            <span id="nominalTunggakan"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-12 justify-content-between" style="display:none;flex-wrap:wrap;" id="divDenda">
+                        <div>
+                            <span id="denda">Denda</span>
+                        </div>
+                        <div>
+                            <span id="nominalDenda"></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-12 justify-content-between" style="display:none;flex-wrap:wrap;" id="divLain">
+                        <div>
+                            <span id="lain">Lain - Lain</span>
+                        </div>
+                        <div>
+                            <span id="nominalLain"></span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="col-lg-12 justify-content-between" style="display: flex;flex-wrap: wrap;">
+                        <div>
+                            <span style="color:#3f6ad8;"><strong>Total</strong></span>
+                        </div>
+                        <div>
+                            <h3><strong><span id="nominalTotal" style="color:#3f6ad8;"></span></strong></h3>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" id="printStruk" class="btn btn-primary btn-sm">Bayar Sekarang</button>
@@ -200,12 +241,98 @@
         }
     });
 
+    //Show Tagihan
+    function ajax_tagihan(id,url){
+        document.getElementById("tempatId").value = id;
+        jQuery.ajax({
+            type: "GET",
+            url: url,
+            dataType: "json",
+            success: function(response) {
+                if(response.tagihanListrik != 0){
+                    document.getElementById("divListrik").style.display = "flex";
+                    document.getElementById("nominalListrik").innerHTML = response.tagihanListrik;
+                }
+                else{
+                    document.getElementById("divListrik").style.display = "none";
+                }
+
+                if(response.tagihanAirBersih != 0){
+                    document.getElementById("divAirBersih").style.display = "flex";
+                    document.getElementById("nominalAirBersih").innerHTML = response.tagihanAirBersih;
+                }
+                else{
+                    document.getElementById("divAirBersih").style.display = "none";
+                }
+
+                if(response.tagihanKeamananIpk != 0){
+                    document.getElementById("divKeamananIpk").style.display = "flex";
+                    document.getElementById("nominalKeamananIpk").innerHTML = response.tagihanKeamananIpk;
+                }
+                else{
+                    document.getElementById("divKeamananIpk").style.display = "none";
+                }
+
+                if(response.tagihanKebersihan != 0){
+                    document.getElementById("divKebersihan").style.display = "flex";
+                    document.getElementById("nominalKebersihan").innerHTML = response.tagihanKebersihan;
+                }
+                else{
+                    document.getElementById("divKebersihan").style.display = "none";
+                }
+
+                if(response.tagihanAirKotor != 0){
+                    document.getElementById("divAirKotor").style.display = "flex";
+                    document.getElementById("nominalAirKotor").innerHTML = response.tagihanAirKotor;
+                }
+                else{
+                    document.getElementById("divAirKotor").style.display = "none";
+                }
+
+                if(response.tagihanLain != 0){
+                    document.getElementById("divLain").style.display = "flex";
+                    document.getElementById("nominalLain").innerHTML = response.tagihanLain;
+                }
+                else{
+                    document.getElementById("divLain").style.display = "none";
+                }
+                
+                if(response.tagihanTunggakan != 0){
+                    document.getElementById("divTunggakan").style.display = "flex";
+                    document.getElementById("nominalTunggakan").innerHTML = response.tagihanTunggakan;
+                }
+                else{
+                    document.getElementById("divTunggakan").style.display = "none";
+                }
+
+                if(response.tagihanDenda != 0){
+                    document.getElementById("divDenda").style.display = "flex";
+                    document.getElementById("nominalDenda").innerHTML = response.tagihanDenda;
+                }
+                else{
+                    document.getElementById("divDenda").style.display = "none";
+                }
+                
+                document.getElementById("nominalTotal").innerHTML = response.tagihanTotal;
+            }
+        }).fail(function () {
+            alert("Oops! Terjadi Kesalahan Sistem");
+        });
+        $('#rincianTagihan').modal('show');
+    }
+
+    document.getElementById("printStruk").onclick = function strukPembayaran() {
+        var id = document.getElementById("tempatId").value;
+        var btn = document.getElementById("printStruk");
+        ajax_print("{{url('kasir/bayar')}}" + "/" + id,btn);
+    }
+
     //Print Via Bluetooth atau USB
     function pc_print(data){
         var socket = new WebSocket("ws://127.0.0.1:40213/");
         socket.bufferType = "arraybuffer";
         socket.onerror = function(error) {
-    	  alert("Oops! Sistem gagal melakukan printing");
+    	  alert("Error");
         };			
     	socket.onopen = function() {
     		socket.send(data);
@@ -225,55 +352,6 @@
     		    pc_print(data);
     		}
         });
-    }
-
-    //Show Tagihan
-    function ajax_tagihan(id,url){
-        document.getElementById("tempatId").value = id;
-        jQuery.ajax({
-            type: "GET",
-            url: url,
-            dataType: "json",
-            success: function(response) {
-                if(response.tagihanListrik != 0){
-                    document.getElementById("divListrik").style.display = "flex";
-                    document.getElementById("nominalListrik").innerHTML = response.tagihanListrik;
-                }
-                else{
-                    document.getElementById("divListrik").style.display = "none";
-                }
-                if(response.tagihanAirBersih != 0){
-                    document.getElementById("divAirBersih").style.display = "flex";
-                    document.getElementById("nominalAirBersih").innerHTML = response.tagihanAirBersih;
-                }
-                else{
-                    document.getElementById("divAirBersih").style.display = "none";
-                }
-                if(response.tagihanKeamananIpk != 0){
-                    document.getElementById("divKeamananIpk").style.display = "flex";
-                    document.getElementById("nominalKeamananIpk").innerHTML = response.tagihanKeamananIpk;
-                }
-                else{
-                    document.getElementById("divKeamananIpk").style.display = "none";
-                }
-                if(response.tagihanKebersihan != 0){
-                    document.getElementById("divKebersihan").style.display = "flex";
-                    document.getElementById("nominalKebersihan").innerHTML = response.tagihanKebersihan;
-                }
-                else{
-                    document.getElementById("divKebersihan").style.display = "none";
-                }
-            }
-        }).fail(function () {
-            alert("Oops! Terjadi Kesalahan Sistem");
-        });
-        $('#rincianTagihan').modal('show');
-    }
-
-    document.getElementById("printStruk").onclick = function strukPembayaran() {
-        var id = document.getElementById("tempatId").value;
-        var btn = document.getElementById("printStruk");
-        ajax_print("{{url('kasir/bayar')}}" + "/" + id,btn);
     }
 </script>
 
