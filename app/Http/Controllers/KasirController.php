@@ -10,6 +10,8 @@ use App\Models\Kasir;
 use App\Models\Tagihan;
 use App\Models\Item;
 use App\Models\StrukMobile;
+use App\Models\StrukLarge;
+use App\Models\StrukLapangan;
 
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
@@ -26,6 +28,68 @@ use Exception;
 class KasirController extends Controller
 {
     public function bayar($id){
+        date_default_timezone_set('Asia/Jakarta');
+        $time = date("d/m/Y H:i:s", time());
+        $blnSekarang = date("Y-m", time());
+        $blnLalu = strtotime($blnSekarang);
+        $blnPakai = date("Y-m", strtotime("-2 month", $blnLalu)); //-1 month seharusnya
+        $blnTagihan = Kasir::indoBln($blnSekarang);
+
+        $tagihan = Tagihan::where([['id_tempat',$id],['stt_lunas',0],['bln_pakai',$blnPakai]])
+        ->select(
+            'nama as pengguna',
+            'kd_kontrol as kontrol',
+            'awal_airbersih as awalAir',
+            'akhir_airbersih as akhirAir',
+            'pakai_airbersih as pakaiAir',
+            'awal_listrik as awalListrik',
+            'akhir_listrik as akhirListrik',
+            'pakai_listrik as pakaiListrik',
+            'sel_listrik as listrik', 
+            'sel_airbersih as airbersih', 
+            'sel_keamananipk as keamananipk',
+            'sel_kebersihan as kebersihan',
+            'sel_airkotor as airkotor',
+            'sel_lain as lain')
+        ->first();
+
+        $awalListrik = number_format($tagihan->awalListrik);
+        $akhirListrik = number_format($tagihan->akhirListrik);
+        $pakaiListrik = number_format($tagihan->pakaiListrik);
+        $listrik = number_format($tagihan->listrik);
+        
+        $awalAir = number_format($tagihan->awalAir);
+        $akhirAir = number_format($tagihan->akhirAir);
+        $pakaiAir = number_format($tagihan->pakaiAir);
+        $airbersih = number_format($tagihan->airbersih);
+
+        $keamananipk = number_format($tagihan->keamananipk);
+
+        $kebersihan = number_format($tagihan->kebersihan);
+
+        $airkotor = number_format($tagihan->airkotor);
+
+        $pengguna = $tagihan->pengguna;
+        $kontrol = $tagihan->kontrol;
+
+        $tunggakan = Tagihan::where([['id_tempat',$id],['stt_lunas',0],['bln_pakai','<',$blnPakai]])
+        ->select(
+            DB::raw('SUM(sel_tagihan) as tunggakan'),
+            DB::raw('SUM(den_tagihan) as denda'))
+        ->get();
+
+        $total = Tagihan::where([['id_tempat',$id],['stt_lunas',0]])
+        ->select(DB::raw('SUM(sel_lain) as lain'),DB::raw('SUM(sel_tagihan) as total'))
+        ->get();
+
+        $denda = number_format($tunggakan[0]->denda);
+        $tunggakan = number_format($tunggakan[0]->tunggakan - $tagihan->lain);
+        $lain = number_format($total[0]->lain);
+
+        $total = number_format($total[0]->total);
+
+        $kasir = Session::get('username');
+
         $agent = new Agent();
         if($agent->isDesktop()){
             $platform = 'desktop';
@@ -34,99 +98,99 @@ class KasirController extends Controller
             $platform = 'mobile';
         }
 
+        $profile = CapabilityProfile::load("POS-5890");
+        $connector = new RawbtPrintConnector();
+        $printer = new Printer($connector,$profile);
+
         if($platform == 'mobile'){
             try {
-                $pedagang = "";
-                $anggota = "";
-                $air = 0;
-                $listrik = 0;
-                $keamanan = 0;
-                $kebersihan = 0;
-                $denda = 0;
-                $ttl = 0;
-                foreach($dataset as $d){
-                    $pedagang = $d->NM_PEDAGANG;
-                    $anggota = $d->NO_ANGGOTA;
-                    $air = $air + $d->TTL_AIR;
-                    $listrik = $listrik + $d->TTL_LISTRIK;
-                    $keamanan = $keamanan + $d->TTL_IPKKEAMANAN;
-                    $kebersihan = $kebersihan + $d->TTL_KEBERSIHAN;
-                    $denda = $denda + $d->DENDA;
-                    $ttl = $ttl + $d->TTL_TAGIHAN;
-                }
-                $air = number_format(1000000);
-                $listrik = number_format(2541200);
-                $keamanan = number_format(145000);
-                $kebersihan = number_format(260000);
-                $denda = number_format(100000);
-                $airkotor = number_format(0);
-                $lain = number_format(0);
-                $ttl = number_format(3674000);
+                // //MOBILE
+                // $items = array(
+                //     new StrukMobile("Listrik", $awalListrik, $akhirListrik, $pakaiListrik, $listrik, 'listrik'),
+                //     new StrukMobile("Air Bersih", $awalAir, $akhirAir, $pakaiAir, $airbersih, 'airbersih'),
+                //     new StrukMobile("K.aman IPK", '', '', '', $keamananipk, 'keamananipk'),
+                //     new StrukMobile("Kebersihan", '', '', '', $kebersihan, 'kebersihan'),
+                //     new StrukMobile("Air Kotor", '', '', '', $airkotor, 'airkotor'),
+                //     new StrukMobile("Tunggakan", '', '', '', $tunggakan, 'tunggakan'),
+                //     new StrukMobile("Denda", '', '', '', $denda, 'denda'),
+                //     new StrukMobile("Lain Lain", '', '', '', $lain, 'lain'),
+                // );
+                // $printer -> setJustification(Printer::JUSTIFY_CENTER);
+                // $printer -> text("================================================\n");
+                // $printer -> text("Badan Pengelola Pusat Perdagangan Caringin.\n");
+                // $printer -> selectPrintMode();
+                // $printer -> text("Jl. Soetta No.220 Blok A1 No.21-24\n");
+                // $printer -> text("================================================\n");
+                // $printer -> setJustification(Printer::JUSTIFY_LEFT);
+                // $printer -> text("Pedagang : ".$pengguna."\n");
+                // $printer -> text("Kontrol  : ".$kontrol."\n");
+                // $printer -> text("Tagihan  : ".$blnTagihan."\n");
+                // $printer -> text("Kasir    : ".$kasir."\n");
+                // $printer -> setJustification(Printer::JUSTIFY_CENTER);
+                // $printer -> text("------------------------------------------------\n");
+                // $printer -> setJustification(Printer::JUSTIFY_LEFT);
+                // $printer -> setEmphasis(true);
+                // $printer -> text(new StrukMobile('Fasilitas', 'Awal', 'Akhir', 'Pakai', 'Rp.', 'header'));
+                // $printer -> setEmphasis(false);
+                // $printer -> text("------------------------------------------------\n");
 
-                $kontrol = 'A-1-001';
-                $bulanTagihan = 'Oktober 2020';
+                // foreach ($items as $item) {
+                //     $printer -> text($item);
+                // }
+                
+                // $printer -> setJustification(Printer::JUSTIFY_CENTER);
+                // $printer -> text("------------------------------------------------\n");
+                // $printer -> setJustification(Printer::JUSTIFY_LEFT);
+                // $printer -> text(new Item('Total', $total));
+                // $printer -> setJustification(Printer::JUSTIFY_CENTER);
+                // $printer -> text("------------------------------------------------\n");
+                // $printer -> text("Total pembayaran telah termasuk PPN\n");
+                // $printer -> text("Dibayar pada ".$time. "\n");
+                // $printer->cut();
 
-                //Connector
-                $profile = CapabilityProfile::load("POS-5890");
-                $connector = new RawbtPrintConnector();
-                $printer = new Printer($connector, $profile);
-
-                /* Information for the receipt */
+                //LAPANGAN
                 $items = array(
-                    new Item("Listrik", $listrik),
-                    new Item("Air Bersih", $airbersih),
-                    new Item("Keamanan IPK", $keamanan),
-                    new Item("Kebersihan", $kebersihan),
-                    new Item("Air Kotor", $airkotor),
-                    new Item("Denda", $denda),
-                    new Item("Tunggakan", $tunggakan),
-                    new Item("Lain Lain", $lain),
+                    new StrukLapangan("Listrik", $listrik),
+                    new StrukLapangan("Air Bersih", $airbersih),
+                    new StrukLapangan("K.aman IPK", $keamananipk),
+                    new StrukLapangan("Kebersihan", $kebersihan),
+                    new StrukLapangan("Air Kotor", $airkotor),
+                    new StrukLapangan("Tunggakan", $tunggakan),
+                    new StrukLapangan("Denda", $denda),
+                    new StrukLapangan("Lain Lain", $lain),
                 );
-                $total = new Item('Total', $ttl);
+                $printer->setJustification(Printer::JUSTIFY_CENTER);
+                $printer->text("Badan\n");
+                $printer->text("Pengelola Pusat Perdagangan\n");
+                $printer->text("Caringin\n");
+                $printer->selectPrintMode();
+                $printer->text("Jl.Soetta 220 Blok A1 No.21-24\n");
+                $printer->text("--------------------------------\n");
+                $printer->setJustification(Printer::JUSTIFY_LEFT);
+                $printer->text("Pdg: ".$pengguna."\n");
+                $printer->text("Alm: ".$kontrol."\n");
+                $printer->text("Tgh: ".$blnTagihan."\n");
+                $printer->text("Ksr: ".$kasir."\n");
+                $printer->setJustification(Printer::JUSTIFY_CENTER);
+                $printer->text("--------------------------------\n");
+                $printer->setJustification(Printer::JUSTIFY_LEFT);
+                $printer->setEmphasis(true);
+                $printer->text(new StrukLapangan('Fasilitas', 'Rp.'));
+                $printer->setEmphasis(false);
+                $printer->text("--------------------------------\n");
 
-                /* Name of shop */
-                $printer -> setJustification(Printer::JUSTIFY_CENTER);
-                $printer -> text("================================================\n");
-                $printer -> text("BADAN PENGELOLA PUSAT PERDAGANGAN CARINGIN\n");
-                $printer -> selectPrintMode();
-                $printer -> text("KEMITRAAN KOPPAS INDUK BANDUNG\n");
-                $printer -> text("================================================\n");
-                $printer -> setJustification(Printer::JUSTIFY_LEFT);
-                $printer -> text("Pedagang : ".$pedagang."\n");
-                $printer -> text("Tagihan  : ".$bulanTagihan."\n");
-                $printer -> text("Kasir    : ".$kasir."\n");
-                $printer -> setJustification(Printer::JUSTIFY_CENTER);
-                $printer -> text("================================================\n");
-                $printer -> feed();
-
-                /* Title of receipt */
-                $printer -> setJustification(Printer::JUSTIFY_LEFT);
-                $printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-                $printer -> text($kontrol."\n");
-                $printer -> selectPrintMode();
-
-                /* Items */
-                $printer -> setJustification(Printer::JUSTIFY_LEFT);
-                $printer -> setEmphasis(true);
-                $printer -> text(new Item('', 'Rp'));
-                $printer -> setEmphasis(false);
                 foreach ($items as $item) {
-                    $printer -> text($item);
+                    $printer->text($item);
                 }
                 
-                $printer -> setJustification(Printer::JUSTIFY_CENTER);
-                $printer -> text("------------------------------------------------\n");
-                $printer -> setJustification(Printer::JUSTIFY_LEFT);
-                $printer -> text($total);
-                $printer -> setJustification(Printer::JUSTIFY_CENTER);
-                $printer -> text("------------------------------------------------\n");
-                $printer -> text("Terimakasih telah melakukan Pembayaran\n");
-                $printer -> text($date . "\n");
-
-                //Print
-                $printer->cut();
-                $printer->pulse();
-            
+                $printer->setJustification(Printer::JUSTIFY_CENTER);
+                $printer->text("--------------------------------\n");
+                $printer->setJustification(Printer::JUSTIFY_LEFT);
+                $printer->text(new StrukLapangan('Total', $total));
+                $printer->setJustification(Printer::JUSTIFY_CENTER);
+                $printer->text("--------------------------------\n");
+                $printer->text("Total pembayaran termasuk PPN\n");
+                $printer->text("Dibayar pada ".$time. "\n\n\n\n");
             } catch (Exception $e) {
                 return redirect()->route('kasirindex')->with('error','Kesalahan Sistem');
             } finally {
@@ -135,51 +199,32 @@ class KasirController extends Controller
         }
         else{
             try{
-                // $profile = CapabilityProfile::load("POS-5890");
-                // $connector = new RawbtPrintConnector();
-                        
-                // $printer = new Printer($connector,$profile);
-
-                // // Content
-                // $printer->text("=================================================================================================\n");
-                // $printer->text("                           BADAN PENGELOLA PUSAT PERDAGANGAN CARINGIN                            \n");
-                // $printer->text("                                 KEMITRAAN KOPPAS INDUK BANDUNG                                  \n");
-                // $printer->text("                                        SEGI PEMBAYARAN                                          \n");
-                // $printer->text("   Fahni Amsyari                                                        Kasir : Fahni Amsyari    \n");
-                // $printer->text("   A-1-001                                                            Tagihan : Oktober 2020     \n");
-                // $printer->text("----- FASILITAS -----------  AWAL -------- AKHIR --------- PAKAI ---------------- JUMLAH --------\n");
-                // $printer->text("      Listrik                                200 kWH                                             \n");
-                // $printer->text("      Air Bersih                             50 M3                                               \n");
-                // $printer->text("      Keamanan & IPK                         2 unit                                              \n");
-                // $printer->text("      Kebersihan                             2 unit                                              \n");
-                // $printer->text("      Air Kotor                                                                                  \n");
-                // $printer->text("      Tunggakan                                                                                  \n");
-                // $printer->text("      Denda                                                                                      \n");
-                // $printer->text("      Lain - Lain                                                                                \n");
-                // $printer->text("-------------------------------------------------------------------------------------------------\n");
-                // $printer->text("   Total Pembayaran                                                                              \n");
-                // $printer->text("-------------------------------------------------------------------------------------------------\n");
-                // $printer->text("            Tanggal : 28 November 2020 - Total Pembayaran telah termasuk PPN                     \n");
-                // $printer->feed();
-                
-                $profile = CapabilityProfile::load("POS-5890");
-                $connector = new RawbtPrintConnector();
-                        
-                $printer = new Printer($connector,$profile);
-
                 $items = array(
-                    new StrukMobile("Listrik", 1000000, 1000000, 1000000, 1000000, 'listrik'),
-                    new StrukMobile("Air Bersih", 5500000, 5500000, 5500000, 5500000, 'airbersih'),
-                    new StrukMobile("K.aman IPK", '', '', '', 120000, 'keamananipk'),
-                    new StrukMobile("Kebersihan", '', '', '', 120000, 'kebersihan'),
-                    new StrukMobile("Air Kotor", '', '', '', 120000, 'airkotor'),
-                    new StrukMobile("Tunggakan", '', '', '', 120000, 'tunggakan'),
-                    new StrukMobile("Denda", '', '', '', 120000, 'denda'),
-                    new StrukMobile("Lain Lain", '', '', '', 120000, 'lain'),
+                    new StrukLarge("Listrik", $awalListrik, $akhirListrik, $pakaiListrik, $listrik, 'listrik'),
+                    new StrukLarge("Air Bersih", $awalAir, $akhirAir, $pakaiAir, $airbersih, 'airbersih'),
+                    new StrukLarge("K.aman IPK", '', '', '', $keamananipk, 'keamananipk'),
+                    new StrukLarge("Kebersihan", '', '', '', $kebersihan, 'kebersihan'),
+                    new StrukLarge("Air Kotor", '', '', '', $airkotor, 'airkotor'),
+                    new StrukLarge("Tunggakan", '', '', '', $tunggakan, 'tunggakan'),
+                    new StrukLarge("Denda", '', '', '', $denda, 'denda'),
+                    new StrukLarge("Lain Lain", '', '', '', $lain, 'lain'),
                 );
+
+                // Content
+                $printer->text("                           BADAN PENGELOLA PUSAT PERDAGANGAN CARINGIN                            \n");
+                $printer->text("                                 KEMITRAAN KOPPAS INDUK BANDUNG                                  \n");
+                $printer->text("                                        SEGI PEMBAYARAN                                          \n");
+                $printer->text("=================================================================================================\n");
+                $printer->text(new StrukLarge("Pengguna : ".$pengguna, '', '', '', "Kasir   : ".$kasir, 'header'));
+                $printer->text(new StrukLarge("Kontrol  : ".$kontrol, '', '', '', "Tagihan : ".$blnTagihan, 'header'));
+                $printer->text("--- FASILITAS --------------- AWAL ------------- AKHIR ------------- PAKAI ----------- JUMLAH ---\n");
                 foreach ($items as $item) {
                     $printer -> text($item);
                 }
+                $printer->text("-------------------------------------------------------------------------------------------------\n");
+                $printer->text(new StrukLarge("Total Pembayaran", '', '', '', "Rp. ".$total, 'total'));
+                $printer->text("-------------------------------------------------------------------------------------------------\n");
+                $printer->text(new StrukLarge("Dibayar pada ".$time." - Total pembayaran telah termasuk PPN", '', '', '', '', 'footer')."\n");
             } catch (Exception $e) {
                 return redirect()->route('kasirindex')->with('error','Kesalahan Sistem');
             } finally {
@@ -192,9 +237,9 @@ class KasirController extends Controller
         date_default_timezone_set('Asia/Jakarta');
         $bulan = date("Y-m", time());
         $time = strtotime($bulan);
-        $bulan = date("Y-m", strtotime("-1 month", $time));
+        $bulan = date("Y-m", strtotime("-2 month", $time)); //-1 month seharusnya
 
-        $dataset = Tagihan::where([['id_tempat',$id],['stt_lunas',0],['bln_pakai','!=',$bulan]])
+        $dataset = Tagihan::where([['id_tempat',$id],['stt_lunas',0],['bln_pakai','<',$bulan]])
         ->select(
             DB::raw('SUM(sel_tagihan) as tunggakan'),
             DB::raw('SUM(den_tagihan) as denda'))
@@ -203,8 +248,7 @@ class KasirController extends Controller
         $tunggakan = number_format($dataset[0]->tunggakan);
         $denda = number_format($dataset[0]->denda);
         
-        
-        $dataset = Tagihan::where([['id_tempat',$id],['stt_lunas',0],['bln_pakai','!=',$bulan]])
+        $dataset = Tagihan::where([['id_tempat',$id],['stt_lunas',0],['bln_pakai',$bulan]])
         ->select(
             'sel_listrik',
             'sel_airbersih',

@@ -30,8 +30,8 @@ class StrukMobile extends Model
             $fasilitasWidth = 8;
             $awalWidth = 10;
             $akhirWidth = 10;
-            $pakaiWidth = 10;
-            $hargaWidth = 10;
+            $pakaiWidth = 7;
+            $hargaWidth = 13;
             $fasilitasShow = str_pad($this->fasilitas, $fasilitasWidth) ;
             $awalShow = str_pad($this->awal, $awalWidth, ' ', STR_PAD_LEFT);
             $akhirShow = str_pad($this->akhir, $akhirWidth, ' ', STR_PAD_LEFT);
@@ -44,8 +44,8 @@ class StrukMobile extends Model
             $fasilitasWidth = 8;
             $awalWidth = 8;
             $akhirWidth = 10;
-            $pakaiWidth = 10;
-            $hargaWidth = 10;
+            $pakaiWidth = 7;
+            $hargaWidth = 13;
             $fasilitasShow = str_pad($this->fasilitas, $fasilitasWidth) ;
             $awalShow = str_pad($this->awal, $awalWidth, ' ', STR_PAD_LEFT);
             $akhirShow = str_pad($this->akhir, $akhirWidth, ' ', STR_PAD_LEFT);
@@ -60,6 +60,20 @@ class StrukMobile extends Model
             $fasilitasShow = str_pad($this->fasilitas, $fasilitasWidth) ;
             $hargaShow = str_pad($this->harga, $hargaWidth, ' ', STR_PAD_LEFT);
             return "$fasilitasShow$hargaShow\n";
+        }
+
+        if($this->status == 'header'){
+            $fasilitasWidth = 8;
+            $awalWidth = 9;
+            $akhirWidth = 10;
+            $pakaiWidth = 7;
+            $hargaWidth = 13;
+            $fasilitasShow = str_pad($this->fasilitas, $fasilitasWidth) ;
+            $awalShow = str_pad($this->awal, $awalWidth, ' ', STR_PAD_LEFT);
+            $akhirShow = str_pad($this->akhir, $akhirWidth, ' ', STR_PAD_LEFT);
+            $pakaiShow = str_pad($this->pakai, $pakaiWidth, ' ', STR_PAD_LEFT);
+            $hargaShow = str_pad($this->harga, $hargaWidth, ' ', STR_PAD_LEFT);
+            return "$fasilitasShow$awalShow$akhirShow$pakaiShow$hargaShow\n";
         }
     }
 }

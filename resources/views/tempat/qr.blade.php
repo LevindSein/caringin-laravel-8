@@ -89,7 +89,7 @@
                     var cmds =  "^XA";
                     cmds += "^FO150,50^ABB,30,18^BQN,2,10^FDQA {{$kode}} ^FS";
                     cmds += "^FO110,50^ABB,25,12^FD {{$kontrol}} ^FS";
-                    cmds += "^FO70,50^ABB,25,12^FD Alamat ^FS";
+                    cmds += "^FO70,50^ABB,25,12^FD KONTROL ^FS";
                     cmds += "^XZ";
                     
                     cpj.printerCommands = cmds;

@@ -38,4 +38,23 @@ class Kasir extends Model
         }
         return $dataset;
     }
+
+    public static function indoBln($date){
+        $bulan = array (
+            1 =>   'Januari',
+            'Februari',
+            'Maret',
+            'April',
+            'Mei',
+            'Juni',
+            'Juli',
+            'Agustus',
+            'September',
+            'Oktober',
+            'November',
+            'Desember'
+        );
+        $pecahkan = explode('-', $date);
+        return $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
+    }
 }

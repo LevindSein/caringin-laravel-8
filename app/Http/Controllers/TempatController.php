@@ -612,7 +612,7 @@ class TempatController extends Controller
 
     public function qr($id){
         $dataset = TempatUsaha::find($id);
-        $kode = 'XXX'.$dataset->kd_kontrol;
+        $kode = 'KODEKONTROL@'.$dataset->kd_kontrol;
         $kontrol = $dataset->kd_kontrol;
 
         return view('tempat.qr',[
