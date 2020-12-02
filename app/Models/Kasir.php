@@ -39,6 +39,36 @@ class Kasir extends Model
         return $dataset;
     }
 
+    public static function rincian($id){
+        date_default_timezone_set('Asia/Jakarta');
+        $bulan = date("Y-m", time());
+        $time = strtotime($bulan);
+        $bulan = date("Y-m", strtotime("-2 month", $time)); //-1 month seharusnya
+
+        $data1 = Tagihan::where([['id_tempat',$id],['stt_lunas',0],['bln_pakai','<',$bulan]])
+        ->select(
+            DB::raw('SUM(sel_tagihan) as tunggakan'),
+            DB::raw('SUM(den_tagihan) as denda'))
+        ->get();
+        
+        $data2 = Tagihan::where([['id_tempat',$id],['stt_lunas',0],['bln_pakai',$bulan]])
+        ->select(
+            'sel_listrik',
+            'sel_airbersih',
+            'sel_keamananipk',
+            'sel_kebersihan',
+            'sel_airkotor',
+            'sel_lain',
+        )
+        ->first();
+    
+        $data3 = Tagihan::where([['id_tempat',$id],['stt_lunas',0]])
+        ->select(DB::raw('SUM(sel_tagihan) as total'))
+        ->get();
+        
+        return array($data1[0],$data2,$data3[0]);
+    }
+
     public static function indoBln($date){
         $bulan = array (
             1 =>   'Januari',

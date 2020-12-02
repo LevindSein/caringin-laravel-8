@@ -222,9 +222,9 @@ Route::get('log',function(){
 Route::get('nasabah/details/{bln}',[NasabahController::class, 'details']);
 Route::get('nasabah/rincian/{bln}',[NasabahController::class, 'rincian']);
 
-Route::post('kasir/cari/transaksi',[KasirController::class, 'cari']);
+Route::get('kasir/cari/transaksi',[KasirController::class, 'cari']);
 Route::get('kasir/bayar/{id}',[KasirController::class, 'bayar']);
-Route::post('kasir/penerimaan',[KasirController::class, 'penerimaan']);
+Route::get('kasir/penerimaan',[KasirController::class, 'penerimaan']);
 Route::get('kasir/scan/{id}',[KasirController::class, 'scan']);
 Route::get('kasir/rincian/{id}',[KasirController::class, 'rincian']);
 Route::post('kasir/bayar/store',[KasirController::class, 'bayarStore']);

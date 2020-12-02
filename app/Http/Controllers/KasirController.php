@@ -12,6 +12,7 @@ use App\Models\Item;
 use App\Models\StrukMobile;
 use App\Models\StrukLarge;
 use App\Models\StrukLapangan;
+use App\Models\Pembayaran;
 
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
@@ -234,74 +235,73 @@ class KasirController extends Controller
     }
 
     public function rincian($id){
-        date_default_timezone_set('Asia/Jakarta');
-        $bulan = date("Y-m", time());
-        $time = strtotime($bulan);
-        $bulan = date("Y-m", strtotime("-2 month", $time)); //-1 month seharusnya
-
-        $dataset = Tagihan::where([['id_tempat',$id],['stt_lunas',0],['bln_pakai','<',$bulan]])
-        ->select(
-            DB::raw('SUM(sel_tagihan) as tunggakan'),
-            DB::raw('SUM(den_tagihan) as denda'))
-        ->get();
-
-        $tunggakan = number_format($dataset[0]->tunggakan);
-        $denda = number_format($dataset[0]->denda);
-        
-        $dataset = Tagihan::where([['id_tempat',$id],['stt_lunas',0],['bln_pakai',$bulan]])
-        ->select(
-            'sel_listrik',
-            'sel_airbersih',
-            'sel_keamananipk',
-            'sel_kebersihan',
-            'sel_airkotor',
-            'sel_lain',
-        )
-        ->first();
-
-        $listrik = number_format($dataset->sel_listrik);
-        $airbersih = number_format($dataset->sel_airbersih);
-        $keamananipk = number_format($dataset->sel_keamananipk);
-        $kebersihan = number_format($dataset->sel_kebersihan);
-        $airkotor = number_format($dataset->sel_airkotor);
-        $lain = number_format($dataset->sel_lain);
-
-        $dataset = Tagihan::where([['id_tempat',$id],['stt_lunas',0]])
-        ->select(DB::raw('SUM(sel_tagihan) as total'))
-        ->get();
-
-        $total = number_format($dataset[0]->total);
+        $d = Kasir::rincian($id);
 
         return json_encode(array(
             "id"=>$id,
-            "tagihanListrik"=>$listrik,
-            "tagihanAirBersih"=>$airbersih,
-            "tagihanKeamananIpk"=>$keamananipk,
-            "tagihanKebersihan"=>$kebersihan,
-            "tagihanAirKotor"=>$airkotor,
-            "tagihanLain"=>$lain,
-            "tagihanTunggakan"=>$tunggakan,
-            "tagihanDenda"=>$denda,
-            "tagihanTotal"=>$total,
+            "tagihanListrik"=>number_format($d[1]->sel_listrik),
+            "tagihanAirBersih"=>number_format($d[1]->sel_airbersih),
+            "tagihanKeamananIpk"=>number_format($d[1]->sel_keamananipk),
+            "tagihanKebersihan"=>number_format($d[1]->sel_kebersihan),
+            "tagihanAirKotor"=>number_format($d[1]->sel_airkotor),
+            "tagihanLain"=>number_format($d[1]->sel_lain),
+            "tagihanTunggakan"=>number_format($d[0]->tunggakan),
+            "tagihanDenda"=>number_format($d[0]->denda),
+            "tagihanTotal"=>number_format($d[2]->total),
         ));
     }
 
     public function bayarStore(Request $request){
-        $id = $request->get('tempatId');
-        // $dataset = Tagihan::where('id_tempat')->get();
-        
-        return redirect()->route('kasirindex')->with('success','Tagihan Dibayar');
+        try{
+            $id = $request->get('tempatId');
+            // $tagihan = Tagihan::where('id_tempat',$id)->get();
+            // foreach($tagihan as $d){
+                // $d->stt_lunas = 1;
+                // $d->stt_bayar = 1;
+                // $d->save();
+
+                
+                // date_default_timezone_set('Asia/Jakarta');
+                // $tanggal = date("Y-m-d", time());
+                // $bulan = date("Y-m-d", time());
+                // $tahun = date("Y-m-d", time());
+                // $pembayaran = new Pembayaran;
+                // $pembayaran->tgl_bayar = $tanggal;
+                // $pembayaran->bln_bayar = $bulan;
+                // $pembayaran->thn_bayar = $tahun;
+                // $pembayaran->via_bayar = 'kasir';
+                // $pembayaran->id_kasir = Session::get('userId');
+                // $pembayaran->nama = Session::get('username');
+                // $pembayaran->id_tempat = $d->id_tempat;
+                // $pembayaran->blok = $d->blok;
+                // $pembayaran->kd_kontrol = $d->kd_kontrol;
+                // $pembayaran->id_pengguna = $d->id_pengguna;
+                // $pembayaran->pengguna = $d->nama;
+                // $pembayaran->id_tagihan = $d->id;
+                // $pembayaran->byr_listrik = $d->sel_listrik;
+                // $pembayaran->byr_denlistrik = $d->den_listrik;
+                // $pembayaran->sel_listrik = 0;
+                // $pembayaran->byr_listrik = $d->sel_listrik;
+                // $pembayaran->byr_denlistrik = $d->den_listrik;
+                // $pembayaran->sel_listrik = 0;
+            // }
+        } catch(\Exception $e){
+            return redirect()->route('kasirindex')->with('error','Pembayaran Gagal');
+        } finally{
+            return redirect()->route('kasirindex')->with('success','Tagihan Dibayar');
+        }
     }
 
     public function cari(Request $request){
-        echo $request->get('kode');
+        return view('errors.cmp',['id'=>$request->get('kode')]);
     }
 
-    public function penerimaan(){
-        
+    public function penerimaan(Request $request){
+        // echo $request->get('tanggal');
+        return view('kasir.penerimaan');
     }
 
     public function scan($id){
-        echo $id;
+        return view('errors.cmp',['id'=>$id]);
     }
 }

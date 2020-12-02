@@ -126,9 +126,8 @@
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <form class="user" action="{{url('kasir/cari/transaksi')}}" method="POST">
+                    <form class="user" action="{{url('kasir/cari/transaksi')}}" method="GET">
                         <div class="modal-body-short">
-                            @csrf
                             <div class="form-group col-lg-12">
                                 <br>
                                 <input
@@ -166,9 +165,8 @@
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <form class="user" action="{{url('kasir/penerimaan')}}" method="POST">
+                    <form class="user" action="{{url('kasir/penerimaan')}}" target="_blank" method="GET">
                         <div class="modal-body-short">
-                            @csrf
                             <div class="form-group col-lg-12">
                                 <br>
                                 <input

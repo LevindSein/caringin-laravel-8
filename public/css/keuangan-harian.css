@@ -1,8 +1,8 @@
 @media print{
     @page {
-      height: 19cm;   /* auto is the initial value */
+      height: 21cm;   /* auto is the initial value */
       width: 33cm;
-      size: F4 landscape;
+      size: landscape;
       margin: auto;  /* this affects the margin in the printer settings */
       border: 1px solid black;  /* set a border for all printed pages */
     }
@@ -26,7 +26,8 @@
   body {
     position: relative;
     width: 33cm;  
-    height: 19cm; 
+    height: 21cm;
+    size: landscape;
     margin: auto; 
     color: #000;
     background: #FFFFFF; 

@@ -38,6 +38,7 @@ class TempatUsaha extends Model
         'stt_tempat',
         'ket_tempat',
         'lok_tempat',
+        'stt_bongkar',
         'updated_at',
         'created_at'
     ];
