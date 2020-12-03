@@ -74,7 +74,7 @@ $sekarang = date("d-m-Y H:i:s",time());
                     @include('data.bongkaran')
                 </div>
                 <div class="tab-pane" id="tab-animated-3" role="tabpanel">
-                    Fahni Amsyari
+                    Under Construction
                 </div>
             </div>
         </div>

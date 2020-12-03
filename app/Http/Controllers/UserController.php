@@ -173,21 +173,27 @@ class UserController extends Controller
 
         $pilihanKelola = array('pedagang','tempatusaha','tagihan','blok','pemakaian','pendapatan','datausaha','alatmeter','tarif','harilibur');
 
-        for($i=0; $i<count($pilihanKelola); $i++){
-            if(in_array($pilihanKelola[$i],$request->get('kelola'))){
-                $kelola[] = [$pilihanKelola[$i] => true];
+        if($request->get('kelola') != NULL){
+            for($i=0; $i<count($pilihanKelola); $i++){
+                if(in_array($pilihanKelola[$i],$request->get('kelola'))){
+                    $kelola[] = [$pilihanKelola[$i] => true];
+                }
+                else{
+                    $kelola[] = [$pilihanKelola[$i] => false];
+                }
             }
-            else{
-                $kelola[] = [$pilihanKelola[$i] => false];
-            }
+    
+            $json = json_encode($kelola);
         }
-
-        $json = json_encode($kelola);
+        else{
+            $json = NULL;
+        }
+        
 
         $dataset = User::find($id);
         $dataset->otoritas = $json;
         $dataset->save();
         Session::put('user',$dataset->role);
-        return redirect()->route('userindex')->with('success','Otoritas Ditambah');
+        return redirect()->route('userindex')->with('success','Otoritas Diupdate');
     }
 }

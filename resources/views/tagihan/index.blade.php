@@ -227,9 +227,7 @@ $role = Session::get('role');
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form class="user" action="{{url('tagihan/print/edaran')}}" target="_blank" method="POST">
                 <div class="modal-body-short">
-                    @csrf
                     <div class="form-group">
                         <label for="blok">BLOK</label>
                         <select class="form-control" name="blok" id="blok" required>
@@ -241,9 +239,8 @@ $role = Session::get('role');
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                    <button type="submit" id="cetakEdaran" class="btn btn-primary btn-sm">Cetak</button>
                 </div>
-            </form>
         </div>
     </div>
 </div>
@@ -252,5 +249,39 @@ $role = Session::get('role');
 
 @section('js')
 <!-- Tambah Content pada Body JS -->
+<script>
+    document.getElementById("cetakEdaran").onclick = function edaran() {
+        var blok = document.getElementById("blok").value;
+        var btn = document.getElementById("cetakEdaran");
+        ajax_print("{{url('tagihan/print/edaran')}}" + "/" + blok,btn);
+    }
+
+    //Print Via Bluetooth atau USB
+    function pc_print(data){
+        var socket = new WebSocket("ws://127.0.0.1:40213/");
+        socket.bufferType = "arraybuffer";
+        socket.onerror = function(error) {
+    	  alert("Error");
+        };			
+    	socket.onopen = function() {
+    		socket.send(data);
+    		socket.close(1000, "Work complete");
+    	};
+    }		
+    function android_print(data){
+        window.location.href = data;  
+    }
+    function ajax_print(url, btn) {
+        $.get(url, function (data) {
+    		var ua = navigator.userAgent.toLowerCase();
+    		var isAndroid = ua.indexOf("android") > -1; 
+    		if(isAndroid) {
+    		    android_print(data);
+    		}else{
+    		    pc_print(data);
+    		}
+        });
+    }
+</script>
 @yield('jstable')
 @endsection

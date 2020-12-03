@@ -135,7 +135,7 @@ Route::get('tagihan/update/{id}',[TagihanController::class, 'update']);
 Route::post('tagihan/store/{id}',[TagihanController::class, 'store']);
 Route::get('tagihan/{fasilitas}',[TagihanController::class, 'fasilitas'])->name('pedagangTagihan');
 Route::post('tagihan/store/{fasilitas}/{id}',[TagihanController::class, 'storeFasilitas']);
-Route::post('tagihan/print/edaran',[TagihanController::class, 'edaran']);
+Route::get('tagihan/print/edaran/{blok}',[TagihanController::class, 'edaran']);
 Route::get('tagihan/publish/now',[TagihanController::class, 'publish']);
 
 Route::get('utilities/tarif',function(){ 

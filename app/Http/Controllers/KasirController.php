@@ -18,9 +18,6 @@ use Mike42\Escpos\Printer;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\PrintConnectors\RawbtPrintConnector;
 use Mike42\Escpos\CapabilityProfile;
-use Illuminate\Support\Facades\Storage;
-use Mike42\Escpos\EscposImage;
-use Mike42\Escpos\ImagickEscposImage;
 
 use Jenssegers\Agent\Agent;
 

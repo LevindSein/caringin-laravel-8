@@ -81,7 +81,7 @@ $sekarang = date("d-m-Y H:i:s",time());
                         href="{{url('tempatusaha/qr',[$data->id])}}"
                         target="_blank"
                         title="Print QR">
-                        <i class="fas fa-qrcode"></i></a>
+                        <i class="fas fa-qrcode" style="color:#1cc88a;"></i></a>
                     &nbsp;
                     <a
                         href="{{url('tempatusaha/update',[$data->id])}}"

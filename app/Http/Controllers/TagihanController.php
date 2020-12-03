@@ -12,9 +12,11 @@ use App\Models\MeteranAir;
 use App\Models\MeteranListrik;
 use App\Models\TempatUsaha;
 use App\Models\Blok;
+use App\Models\Edaran;
 
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
+use Mike42\Escpos\PrintConnectors\RawbtPrintConnector;
 use Mike42\Escpos\CapabilityProfile;
 
 use Exception;
@@ -177,30 +179,49 @@ class TagihanController extends Controller
         return redirect()->route('pedagangTagihan',$fasilitas)->with('success','^_^');
     }
 
-    public function edaran(Request $request){
-        date_default_timezone_set('Asia/Jakarta');
-        $month = date("Y-m", time());
+    public function edaran(Request $request, $blok){
+        $profile = CapabilityProfile::load("POS-5890");
+        $connector = new RawbtPrintConnector();
+        $printer = new Printer($connector,$profile);
 
-        // $profile = CapabilityProfile::load("default");
-        $connector = new WindowsPrintConnector("EPSONLQ");
-                
-        $printer = new Printer($connector);
+        try{
+            $items = array(
+                new Edaran("Listrik", 100000, 100000, 100000, 260000, 'listrik'),
+                new Edaran("Air Bersih", 100000, 100000, 100000, 260000, 'listrik'),
+                new Edaran("K.aman IPK", '', '', '', 260000, 'kebersihan'),
+                new Edaran("Kebersihan", '', '', '', 260000, 'kebersihan'),
+                new Edaran("Air Kotor", '', '', '', 260000, 'kebersihan'),
+                new Edaran("Tunggakan", '', '', '', 260000, 'kebersihan'),
+                new Edaran("Denda", '', '', '', 260000, 'kebersihan'),
+                new Edaran("Lain Lain", '', '', '', 260000, 'kebersihan'),
+            );
+            $total = new Edaran("TOTAL", '', '', '', 10000000, 'total');
 
-        /* Name of shop */
-        $printer -> selectPrintMode();
-        $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> text("================================================\n");
-        $printer -> text("       PT. Pengelola Pusat Perdagangan Caringin.\n");
-        $printer -> selectPrintMode();
-        $printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $printer -> text("Jl. Soetta No.220 Blok A1 No.21-24\n");
-        $printer -> text("======================    ======================\n");
-        $printer -> feed();
-        // $printer -> cut();
-        // $printer -> pulse();
-
-        $printer -> close();
-        // return view('tagihan.edaran',['dataset'=>Tagihan::where([['blok',$request->get('blok')],['bln_tagihan',$month]])->get()]);
+            $printer->text("\n\n");
+            for($i = 0; $i < 3; $i++){
+                // Content
+                $printer->text(" -----------------------------   -----------------------------   ------------------------------------------------------------------------------------------------- \n");
+                $printer->text("|    BADAN PENGELOLA PUSAT    | |    BADAN PENGELOLA PUSAT    | |                             BADAN PENGELOLA PUSAT PERDAGANGAN CARINGIN                          |\n");
+                $printer->text("|    PERDAGANGAN  CARINGIN    | |    PERDAGANGAN  CARINGIN    | |                                   KEMITRAAN KOPPAS INDUK BANDUNG                                |\n");
+                $printer->text("|     SEGI  PEMBERITAHUAN     | |        SEGI PELUNASAN       | |                                          SEGI  PEMBAYARAN                                       |\n");
+                $printer->text(" -----------------------------   -----------------------------   ------------------------------------------------------------------------------------------------- \n");
+                $printer->text("| Pdg :                       | | Pdg :                       | | Pedagang :                                                         Kasir   :                    |\n");
+                $printer->text("| Alm :                       | | Alm :                       | | Alamat   :                                                         Tagihan :                    |\n");
+                $printer->text(" ---------- Jan 2020 ---------   ---------- Jan 2020 ---------   ------------------------ AWAL ------------ AKHIR ------------ PAKAI ------------------ JUMLAH --- \n");
+                foreach ($items as $item) {
+                    $printer -> text($item);
+                }
+                $printer->text(" -----------------------------   -----------------------------   ------------------------------------------------------------------------------------------------- \n");
+                $printer->text($total);
+                $printer->text(" -----------------------------   -----------------------------   ------------------------------------------------------------------------------------------------- \n");
+                $printer->text("  Harap bayar sebelum tgl 15.      Bukti Kas & Administrasi.                         Harap bayar sebelum tgl 15, Total Pembayaran telah termasuk PPN               \n\n");
+            }
+            $printer->text("\n\n");
+        } catch (Exception $e) {
+            return redirect()->route('tagihandata','now')->with('error','Kesalahan Sistem');
+        } finally {
+            $printer->close();
+        }
     }
 
     public function publish(){
