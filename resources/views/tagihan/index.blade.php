@@ -227,6 +227,7 @@ $role = Session::get('role');
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
+            <form>
                 <div class="modal-body-short">
                     <div class="form-group">
                         <label for="blok">BLOK</label>
@@ -241,6 +242,7 @@ $role = Session::get('role');
                 <div class="modal-footer">
                     <button type="submit" id="cetakEdaran" class="btn btn-primary btn-sm">Cetak</button>
                 </div>
+            </form>
         </div>
     </div>
 </div>
@@ -272,6 +274,9 @@ $role = Session::get('role');
         window.location.href = data;  
     }
     function ajax_print(url, btn) {
+        b = $(btn);
+        b.attr('data-old', b.text());
+        b.text('Proses');
         $.get(url, function (data) {
     		var ua = navigator.userAgent.toLowerCase();
     		var isAndroid = ua.indexOf("android") > -1; 
@@ -280,6 +285,10 @@ $role = Session::get('role');
     		}else{
     		    pc_print(data);
     		}
+        }).fail(function () {
+            alert("Gagal Melakukan Print");
+        }).always(function () {
+            b.text(b.attr('data-old'));
         });
     }
 </script>

@@ -180,41 +180,62 @@ class TagihanController extends Controller
     }
 
     public function edaran(Request $request, $blok){
+        date_default_timezone_set('Asia/Jakarta');
+        $now = date("Y-m-d",time());
+        $time = strtotime($now);
+        $check = date("Y-m-20",time());
+
+        if($now < $check){
+            $bln = $this->indoBln(date("Y-m"));
+            $bulan = Tagihan::indoBln(data("Y-m"));
+        }
+        else if($now >= $check){
+            $sekarang = date("Y-m", time());
+            $time = strtotime($sekarang);
+            $months = date("Y-m", strtotime("+1 month", $time));
+            $bln = $this->indoBln($months);
+            $bulan = Tagihan::indoBln($months);
+        }
+
         $profile = CapabilityProfile::load("POS-5890");
         $connector = new RawbtPrintConnector();
         $printer = new Printer($connector,$profile);
 
         try{
-            $items = array(
-                new Edaran("Listrik", 100000, 100000, 100000, 260000, 'listrik'),
-                new Edaran("Air Bersih", 100000, 100000, 100000, 260000, 'listrik'),
-                new Edaran("K.aman IPK", '', '', '', 260000, 'kebersihan'),
-                new Edaran("Kebersihan", '', '', '', 260000, 'kebersihan'),
-                new Edaran("Air Kotor", '', '', '', 260000, 'kebersihan'),
-                new Edaran("Tunggakan", '', '', '', 260000, 'kebersihan'),
-                new Edaran("Denda", '', '', '', 260000, 'kebersihan'),
-                new Edaran("Lain Lain", '', '', '', 260000, 'kebersihan'),
-            );
-            $total = new Edaran("TOTAL", '', '', '', 10000000, 'total');
-
-            $printer->text("\n\n");
+            $printer->text("\n");
             for($i = 0; $i < 3; $i++){
+                $items = array(
+                    new Edaran("Listrik", 100000, 100000, 100000, 260000, 'listrik'),
+                    new Edaran("Air Bersih", 100000, 100000, 100000, 260000, 'listrik'),
+                    new Edaran("K.aman IPK", '', '', '', 260000, 'kebersihan'),
+                    new Edaran("Kebersihan", '', '', '', 260000, 'kebersihan'),
+                    new Edaran("Air Kotor", '', '', '', 260000, 'kebersihan'),
+                    new Edaran("Tunggakan", '', '', '', 260000, 'kebersihan'),
+                    new Edaran("Denda", '', '', '', 260000, 'kebersihan'),
+                    new Edaran("Lain Lain", '', '', '', 260000, 'kebersihan'),
+                );
+                $total = new Edaran("TOTAL", '', '', '', 10000000, 'total');
+
+                $alamat = new Edaran("Alm", '', '', '', 'A-1-001', 'alamat');
+                $pedagang = new Edaran("Pdg", '', '', $bulan, 'Fahni Amsyari', 'pedagang');
+
                 // Content
                 $printer->text(" -----------------------------   -----------------------------   ------------------------------------------------------------------------------------------------- \n");
                 $printer->text("|    BADAN PENGELOLA PUSAT    | |    BADAN PENGELOLA PUSAT    | |                             BADAN PENGELOLA PUSAT PERDAGANGAN CARINGIN                          |\n");
                 $printer->text("|    PERDAGANGAN  CARINGIN    | |    PERDAGANGAN  CARINGIN    | |                                   KEMITRAAN KOPPAS INDUK BANDUNG                                |\n");
                 $printer->text("|     SEGI  PEMBERITAHUAN     | |        SEGI PELUNASAN       | |                                          SEGI  PEMBAYARAN                                       |\n");
                 $printer->text(" -----------------------------   -----------------------------   ------------------------------------------------------------------------------------------------- \n");
-                $printer->text("| Pdg :                       | | Pdg :                       | | Pedagang :                                                         Kasir   :                    |\n");
-                $printer->text("| Alm :                       | | Alm :                       | | Alamat   :                                                         Tagihan :                    |\n");
-                $printer->text(" ---------- Jan 2020 ---------   ---------- Jan 2020 ---------   ------------------------ AWAL ------------ AKHIR ------------ PAKAI ------------------ JUMLAH --- \n");
+                $printer->text($pedagang);
+                $printer->text($alamat);
+                $printer->text(" ---------- $bln ---------   ---------- $bln ---------   ------------------------ AWAL ------------ AKHIR ------------ PAKAI ------------------ JUMLAH --- \n");
                 foreach ($items as $item) {
                     $printer -> text($item);
                 }
                 $printer->text(" -----------------------------   -----------------------------   ------------------------------------------------------------------------------------------------- \n");
                 $printer->text($total);
                 $printer->text(" -----------------------------   -----------------------------   ------------------------------------------------------------------------------------------------- \n");
-                $printer->text("  Harap bayar sebelum tgl 15.      Bukti Kas & Administrasi.                         Harap bayar sebelum tgl 15, Total Pembayaran telah termasuk PPN               \n\n");
+                $printer->text("        Hindari Denda,                  Untuk keperluan                                       Hindari Denda, harap bayar sebelum tgl 15.                           \n");
+                $printer->text("  harap bayar sebelum tgl 15.      Bukti Kas & Administrasi.                                     Total Pembayaran telah termasuk PPN                             \n\n");
             }
             $printer->text("\n\n");
         } catch (Exception $e) {
@@ -246,5 +267,24 @@ class TagihanController extends Controller
         }catch(\Exception $e){
             return redirect()->route('pedagangTagihan', $fasilitas)->with('error','Pedagang Gagal Ditambah');
         }
+    }
+
+    public function indoBln($date){
+        $bulan = array (
+            1 =>   'JAN',
+            'FEB',
+            'MAR',
+            'APR',
+            'MEI',
+            'JUN',
+            'JUL',
+            'AGU',
+            'SEP',
+            'OKT',
+            'NOV',
+            'DES'
+        );
+        $pecahkan = explode('-', $date);
+        return $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
     }
 }
