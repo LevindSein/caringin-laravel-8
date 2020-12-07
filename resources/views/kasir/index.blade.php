@@ -1,6 +1,19 @@
 @extends('layout.kasir')
 @section('content')
-<div class="form-group d-flex align-items-center justify-content-end">
+<div class="form-group">
+    <h3 style="color:#16aaff;font-weight:700;text-align:center;">{{$bulan}}</h3>
+</div>
+<div class="form-group d-flex align-items-center justify-content-center">
+    <div>
+        <a 
+            href="{{url('kasir/index/now')}}"
+            type="button"
+            class="btn btn-outline-inverse-info"
+            title="Home">
+            <i class="mdi mdi-home btn-icon-append"></i>  
+        </a>
+    </div>
+    &nbsp;
     <div>
         <a 
             type="button"
@@ -16,9 +29,9 @@
             type="button"
             class="btn btn-outline-inverse-info"
             data-toggle="modal"
-            data-target="#myPenerimaan"
-            title="Cetak Penerimaan">
-            <i class="mdi mdi-printer btn-icon-append"></i>  
+            data-target="#myBulan"
+            title="Bayar by Bulanan">
+            <i class="mdi mdi-calendar-check btn-icon-append"></i>  
         </a>
     </div>
     @if($platform == 'mobile')
@@ -33,6 +46,16 @@
         </a>
     </div>
     @endif
+    &nbsp;<div>
+        <a 
+            type="button"
+            class="btn btn-outline-inverse-info"
+            data-toggle="modal"
+            data-target="#myPenerimaan"
+            title="Cetak Penerimaan">
+            <i class="mdi mdi-printer btn-icon-append"></i>  
+        </a>
+    </div>
 </div>
 <div id="container">
     <div id="qr-result" hidden="">
@@ -66,9 +89,9 @@
                             class="btn btn-sm btn-warning">Bayar
                         </button>
                     @else
-                        <?php $id = $data[3]; ?>
+                        <?php $id = $data[3];?>
                         <button
-                            onclick="ajax_tagihan({{$id}},'{{url('/kasir/rincian',[$id])}}')"
+                            onclick="ajax_tagihan({{$id}},'{{url('/kasir/rincian',[$index,$id])}}')"
                             class="btn btn-sm btn-warning">Bayar
                         </button>
                     @endif
@@ -196,164 +219,144 @@
         </div>
     </div>
 </div>
+
+<div
+    class="modal fade"
+    id="myModal"
+    tabIndex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cari Transaksi</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form class="user" action="{{url('kasir/cari/transaksi')}}" method="GET">
+                <div class="modal-body-short">
+                    <div class="form-group col-lg-12">
+                        <br>
+                        <input
+                            required
+                            autocomplete="off"
+                            type="text"
+                            style="text-transform:uppercase;"
+                            name="kode"
+                            maxlength="10"
+                            class="form-control"
+                            id="kode"
+                            placeholder="Masukkan 10 Digit Kode Pembayaran">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-sm">Cari</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div
+    class="modal fade"
+    id="myPenerimaan"
+    tabIndex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cetak Penerimaan Harian</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form class="user" action="{{url('kasir/penerimaan')}}" target="_blank" method="GET">
+                <div class="modal-body-short">
+                    <div class="form-group col-lg-12">
+                        <br>
+                        <input
+                            required
+                            placeholder="Masukkan Tanggal Penerimaan" class="form-control" type="text" onfocus="(this.type='date')"
+                            autocomplete="off"
+                            type="date"
+                            name="tanggal"
+                            id="tanggal">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-sm">Cetak</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div
+    class="modal fade"
+    id="myBulan"
+    tabIndex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Bayar bulan apa ?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form class="user" action="{{url('kasir/index/periode')}}" method="GET">
+                <div class="modal-body-short">
+                    <div class="form-group col-lg-12">
+                        <br>
+                        <label for="bulan">Bulan</label>
+                        <select class="form-control" name="bulan" id="bulan">
+                            <option selected="selected" hidden="hidden" value="{{$month}}">Pilih Bulan</option>
+                            <option value="01">Januari</option>
+                            <option value="02">Februari</option>
+                            <option value="03">Maret</option>
+                            <option value="04">April</option>
+                            <option value="05">Mei</option>
+                            <option value="06">Juni</option>
+                            <option value="07">Juli</option>
+                            <option value="08">Agustus</option>
+                            <option value="09">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Desember</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <label for="tahun">Tahun</label>
+                        <select class="form-control" name="tahun" id="tahun">
+                            <option selected="selected" hidden="hidden"  value="{{$tahun}}">{{$tahun}}</option>
+                            @foreach($dataTahun as $d)
+                            <option value="{{$d->thn_tagihan}}">{{$d->thn_tagihan}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('js')
-<script>
-     $(document).ready(function () {
-        var table = $(
-            '#tableTest'
-        ).DataTable({
-            "processing": true,
-            "bProcessing": true,
-            "language": {
-                'loadingRecords': '&nbsp;',
-                'processing': '<i class="fas fa-spinner"></i>'
-            },
-            "dom": "r<'row'<'col-sm-12 col-md-6'><'col-sm-12 col-md-6'f>><'row'<'col-sm-12'tr>><'" +
-                    "row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-            "scrollX": true,
-            "deferRender": true,
-            "responsive": true,
-            pageLength: 3,
-            order: [],
-            columnDefs: [ {
-                'targets': [0], /* column index [0,1,2,3]*/
-                'orderable': false, /* true or false */
-            }],
-        });
-        new $.fn.dataTable.FixedHeader(table);
-    });
 
-    
-    $(document).ready(function () {
-        $('#myModal').on('shown.bs.modal', function () {
-            $('#kode').trigger('focus');
-        });
-    });
-
-    $('#kode').on('keypress', function (event) {
-        var regex = new RegExp("^[0-9]+$");
-        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-        if (!regex.test(key)) {
-        event.preventDefault();
-        return false;
-        }
-    });
-
-    //Show Tagihan
-    function ajax_tagihan(id,url){
-        document.getElementById("tempatId").value = id;
-        jQuery.ajax({
-            type: "GET",
-            url: url,
-            dataType: "json",
-            success: function(response) {
-                if(response.tagihanListrik != 0){
-                    document.getElementById("divListrik").style.display = "flex";
-                    document.getElementById("nominalListrik").innerHTML = response.tagihanListrik;
-                }
-                else{
-                    document.getElementById("divListrik").style.display = "none";
-                }
-
-                if(response.tagihanAirBersih != 0){
-                    document.getElementById("divAirBersih").style.display = "flex";
-                    document.getElementById("nominalAirBersih").innerHTML = response.tagihanAirBersih;
-                }
-                else{
-                    document.getElementById("divAirBersih").style.display = "none";
-                }
-
-                if(response.tagihanKeamananIpk != 0){
-                    document.getElementById("divKeamananIpk").style.display = "flex";
-                    document.getElementById("nominalKeamananIpk").innerHTML = response.tagihanKeamananIpk;
-                }
-                else{
-                    document.getElementById("divKeamananIpk").style.display = "none";
-                }
-
-                if(response.tagihanKebersihan != 0){
-                    document.getElementById("divKebersihan").style.display = "flex";
-                    document.getElementById("nominalKebersihan").innerHTML = response.tagihanKebersihan;
-                }
-                else{
-                    document.getElementById("divKebersihan").style.display = "none";
-                }
-
-                if(response.tagihanAirKotor != 0){
-                    document.getElementById("divAirKotor").style.display = "flex";
-                    document.getElementById("nominalAirKotor").innerHTML = response.tagihanAirKotor;
-                }
-                else{
-                    document.getElementById("divAirKotor").style.display = "none";
-                }
-
-                if(response.tagihanLain != 0){
-                    document.getElementById("divLain").style.display = "flex";
-                    document.getElementById("nominalLain").innerHTML = response.tagihanLain;
-                }
-                else{
-                    document.getElementById("divLain").style.display = "none";
-                }
-                
-                if(response.tagihanTunggakan != 0){
-                    document.getElementById("divTunggakan").style.display = "flex";
-                    document.getElementById("nominalTunggakan").innerHTML = response.tagihanTunggakan;
-                }
-                else{
-                    document.getElementById("divTunggakan").style.display = "none";
-                }
-
-                if(response.tagihanDenda != 0){
-                    document.getElementById("divDenda").style.display = "flex";
-                    document.getElementById("nominalDenda").innerHTML = response.tagihanDenda;
-                }
-                else{
-                    document.getElementById("divDenda").style.display = "none";
-                }
-                
-                document.getElementById("nominalTotal").innerHTML = response.tagihanTotal;
-            }
-        }).fail(function () {
-            alert("Oops! Terjadi Kesalahan Sistem");
-        });
-        $('#rincianTagihan').modal('show');
-    }
-
-    document.getElementById("printStruk").onclick = function strukPembayaran() {
-        var id = document.getElementById("tempatId").value;
-        var btn = document.getElementById("printStruk");
-        ajax_print("{{url('kasir/bayar')}}" + "/" + id,btn);
-    }
-
-    //Print Via Bluetooth atau USB
-    function pc_print(data){
-        var socket = new WebSocket("ws://127.0.0.1:40213/");
-        socket.bufferType = "arraybuffer";
-        socket.onerror = function(error) {
-    	  alert("Error");
-        };			
-    	socket.onopen = function() {
-    		socket.send(data);
-    		socket.close(1000, "Work complete");
-    	};
-    }		
-    function android_print(data){
-        window.location.href = data;  
-    }
-    function ajax_print(url, btn) {
-        $.get(url, function (data) {
-    		var ua = navigator.userAgent.toLowerCase();
-    		var isAndroid = ua.indexOf("android") > -1; 
-    		if(isAndroid) {
-    		    android_print(data);
-    		}else{
-    		    pc_print(data);
-    		}
-        });
-    }
-</script>
+@if($data == 'now')
+<script src="{{asset('js/kasir.js')}}"></script>
+@else
+<script src="{{asset('js/kasir-periode.js')}}"></script>
+@endif
 
 @if($platform == 'mobile')
 <script src="{{asset('js/qrCodeScanner.js')}}"></script>

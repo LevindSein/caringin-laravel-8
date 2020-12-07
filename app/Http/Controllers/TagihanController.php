@@ -187,7 +187,7 @@ class TagihanController extends Controller
 
         if($now < $check){
             $bln = $this->indoBln(date("Y-m"));
-            $bulan = Tagihan::indoBln(data("Y-m"));
+            $bulan = Tagihan::indoBln(date("Y-m"));
         }
         else if($now >= $check){
             $sekarang = date("Y-m", time());
@@ -203,7 +203,7 @@ class TagihanController extends Controller
 
         try{
             $printer->text("\n");
-            for($i = 0; $i < 3; $i++){
+            for($j=0; $j<3; $j++){
                 $items = array(
                     new Edaran("Listrik", 100000, 100000, 100000, 260000, 'listrik'),
                     new Edaran("Air Bersih", 100000, 100000, 100000, 260000, 'listrik'),
@@ -216,8 +216,8 @@ class TagihanController extends Controller
                 );
                 $total = new Edaran("TOTAL", '', '', '', 10000000, 'total');
 
-                $alamat = new Edaran("Alm", '', '', '', 'A-1-001', 'alamat');
                 $pedagang = new Edaran("Pdg", '', '', $bulan, 'Fahni Amsyari', 'pedagang');
+                $alamat = new Edaran("Alm", '', '', '', 'A-1-001', 'alamat');
 
                 // Content
                 $printer->text(" -----------------------------   -----------------------------   ------------------------------------------------------------------------------------------------- \n");
@@ -237,8 +237,41 @@ class TagihanController extends Controller
                 $printer->text("        Hindari Denda,                  Untuk keperluan                                       Hindari Denda, harap bayar sebelum tgl 15.                           \n");
                 $printer->text("  harap bayar sebelum tgl 15.      Bukti Kas & Administrasi.                                     Total Pembayaran telah termasuk PPN                             \n\n");
             }
-            $printer->text("\n\n");
+            $printer->text("\n\n\n");
+            $items = array(
+                new Edaran("Listrik", 100000, 100000, 100000, 260000, 'listrik'),
+                new Edaran("Air Bersih", 100000, 100000, 100000, 260000, 'listrik'),
+                new Edaran("K.aman IPK", '', '', '', 260000, 'kebersihan'),
+                new Edaran("Kebersihan", '', '', '', 260000, 'kebersihan'),
+                new Edaran("Air Kotor", '', '', '', 260000, 'kebersihan'),
+                new Edaran("Tunggakan", '', '', '', 260000, 'kebersihan'),
+                new Edaran("Denda", '', '', '', 260000, 'kebersihan'),
+                new Edaran("Lain Lain", '', '', '', 260000, 'kebersihan'),
+            );
+            $total = new Edaran("TOTAL", '', '', '', 10000000, 'total');
+
+            $pedagang = new Edaran("Pdg", '', '', $bulan, 'Fahni Amsyari', 'pedagang');
+            $alamat = new Edaran("Alm", '', '', '', 'A-1-001', 'alamat');
+
+            // Content
+            $printer->text(" -----------------------------   -----------------------------   ------------------------------------------------------------------------------------------------- \n");
+            $printer->text("|    BADAN PENGELOLA PUSAT    | |    BADAN PENGELOLA PUSAT    | |                             BADAN PENGELOLA PUSAT PERDAGANGAN CARINGIN                          |\n");
+            $printer->text("|    PERDAGANGAN  CARINGIN    | |    PERDAGANGAN  CARINGIN    | |                                   KEMITRAAN KOPPAS INDUK BANDUNG                                |\n");
+            $printer->text("|     SEGI  PEMBERITAHUAN     | |        SEGI PELUNASAN       | |                                          SEGI  PEMBAYARAN                                       |\n");
+            $printer->text(" -----------------------------   -----------------------------   ------------------------------------------------------------------------------------------------- \n");
+            $printer->text($pedagang);
+            $printer->text($alamat);
+            $printer->text(" ---------- $bln ---------   ---------- $bln ---------   ------------------------ AWAL ------------ AKHIR ------------ PAKAI ------------------ JUMLAH --- \n");
+            foreach ($items as $item) {
+                $printer -> text($item);
+            }
+            $printer->text(" -----------------------------   -----------------------------   ------------------------------------------------------------------------------------------------- \n");
+            $printer->text($total);
+            $printer->text(" -----------------------------   -----------------------------   ------------------------------------------------------------------------------------------------- \n");
+            $printer->text("        Hindari Denda,                  Untuk keperluan                                       Hindari Denda, harap bayar sebelum tgl 15.                           \n");
+            $printer->text("  harap bayar sebelum tgl 15.      Bukti Kas & Administrasi.                                     Total Pembayaran telah termasuk PPN                             \n\n");
         } catch (Exception $e) {
+            // $e->message();
             return redirect()->route('tagihandata','now')->with('error','Kesalahan Sistem');
         } finally {
             $printer->close();

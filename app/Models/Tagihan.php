@@ -1098,8 +1098,10 @@ class Tagihan extends Model
         $dataset = Tagihan::where('ttl_keamananipk','!=',0)->get();
 
         foreach($dataset as $d){
-            $d->sub_keamananipk = $d->ttl_keamananipk;
-            $d->stt_keamananipk = 1;
+            // $d->sub_keamananipk = $d->ttl_keamananipk;
+            // $d->stt_keamananipk = 1;
+            // $d->save();
+            $d->ttl_keamananipk = $d->sub_keamananipk - $d->dis_keamananipk;
             $d->save();
         }
     }
@@ -1108,8 +1110,10 @@ class Tagihan extends Model
         $dataset = Tagihan::where('ttl_kebersihan','!=',0)->get();
 
         foreach($dataset as $d){
-            $d->sub_kebersihan = $d->ttl_kebersihan;
-            $d->stt_kebersihan = 1;
+            // $d->sub_kebersihan = $d->ttl_kebersihan;
+            // $d->stt_kebersihan = 1;
+            // $d->save();
+            $d->ttl_kebersihan = $d->sub_kebersihan - $d->dis_kebersihan;
             $d->save();
         }
     }
@@ -1121,6 +1125,18 @@ class Tagihan extends Model
             $jml = TempatUsaha::find($data->id_tempat);
             $jml = $jml->jml_alamat;
             $data->jml_alamat = $jml;
+            $data->save();
+        }
+    }
+
+    public static function ttlTagihan(){
+        $dataset = Tagihan::get();
+
+        foreach($dataset as $data){
+            $data->sub_tagihan = $data->sub_airbersih + $data->sub_listrik + $data->sub_keamananipk + $data->sub_kebersihan + $data->sub_airkotor + $data->sub_lain;
+            $data->ttl_tagihan = $data->ttl_airbersih + $data->ttl_listrik + $data->ttl_keamananipk + $data->ttl_kebersihan + $data->ttl_airkotor + $data->ttl_lain;
+            $data->dis_tagihan = $data->dis_airbersih + $data->dis_listrik + $data->dis_keamananipk + $data->dis_kebersihan;
+            $data->sel_tagihan = $data->ttl_tagihan;
             $data->save();
         }
     }

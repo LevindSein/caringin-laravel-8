@@ -81,8 +81,8 @@ class Edaran extends Model
             
             $fasPelunasanWidth = 19;
             $hargaPelunasanWidth = 12;
-            $fasPelunasanShow = str_pad('| '.$this->fasilitas, $fasPemberitahuanWidth);
-            $hargaPelunasanShow = str_pad($this->harga.' |', $hargaPemberitahuanWidth, ' ', STR_PAD_LEFT);
+            $fasPelunasanShow = str_pad('| '.$this->fasilitas, $fasPelunasanWidth);
+            $hargaPelunasanShow = str_pad($this->harga.' |', $hargaPelunasanWidth, ' ', STR_PAD_LEFT);
 
             $fasPembayaranWidth = 87;
             $hargaPembayaranWidth = 12;
@@ -91,43 +91,33 @@ class Edaran extends Model
 
             return "$fasPemberitahuanShow$hargaPemberitahuanShow $fasPelunasanShow$hargaPelunasanShow $fasPembayaranShow$hargaPembayaranShow\n";
         }
-
-        if($this->status = 'alamat'){
-            $fasPemberitahuanWidth = 19;
-            $hargaPemberitahuanWidth = 12;
-            $fasPemberitahuanShow = str_pad('| '.$this->fasilitas, $fasPemberitahuanWidth);
-            $hargaPemberitahuanShow = str_pad($this->harga.' |', $hargaPemberitahuanWidth, ' ', STR_PAD_LEFT);
+        
+        if($this->status == 'pedagang'){
+            $fasPemberitahuanWidth = 29;
+            $fasPemberitahuanShow = str_pad('| '.$this->fasilitas.' : '.$this->harga, $fasPemberitahuanWidth).' |';
             
-            $fasPelunasanWidth = 19;
-            $hargaPelunasanWidth = 12;
-            $fasPelunasanShow = str_pad('| '.$this->fasilitas, $fasPemberitahuanWidth);
-            $hargaPelunasanShow = str_pad($this->harga.' |', $hargaPemberitahuanWidth, ' ', STR_PAD_LEFT);
-
-            $fasPembayaranWidth = 87;
-            $hargaPembayaranWidth = 12;
-            $fasPembayaranShow = str_pad('| Alamat   : '.$this->harga, $fasPembayaranWidth);
-            $hargaPembayaranShow = str_pad(' |', $hargaPembayaranWidth, ' ', STR_PAD_LEFT);
-
-            return "$fasPemberitahuanShow$hargaPemberitahuanShow $fasPelunasanShow$hargaPelunasanShow $fasPembayaranShow$hargaPembayaranShow\n";
-        }
-
-        if($this->status = 'pedagang'){
-            $fasPemberitahuanWidth = 19;
-            $hargaPemberitahuanWidth = 12;
-            $fasPemberitahuanShow = str_pad('| '.$this->fasilitas, $fasPemberitahuanWidth);
-            $hargaPemberitahuanShow = str_pad($this->harga.' |', $hargaPemberitahuanWidth, ' ', STR_PAD_LEFT);
-            
-            $fasPelunasanWidth = 19;
-            $hargaPelunasanWidth = 12;
-            $fasPelunasanShow = str_pad('| '.$this->fasilitas, $fasPemberitahuanWidth);
-            $hargaPelunasanShow = str_pad($this->harga.' |', $hargaPemberitahuanWidth, ' ', STR_PAD_LEFT);
+            $fasPelunasanWidth = 29;
+            $fasPelunasanShow = str_pad('| '.$this->fasilitas.' : '.$this->harga, $fasPelunasanWidth).' |';
 
             $fasPembayaranWidth = 70;
             $hargaPembayaranWidth = 27;
             $fasPembayaranShow = str_pad('| Pedagang : '.$this->harga, $fasPembayaranWidth);
-            $hargaPembayaranShow = str_pad($this->pakai, $hargaPembayaranWidth).' |';
+            $hargaPembayaranShow = str_pad('Tagihan : '.$this->pakai, $hargaPembayaranWidth).' |';
 
-            return "$fasPemberitahuanShow$hargaPemberitahuanShow $fasPelunasanShow$hargaPelunasanShow $fasPembayaranShow$hargaPembayaranShow\n";
+            return "$fasPemberitahuanShow $fasPelunasanShow $fasPembayaranShow$hargaPembayaranShow\n";
+        }
+
+        if($this->status == 'alamat'){
+            $fasPemberitahuanWidth = 29;
+            $fasPemberitahuanShow = str_pad('| '.$this->fasilitas.' : '.$this->harga, $fasPemberitahuanWidth).' |';
+            
+            $fasPelunasanWidth = 29;
+            $fasPelunasanShow = str_pad('| '.$this->fasilitas.' : '.$this->harga, $fasPelunasanWidth).' |';
+
+            $fasPembayaranWidth = 97;
+            $fasPembayaranShow = str_pad('| Alamat   : '.$this->harga, $fasPembayaranWidth).' |';
+
+            return "$fasPemberitahuanShow $fasPelunasanShow $fasPembayaranShow\n";
         }
     }
 }

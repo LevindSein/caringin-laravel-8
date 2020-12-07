@@ -59,7 +59,7 @@ class CekLogin
                 return redirect()->route('keuanganindex')->with('success','Selamat Datang');
             }
             else if ($user->role == 'kasir') {
-                return redirect()->route('kasirindex')->with('success','Selamat Datang');
+                return redirect()->route('kasirindex','now')->with('success','Selamat Datang');
             }
             else if ($user->role == 'nasabah') {
                 return redirect()->route('nasabahindex')->with('success','Selamat Datang');

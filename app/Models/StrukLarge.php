@@ -103,8 +103,8 @@ class StrukLarge extends Model
         }
         
         if($this->status == 'total'){
-            $fasilitasWidth = 76; //38
-            $hargaWidth = 10;
+            $fasilitasWidth = 71; //38
+            $hargaWidth = 19;
             $fasilitasShow = str_pad('', 5, ' ', STR_PAD_LEFT).str_pad($this->fasilitas, $fasilitasWidth) ;
             $hargaShow = str_pad($this->harga, $hargaWidth, ' ', STR_PAD_LEFT);
             return "$fasilitasShow$hargaShow\n";

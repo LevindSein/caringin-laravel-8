@@ -31,6 +31,7 @@ class MasterController extends Controller
         // Tagihan::cekMeter();
         // Tagihan::keamananIpk();
         // Tagihan::kebersihan();
+        // Tagihan::ttlTagihan();
         // Tagihan::alamat();
 
         return view('master.index',[

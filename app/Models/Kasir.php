@@ -13,7 +13,7 @@ use App\Models\PasangAlat;
 
 class Kasir extends Model
 {
-    public static function tagihan(){
+    public static function tagihan($data){
         $tempat = TempatUsaha::select('id','kd_kontrol','id_pengguna')->orderBy('kd_kontrol','asc')->get();
         $dataset = array();
         $i = 0;
@@ -21,12 +21,24 @@ class Kasir extends Model
             $dataset[$i][0] = $t->kd_kontrol;
             $pengguna = User::find($t->id_pengguna);
             $dataset[$i][1] = $pengguna->nama;
-            $tagihan = Tagihan::where([['id_tempat',$t->id],['stt_lunas',0]])
-            ->select(DB::raw('SUM(sel_tagihan) as tagihan'))
-            ->get();
-            $pasang = PasangAlat::where([['id_tempat',$t->id],['stt_lunas',0]])
-            ->select(DB::raw('SUM(sel_pasang) as tagihan'))
-            ->get();
+
+            if($data == 'now'){
+                $tagihan = Tagihan::where([['id_tempat',$t->id],['stt_lunas',0]])
+                ->select(DB::raw('SUM(sel_tagihan) as tagihan'))
+                ->get();
+                $pasang = PasangAlat::where([['id_tempat',$t->id],['stt_lunas',0]])
+                ->select(DB::raw('SUM(sel_pasang) as tagihan'))
+                ->get();
+            }
+            else{
+                $tagihan = Tagihan::where([['id_tempat',$t->id],['stt_lunas',0],['bln_tagihan','<=',$data]])
+                ->select(DB::raw('SUM(sel_tagihan) as tagihan'))
+                ->get();
+                $pasang = PasangAlat::where([['id_tempat',$t->id],['stt_lunas',0]])
+                ->select(DB::raw('SUM(sel_pasang) as tagihan'))
+                ->get();
+            }
+            
             if($pasang != NULL){
                 $dataset[$i][2] = $tagihan[0]->tagihan + $pasang[0]->tagihan;
             }
@@ -39,34 +51,36 @@ class Kasir extends Model
         return $dataset;
     }
 
-    public static function rincian($id){
-        date_default_timezone_set('Asia/Jakarta');
-        $bulan = date("Y-m", time());
-        $time = strtotime($bulan);
-        $bulan = date("Y-m", strtotime("-2 month", $time)); //-1 month seharusnya
+    public static function rincian($data,$id){
+        if($data == 'now'){
+            date_default_timezone_set('Asia/Jakarta');
+            $bulan = date("Y-m", time());
+            $time = strtotime($bulan);
+            $bulan = date("Y-m", strtotime("-2 month", $time)); //-1 month seharusnya
 
-        $data1 = Tagihan::where([['id_tempat',$id],['stt_lunas',0],['bln_pakai','<',$bulan]])
-        ->select(
-            DB::raw('SUM(sel_tagihan) as tunggakan'),
-            DB::raw('SUM(den_tagihan) as denda'))
-        ->get();
+            $data1 = Tagihan::where([['id_tempat',$id],['stt_lunas',0],['bln_pakai','<',$bulan]])
+            ->select(
+                DB::raw('SUM(sel_tagihan) as tunggakan'),
+                DB::raw('SUM(den_tagihan) as denda'))
+            ->get();
+            
+            $data2 = Tagihan::where([['id_tempat',$id],['stt_lunas',0],['bln_pakai',$bulan]])
+            ->select(
+                'sel_listrik',
+                'sel_airbersih',
+                'sel_keamananipk',
+                'sel_kebersihan',
+                'sel_airkotor',
+                'sel_lain',
+            )
+            ->first();
         
-        $data2 = Tagihan::where([['id_tempat',$id],['stt_lunas',0],['bln_pakai',$bulan]])
-        ->select(
-            'sel_listrik',
-            'sel_airbersih',
-            'sel_keamananipk',
-            'sel_kebersihan',
-            'sel_airkotor',
-            'sel_lain',
-        )
-        ->first();
-    
-        $data3 = Tagihan::where([['id_tempat',$id],['stt_lunas',0]])
-        ->select(DB::raw('SUM(sel_tagihan) as total'))
-        ->get();
-        
-        return array($data1[0],$data2,$data3[0]);
+            $data3 = Tagihan::where([['id_tempat',$id],['stt_lunas',0]])
+            ->select(DB::raw('SUM(sel_tagihan) as total'))
+            ->get();
+            
+            return array($data1[0],$data2,$data3[0]);
+        }
     }
 
     public static function indoBln($date){

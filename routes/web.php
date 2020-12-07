@@ -72,19 +72,7 @@ Route::get('admin/dashboard',[AdminController::class, 'index'])->name('admininde
 Route::get('manajer/dashboard',[ManajerController::class, 'index'])->name('manajerindex')->middleware('cekmanajer');
 Route::get('keuangan/index',[KeuanganController::class, 'index'])->name('keuanganindex')->middleware('cekkeuangan');
 
-Route::get('kasir/index',function(){
-    $agent = new Agent();
-    if($agent->isDesktop()){
-        $platform = 'desktop';
-    }
-    else{
-        $platform = 'mobile';
-    }
-    return view('kasir.index',[
-        'dataset'=>Kasir::tagihan(),
-        'platform'=>$platform,
-    ]);
-})->name('kasirindex')->middleware('cekkasir');
+Route::get('kasir/index/{data}',[KasirController::class,'index'])->name('kasirindex')->middleware('cekkasir');
 
 Route::get('nasabah/index',function(){
     $id = Session::get('userId');
@@ -226,7 +214,7 @@ Route::get('kasir/cari/transaksi',[KasirController::class, 'cari']);
 Route::get('kasir/bayar/{id}',[KasirController::class, 'bayar']);
 Route::get('kasir/penerimaan',[KasirController::class, 'penerimaan']);
 Route::get('kasir/scan/{id}',[KasirController::class, 'scan']);
-Route::get('kasir/rincian/{id}',[KasirController::class, 'rincian']);
+Route::get('kasir/rincian/{data}/{id}',[KasirController::class, 'rincian']);
 Route::post('kasir/bayar/store',[KasirController::class, 'bayarStore']);
 
 //opsional
