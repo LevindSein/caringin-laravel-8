@@ -130,7 +130,7 @@ function pc_print(data){
     var socket = new WebSocket("ws://127.0.0.1:40213/");
     socket.bufferType = "arraybuffer";
     socket.onerror = function(error) {
-      alert("Plugin Printer RawBT Belum Aktif");
+        alert("Aktifkan Plugin RawBT untuk Cetak Struk");
     };			
     socket.onopen = function() {
         socket.send(data);

@@ -72,33 +72,45 @@
             width="100%">
             <thead>
                 <tr>
+                    @if($platform == 'mobile')
                     <th style="text-align:center;"><b>Action</b></th>
                     <th style="text-align:center;"><b>Kontrol</b></th>
                     <th style="text-align:center;"><b>Pengguna</b></th>
                     <th style="text-align:center;"><b>Tagihan</b></th>
+                    @else
+                    <th style="text-align:center;"><b>Kontrol</b></th>
+                    <th style="text-align:center;"><b>Pengguna</b></th>
+                    <th style="text-align:center;"><b>Tagihan</b></th>
+                    <th style="text-align:center;"><b>Action</b></th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
                 @foreach($dataset as $data)
                 @if($data[2] != 0)
                 <tr>
-                    <td style="text-align:center;">
                     @if($platform == 'mobile')
+                    <td style="text-align:center;">
                         <button
                             onclick="ajax_print('{{url('/kasir/bayar',[$data[3]])}}',this)"
                             class="btn btn-sm btn-warning">Bayar
                         </button>
+                    </td>
+                    <td style="text-align:center;">{{$data[0]}}</td>
+                    <td style="text-align:center;">{{$data[1]}}</td>
+                    <td style="text-align:center;color:green;"><b>{{number_format($data[2])}}</b></td>
                     @else
+                    <td style="text-align:center;">{{$data[0]}}</td>
+                    <td style="text-align:center;">{{$data[1]}}</td>
+                    <td style="text-align:center;color:green;"><b>{{number_format($data[2])}}</b></td>
+                    <td style="text-align:center;">
                         <?php $id = $data[3];?>
                         <button
                             onclick="ajax_tagihan({{$id}},'{{url('/kasir/rincian',[$index,$id])}}')"
                             class="btn btn-sm btn-warning">Bayar
                         </button>
-                    @endif
                     </td>
-                    <td style="text-align:center;">{{$data[0]}}</td>
-                    <td style="text-align:center;">{{$data[1]}}</td>
-                    <td style="text-align:center;color:green;"><b>{{number_format($data[2])}}</b></td>
+                    @endif
                 </tr>
                 @endif
                 @endforeach
@@ -127,8 +139,88 @@
             <form class="user" action="{{url('kasir/bayar/store')}}" method="POST">
                 <div class="modal-body">
                     @csrf
-                    <br>
                     <input hidden id="tempatId" name="tempatId"></input>
+                    <div class="col-lg-12 justify-content-between" style="display:flex;flex-wrap:wrap;">
+                        <div>
+                            <div>
+                                <input
+                                    checked
+                                    type="checkbox"
+                                    name="bayar[]"
+                                    id="checkListrik"
+                                    value="listrik"
+                                    onclick="rincian('listrik')">
+                                <label for="checkListrik">
+                                    Listrik
+                                </label>
+                            </div>
+                            <div>
+                                <input
+                                    checked
+                                    type="checkbox"
+                                    name="bayar[]"
+                                    id="checkAirBersih"
+                                    value="airbersih"
+                                    onclick="rincian('airbersih')">
+                                <label for="checkAirBersih">
+                                    Air Bersih
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <input
+                                    checked
+                                    type="checkbox"
+                                    name="bayar[]"
+                                    id="checkKeamananIpk"
+                                    value="keamananipk"
+                                    onclick="rincian('keamananipk')">
+                                <label for="checkKeamananIpk">
+                                    Keamanan IPK
+                                </label>
+                            </div>
+                            <div>
+                                <input
+                                    checked
+                                    type="checkbox"
+                                    name="bayar[]"
+                                    id="checkKebersihan"
+                                    value="kebersihan"
+                                    onclick="rincian('kebersihan')">
+                                <label for="checkKebersihan">
+                                    Kebersihan
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <input
+                                    checked
+                                    type="checkbox"
+                                    name="bayar[]"
+                                    id="checkAirKotor"
+                                    value="airkotor"
+                                    onclick="rincian('airkotor')">
+                                <label for="checkAirKotor">
+                                    Air Kotor
+                                </label>
+                            </div>
+                            <div>
+                                <input
+                                    checked
+                                    type="checkbox"
+                                    name="bayar[]"
+                                    id="checkLain"
+                                    value="lain"
+                                    onclick="rincian('lain')">
+                                <label for="checkLain">
+                                    Lain Lain
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
                     <div class="col-lg-12 justify-content-between" style="display: flex;flex-wrap: wrap;">
                         <div>
                             <span style="color:#3f6ad8;"><strong>Fasilitas</strong></span>
@@ -138,44 +230,54 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="form-group col-lg-12 justify-content-between" style="display:none;flex-wrap:wrap;" id="divListrik">
-                        <div>
-                            <span id="listrik">Listrik</span>
-                        </div>
-                        <div>
-                            <span id="nominalListrik"></span>
-                        </div>
-                    </div>
-                    <div class="form-group col-lg-12 justify-content-between" style="display:none;flex-wrap:wrap;" id="divAirBersih">
-                        <div>
-                            <span id="airbersih">Air Bersih</span>
-                        </div>
-                        <div>
-                            <span id="nominalAirBersih"></span>
+                    <div class="form-group col-lg-12" id="divListrik" style="display:block;">
+                        <div class="justify-content-between" id="testListrik" style="display:flex;flex-wrap:wrap;">
+                            <div>
+                                <span id="listrik">Listrik</span>
+                            </div>
+                            <div>
+                                <span id="nominalListrik"></span>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group col-lg-12 justify-content-between" style="display:none;flex-wrap:wrap;" id="divKeamananIpk">
-                        <div>
-                            <span id="keamananipk">Keamanan & IPK</span>
-                        </div>
-                        <div>
-                            <span id="nominalKeamananIpk"></span>
-                        </div>
-                    </div>
-                    <div class="form-group col-lg-12 justify-content-between" style="display:none;flex-wrap:wrap;" id="divKebersihan">
-                        <div>
-                            <span id="kebersihan">Kebersihan</span>
-                        </div>
-                        <div>
-                            <span id="nominalKebersihan"></span>
+                    <div class="form-group col-lg-12" style="display:block;" id="divAirBersih">
+                        <div class="justify-content-between" id="testAirBersih" style="display:flex;flex-wrap:wrap;">
+                            <div>
+                                <span id="airbersih">Air Bersih</span>
+                            </div>
+                            <div>
+                                <span id="nominalAirBersih"></span>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group col-lg-12 justify-content-between" style="display:none;flex-wrap:wrap;" id="divAirKotor">
-                        <div>
-                            <span id="airkotor">Air Kotor</span>
+                    <div class="form-group col-lg-12" style="display:block;" id="divKeamananIpk">
+                        <div class="justify-content-between" id="testKeamananIpk" style="display:flex;flex-wrap:wrap;">
+                            <div>
+                                <span id="keamananipk">Keamanan & IPK</span>
+                            </div>
+                            <div>
+                                <span id="nominalKeamananIpk"></span>
+                            </div>
                         </div>
-                        <div>
-                            <span id="nominalAirKotor"></span>
+                    </div>
+                    <div class="form-group col-lg-12" style="display:block;" id="divKebersihan">
+                        <div class="justify-content-between" id="testKebersihan" style="display:flex;flex-wrap:wrap;">
+                            <div>
+                                <span id="kebersihan">Kebersihan</span>
+                            </div>
+                            <div>
+                                <span id="nominalKebersihan"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-lg-12" style="display:block;" id="divAirKotor">
+                        <div class="justify-content-between" id="testAirKotor" style="display:flex;flex-wrap:wrap;">
+                            <div>
+                                <span id="airkotor">Air Kotor</span>
+                            </div>
+                            <div>
+                                <span id="nominalAirKotor"></span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group col-lg-12 justify-content-between" style="display:none;flex-wrap:wrap;" id="divTunggakan">
@@ -194,16 +296,18 @@
                             <span id="nominalDenda"></span>
                         </div>
                     </div>
-                    <div class="form-group col-lg-12 justify-content-between" style="display:none;flex-wrap:wrap;" id="divLain">
-                        <div>
-                            <span id="lain">Lain - Lain</span>
-                        </div>
-                        <div>
-                            <span id="nominalLain"></span>
+                    <div class="form-group col-lg-12" style="display:block;" id="divLain">
+                        <div class="justify-content-between" id="testLain" style="display:flex;flex-wrap:wrap;">
+                            <div>
+                                <span id="lain">Lain - Lain</span>
+                            </div>
+                            <div>
+                                <span id="nominalLain"></span>
+                            </div>
                         </div>
                     </div>
                     <hr>
-                    <div class="col-lg-12 justify-content-between" style="display: flex;flex-wrap: wrap;">
+                    <div class="col-lg-12 justify-content-between" style="display:flex;flex-wrap: wrap;">
                         <div>
                             <span style="color:#3f6ad8;"><strong>Total</strong></span>
                         </div>
@@ -352,7 +456,7 @@
 
 @section('js')
 
-@if($data == 'now')
+@if($index == 'now')
 <script src="{{asset('js/kasir.js')}}"></script>
 @else
 <script src="{{asset('js/kasir-periode.js')}}"></script>

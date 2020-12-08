@@ -184,7 +184,7 @@ class KasirController extends Controller
                 $printer -> text("Total pembayaran telah termasuk PPN\n");
                 $printer -> text("Dibayar pada ".$time. "\n\n");
                 $printer -> text("Struk ini merupakan bukti\n");
-                $printer -> text("pembayaran yang sah, harap disimpan");
+                $printer -> text("pembayaran yang sah, harap disimpan\n");
                 $printer -> cut();
 
                 //LAPANGAN
@@ -277,7 +277,7 @@ class KasirController extends Controller
         }
     }
 
-    public function rincian($data,$id){
+    public function rincian($data, $id){
         $d = Kasir::rincian($data,$id);
 
         return json_encode(array(

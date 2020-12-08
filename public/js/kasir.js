@@ -41,7 +41,6 @@ $('#kode').on('keypress', function (event) {
 });
 
 function ajax_tagihan(id,url){
-    alert(url);
     document.getElementById("tempatId").value = id;
     jQuery.ajax({
         type: "GET",
@@ -49,51 +48,93 @@ function ajax_tagihan(id,url){
         dataType: "json",
         success: function(response) {
             if(response.tagihanListrik != 0){
-                document.getElementById("divListrik").style.display = "flex";
+                $("#testListrik").fadeIn();
+                document.getElementById("checkListrik").disabled = false;
+                document.getElementById("checkListrik").checked = true;
+                document.getElementById("testListrik").hidden = false;
+                document.getElementById("divListrik").hidden = false;
                 document.getElementById("nominalListrik").innerHTML = response.tagihanListrik;
             }
             else{
-                document.getElementById("divListrik").style.display = "none";
+                document.getElementById("checkListrik").disabled = true;
+                document.getElementById("checkListrik").checked = false;
+                document.getElementById("testListrik").hidden = true;
+                document.getElementById("divListrik").hidden = true;
             }
 
             if(response.tagihanAirBersih != 0){
-                document.getElementById("divAirBersih").style.display = "flex";
+                $("#testAirBersih").fadeIn();
+                document.getElementById("checkAirBersih").disabled = false;
+                document.getElementById("checkAirBersih").checked = true;
+                document.getElementById("testAirBersih").hidden = false;
+                document.getElementById("divAirBersih").hidden = false;
                 document.getElementById("nominalAirBersih").innerHTML = response.tagihanAirBersih;
             }
             else{
-                document.getElementById("divAirBersih").style.display = "none";
+                document.getElementById("checkAirBersih").disabled = true;
+                document.getElementById("checkAirBersih").checked = false;
+                document.getElementById("testAirBersih").hidden = true;
+                document.getElementById("divAirBersih").hidden = true;
             }
 
             if(response.tagihanKeamananIpk != 0){
-                document.getElementById("divKeamananIpk").style.display = "flex";
+                $("#testKeamananIpk").fadeIn();
+                document.getElementById("checkKeamananIpk").disabled = false;
+                document.getElementById("checkKeamananIpk").checked = true;
+                document.getElementById("testKeamananIpk").hidden = false;
+                document.getElementById("divKeamananIpk").hidden = false;
                 document.getElementById("nominalKeamananIpk").innerHTML = response.tagihanKeamananIpk;
             }
             else{
-                document.getElementById("divKeamananIpk").style.display = "none";
+                document.getElementById("checkKeamananIpk").disabled = true;
+                document.getElementById("checkKeamananIpk").checked = false;
+                document.getElementById("testKeamananIpk").hidden = true;
+                document.getElementById("divKeamananIpk").hidden = true;
             }
 
             if(response.tagihanKebersihan != 0){
-                document.getElementById("divKebersihan").style.display = "flex";
+                $("#testKebersihan").fadeIn();
+                document.getElementById("checkKebersihan").disabled = false;
+                document.getElementById("checkKebersihan").checked = true;
+                document.getElementById("testKebersihan").hidden = false;
+                document.getElementById("divKebersihan").hidden = false;
                 document.getElementById("nominalKebersihan").innerHTML = response.tagihanKebersihan;
             }
             else{
-                document.getElementById("divKebersihan").style.display = "none";
+                document.getElementById("checkKebersihan").disabled = true;
+                document.getElementById("checkKebersihan").checked = false;
+                document.getElementById("testKebersihan").hidden = true;
+                document.getElementById("divKebersihan").hidden = true;
             }
 
             if(response.tagihanAirKotor != 0){
-                document.getElementById("divAirKotor").style.display = "flex";
+                $("#testAirKotor").fadeIn();
+                document.getElementById("checkAirKotor").disabled = false;
+                document.getElementById("checkAirKotor").checked = true;
+                document.getElementById("testAirKotor").hidden = false;
+                document.getElementById("divAirKotor").hidden = false;
                 document.getElementById("nominalAirKotor").innerHTML = response.tagihanAirKotor;
             }
             else{
-                document.getElementById("divAirKotor").style.display = "none";
+                document.getElementById("checkAirKotor").disabled = true;
+                document.getElementById("checkAirKotor").checked = false;
+                document.getElementById("testAirKotor").hidden = true;
+                document.getElementById("divAirKotor").hidden = true;
             }
 
             if(response.tagihanLain != 0){
-                document.getElementById("divLain").style.display = "flex";
+                $("#testLain").fadeIn();
+                document.getElementById("checkLain").disabled = false;
+                document.getElementById("checkLain").checked = true;
+                document.getElementById("testLain").hidden = false;
+                document.getElementById("divLain").hidden = false;
                 document.getElementById("nominalLain").innerHTML = response.tagihanLain;
             }
             else{
-                document.getElementById("divLain").style.display = "none";
+                document.getElementById("checkLain").disabled = true;
+                document.getElementById("checkLain").checked = false;
+                document.getElementById("testLain").hidden = true;
+                document.getElementById("divLain").hidden = true;
             }
             
             if(response.tagihanTunggakan != 0){
@@ -120,6 +161,117 @@ function ajax_tagihan(id,url){
     $('#rincianTagihan').modal('show');
 }
 
+
+
+function jumlah(total,harga,operation) {
+    var explode = harga.split(",");
+    var implode = explode.join("");
+    var harga = parseInt(implode);
+    if(operation == 'add'){
+        var total = total + harga;
+    }
+    else{
+        var total = total - harga;
+    }
+    return total;
+}
+function rincian(data) {
+    var total = document.getElementById("nominalTotal").innerHTML;
+    var explode = total.split(",");
+    var implode = explode.join("");
+    var total = parseInt(implode);
+
+    if(data == 'listrik'){
+        if(document.getElementById("checkListrik").checked){
+            $("#testListrik").fadeIn();
+            var harga = document.getElementById("nominalListrik").innerHTML;
+            var total = jumlah(total,harga,'add');
+            document.getElementById("nominalTotal").innerHTML = total.toLocaleString();
+        }
+        else{
+            $("#testListrik").fadeOut();
+            var harga = document.getElementById("nominalListrik").innerHTML;
+            var total = jumlah(total,harga,'sub');
+            document.getElementById("nominalTotal").innerHTML = total.toLocaleString();
+        }
+    }
+
+    if(data == 'airbersih'){
+        if(document.getElementById("checkAirBersih").checked){
+            $("#testAirBersih").fadeIn();
+            var harga = document.getElementById("nominalAirBersih").innerHTML;
+            var total = jumlah(total,harga,'add');
+            document.getElementById("nominalTotal").innerHTML = total.toLocaleString();
+        }
+        else{
+            $("#testAirBersih").fadeOut();
+            var harga = document.getElementById("nominalAirBersih").innerHTML;
+            var total = jumlah(total,harga,'sub');
+            document.getElementById("nominalTotal").innerHTML = total.toLocaleString();
+        }
+    }
+
+    if(data == 'keamananipk'){
+        if(document.getElementById("checkKeamananIpk").checked){
+            $("#testKeamananIpk").fadeIn();
+            var harga = document.getElementById("nominalKeamananIpk").innerHTML;
+            var total = jumlah(total,harga,'add');
+            document.getElementById("nominalTotal").innerHTML = total.toLocaleString();
+        }
+        else{
+            $("#testKeamananIpk").fadeOut();
+            var harga = document.getElementById("nominalKeamananIpk").innerHTML;
+            var total = jumlah(total,harga,'sub');
+            document.getElementById("nominalTotal").innerHTML = total.toLocaleString();
+        }
+    }
+
+    if(data == 'kebersihan'){
+        if(document.getElementById("checkKebersihan").checked){
+            $("#testKebersihan").fadeIn();
+            var harga = document.getElementById("nominalKebersihan").innerHTML;
+            var total = jumlah(total,harga,'add');
+            document.getElementById("nominalTotal").innerHTML = total.toLocaleString();
+        }
+        else{
+            $("#testKebersihan").fadeOut();
+            var harga = document.getElementById("nominalKebersihan").innerHTML;
+            var total = jumlah(total,harga,'sub');
+            document.getElementById("nominalTotal").innerHTML = total.toLocaleString();
+        }
+    }
+    
+    if(data == 'airkotor'){
+        if(document.getElementById("checkAirKotor").checked){
+            $("#testAirKotor").fadeIn();
+            var harga = document.getElementById("nominalAirKotor").innerHTML;
+            var total = jumlah(total,harga,'add');
+            document.getElementById("nominalTotal").innerHTML = total.toLocaleString();
+        }
+        else{
+            $("#testAirKotor").fadeOut();
+            var harga = document.getElementById("nominalAirKotor").innerHTML;
+            var total = jumlah(total,harga,'sub');
+            document.getElementById("nominalTotal").innerHTML = total.toLocaleString();
+        }
+    }
+
+    if(data == 'lain'){
+        if(document.getElementById("checkLain").checked){
+            $("#testLain").fadeIn();
+            var harga = document.getElementById("nominalLain").innerHTML;
+            var total = jumlah(total,harga,'add');
+            document.getElementById("nominalLain").innerHTML = total.toLocaleString();
+        }
+        else{
+            $("#testLain").fadeOut();
+            var harga = document.getElementById("nominalLain").innerHTML;
+            var total = jumlah(total,harga,'sub');
+            document.getElementById("nominalTotal").innerHTML = total.toLocaleString();
+        }
+    }
+}
+
 document.getElementById("printStruk").onclick = function strukPembayaran() {
     var id = document.getElementById("tempatId").value;
     var btn = document.getElementById("printStruk");
@@ -131,7 +283,7 @@ function pc_print(data){
     var socket = new WebSocket("ws://127.0.0.1:40213/");
     socket.bufferType = "arraybuffer";
     socket.onerror = function(error) {
-      alert("Plugin Printer RawBT Belum Aktif");
+        // alert("Aktifkan Plugin RawBT untuk Cetak Struk");
     };			
     socket.onopen = function() {
         socket.send(data);
