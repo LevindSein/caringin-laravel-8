@@ -1077,20 +1077,20 @@ class Tagihan extends Model
         $listrik = MeteranListrik::get();
 
         foreach($air as $d){
-            $tempat = TempatUsaha::where('id_meteran_air',$d->id)->first();
-            if($tempat == NULL){
+            // $tempat = TempatUsaha::where('id_meteran_air',$d->id)->first();
+            // if($tempat == NULL){
                 $d->stt_sedia = 0;
                 $d->stt_bayar = 0;
                 $d->save();
-            }
+            // }
         }
         foreach($listrik as $d){
-            $tempat = TempatUsaha::where('id_meteran_listrik',$d->id)->first();
-            if($tempat == NULL){
+            // $tempat = TempatUsaha::where('id_meteran_listrik',$d->id)->first();
+            // if($tempat == NULL){
                 $d->stt_sedia = 0;
                 $d->stt_bayar = 0;
                 $d->save();
-            }
+            // }
         }
     }
 
@@ -1133,11 +1133,23 @@ class Tagihan extends Model
         $dataset = Tagihan::get();
 
         foreach($dataset as $data){
+            if($data->awal_airbersih == NULL){
+                $data->sub_airbersih = 0;
+                $data->ttl_airbersih = 0;
+            }
+            if($data->awal_listrik == NULL){
+                $data->sub_listrik = 0;
+                $data->ttl_listrik = 0;
+            }
             $data->sub_tagihan = $data->sub_airbersih + $data->sub_listrik + $data->sub_keamananipk + $data->sub_kebersihan + $data->sub_airkotor + $data->sub_lain;
             $data->ttl_tagihan = $data->ttl_airbersih + $data->ttl_listrik + $data->ttl_keamananipk + $data->ttl_kebersihan + $data->ttl_airkotor + $data->ttl_lain;
             $data->dis_tagihan = $data->dis_airbersih + $data->dis_listrik + $data->dis_keamananipk + $data->dis_kebersihan;
             $data->sel_tagihan = $data->ttl_tagihan;
             $data->save();
         }
+    }
+
+    public static function nasabah(){
+        $dataset = User::where('role','nasabah')->delete();
     }
 }

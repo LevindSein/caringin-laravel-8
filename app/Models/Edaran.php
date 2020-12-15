@@ -8,116 +8,88 @@ use Illuminate\Database\Eloquent\Model;
 class Edaran extends Model
 {
     private $fasilitas;
+    private $harga;
+    private $status;
     private $awal;
     private $akhir;
     private $pakai;
-    private $harga;
-    private $status;
+    private $daya;
 
-    public function __construct($fasilitas = '', $awal = '', $akhir = '', $pakai = '', $harga = '', $status = '')
+    public function __construct($fasilitas = '', $harga = '', $status = '', $awal = '', $akhir = '', $pakai = '', $daya = '')
     {
         $this->fasilitas = $fasilitas;
+        $this->harga = $harga;
+        $this->status = $status;
         $this->awal = $awal;
         $this->akhir = $akhir;
         $this->pakai = $pakai;
-        $this->harga = $harga;
-        $this->status = $status;
+        $this->daya = $daya;
     }
 
     public function __toString()
     {        
-        if($this->status == 'kebersihan'){
-            //153 + 10 / 151 + 12
-            $fasPemberitahuanWidth = 19;
-            $hargaPemberitahuanWidth = 12;
-            $fasPemberitahuanShow = str_pad('| '.$this->fasilitas, $fasPemberitahuanWidth);
-            $hargaPemberitahuanShow = str_pad($this->harga.' |', $hargaPemberitahuanWidth, ' ', STR_PAD_LEFT);
-            
-            $fasPelunasanWidth = 19;
-            $hargaPelunasanWidth = 12;
-            $fasPelunasanShow = str_pad('| '.$this->fasilitas, $fasPemberitahuanWidth);
-            $hargaPelunasanShow = str_pad($this->harga.' |', $hargaPemberitahuanWidth, ' ', STR_PAD_LEFT);
+        if($this->status == 'title'){
+            $nama = substr($this->harga,0,20);
+            $fasilitas = str_pad($this->fasilitas,9);
+            $fasilitas = str_pad('| '.$fasilitas.': '.$nama, 42).' |';
 
-            $fasPembayaranWidth = 87;
-            $hargaPembayaranWidth = 12;
-            $fasPembayaranShow = str_pad('| '.$this->fasilitas, $fasPembayaranWidth);
-            $hargaPembayaranShow = str_pad($this->harga.' |', $hargaPembayaranWidth, ' ', STR_PAD_LEFT);
+            return "$fasilitas\n";
+        }
 
-            return "$fasPemberitahuanShow$hargaPemberitahuanShow $fasPelunasanShow$hargaPelunasanShow $fasPembayaranShow$hargaPembayaranShow\n";
+        if($this->status == 'fasilitas'){
+            $fasilitas = str_pad('| '.$this->fasilitas, 20);
+            $harga = str_pad($this->harga, 22, ' ', STR_PAD_LEFT).' |';
+
+            return "$fasilitas$harga\n";
         }
 
         if($this->status == 'listrik'){
-            //153 + 10 / 151 + 12
-            $fasPemberitahuanWidth = 19;
-            $hargaPemberitahuanWidth = 12;
-            $fasPemberitahuanShow = str_pad('| '.$this->fasilitas, $fasPemberitahuanWidth);
-            $hargaPemberitahuanShow = str_pad($this->harga.' |', $hargaPemberitahuanWidth, ' ', STR_PAD_LEFT);
+            $fasilitas = str_pad('| '.$this->fasilitas, 20);
+            $harga = str_pad($this->harga, 22, ' ', STR_PAD_LEFT).' |';
+
+            $ket = str_pad('|      + Daya', 15);
+            $daya = str_pad($this->daya, 12,' ', STR_PAD_LEFT);
+            $border = str_pad('|', 17, ' ', STR_PAD_LEFT);
+            $daya = $ket.$daya.$border;
+
+            $ket = str_pad('|        Awal', 15);
+            $awal = str_pad($this->awal, 12,' ', STR_PAD_LEFT);
+            $border = str_pad('|', 17, ' ', STR_PAD_LEFT);
+            $awal = $ket.$awal.$border;
             
-            $fasPelunasanWidth = 19;
-            $hargaPelunasanWidth = 12;
-            $fasPelunasanShow = str_pad('| '.$this->fasilitas, $fasPemberitahuanWidth);
-            $hargaPelunasanShow = str_pad($this->harga.' |', $hargaPemberitahuanWidth, ' ', STR_PAD_LEFT);
+            $ket = str_pad('|        Akhir', 15);
+            $akhir = str_pad($this->akhir, 12,' ', STR_PAD_LEFT);
+            $border = str_pad('|', 17, ' ', STR_PAD_LEFT);
+            $akhir = $ket.$akhir.$border;
 
-            $fasPembayaranWidth = 20;
-            $awalPembayaranWidth = 12;
-            $akhirPembayaranWidth = 19;
-            $pakaiPembayaranWidth = 19;
-            $hargaPembayaranWidth = 29;
-            $fasPembayaranShow = str_pad('| '.$this->fasilitas, $fasPembayaranWidth);
-            $awalPembayaranShow = str_pad($this->awal, $awalPembayaranWidth,' ', STR_PAD_LEFT);
-            $akhirPembayaranShow = str_pad($this->akhir, $akhirPembayaranWidth,' ', STR_PAD_LEFT);
-            $pakaiPembayaranShow = str_pad($this->pakai, $pakaiPembayaranWidth,' ', STR_PAD_LEFT);
-            $hargaPembayaranShow = str_pad($this->harga.' |', $hargaPembayaranWidth, ' ', STR_PAD_LEFT);
+            $ket = str_pad('|        Pakai', 15);
+            $pakai = str_pad($this->pakai, 12,' ', STR_PAD_LEFT);
+            $border = str_pad('|', 17, ' ', STR_PAD_LEFT);
+            $pakai = $ket.$pakai.$border;
 
-            return "$fasPemberitahuanShow$hargaPemberitahuanShow $fasPelunasanShow$hargaPelunasanShow $fasPembayaranShow$awalPembayaranShow$akhirPembayaranShow$pakaiPembayaranShow$hargaPembayaranShow\n";
+            return "$fasilitas$harga\n$daya\n$awal\n$akhir\n$pakai\n";
         }
 
-        if($this->status == 'total'){
-            //153 + 10 / 151 + 12
-            $fasPemberitahuanWidth = 19;
-            $hargaPemberitahuanWidth = 12;
-            $fasPemberitahuanShow = str_pad('| '.$this->fasilitas, $fasPemberitahuanWidth);
-            $hargaPemberitahuanShow = str_pad($this->harga.' |', $hargaPemberitahuanWidth, ' ', STR_PAD_LEFT);
+        if($this->status == 'airbersih'){
+            $fasilitas = str_pad('| '.$this->fasilitas, 20);
+            $harga = str_pad($this->harga, 22, ' ', STR_PAD_LEFT).' |';
+
+            $ket = str_pad('|      + Awal', 15);
+            $awal = str_pad($this->awal, 12,' ', STR_PAD_LEFT);
+            $border = str_pad('|', 17, ' ', STR_PAD_LEFT);
+            $awal = $ket.$awal.$border;
             
-            $fasPelunasanWidth = 19;
-            $hargaPelunasanWidth = 12;
-            $fasPelunasanShow = str_pad('| '.$this->fasilitas, $fasPelunasanWidth);
-            $hargaPelunasanShow = str_pad($this->harga.' |', $hargaPelunasanWidth, ' ', STR_PAD_LEFT);
+            $ket = str_pad('|        Akhir', 15);
+            $akhir = str_pad($this->akhir, 12,' ', STR_PAD_LEFT);
+            $border = str_pad('|', 17, ' ', STR_PAD_LEFT);
+            $akhir = $ket.$akhir.$border;
 
-            $fasPembayaranWidth = 87;
-            $hargaPembayaranWidth = 12;
-            $fasPembayaranShow = str_pad('| '.$this->fasilitas.' PEMBAYARAN', $fasPembayaranWidth);
-            $hargaPembayaranShow = str_pad($this->harga.' |', $hargaPembayaranWidth, ' ', STR_PAD_LEFT);
+            $ket = str_pad('|        Pakai', 15);
+            $pakai = str_pad($this->pakai, 12,' ', STR_PAD_LEFT);
+            $border = str_pad('|', 17, ' ', STR_PAD_LEFT);
+            $pakai = $ket.$pakai.$border;
 
-            return "$fasPemberitahuanShow$hargaPemberitahuanShow $fasPelunasanShow$hargaPelunasanShow $fasPembayaranShow$hargaPembayaranShow\n";
-        }
-        
-        if($this->status == 'pedagang'){
-            $fasPemberitahuanWidth = 29;
-            $fasPemberitahuanShow = str_pad('| '.$this->fasilitas.' : '.$this->harga, $fasPemberitahuanWidth).' |';
-            
-            $fasPelunasanWidth = 29;
-            $fasPelunasanShow = str_pad('| '.$this->fasilitas.' : '.$this->harga, $fasPelunasanWidth).' |';
-
-            $fasPembayaranWidth = 70;
-            $hargaPembayaranWidth = 27;
-            $fasPembayaranShow = str_pad('| Pedagang : '.$this->harga, $fasPembayaranWidth);
-            $hargaPembayaranShow = str_pad('Tagihan : '.$this->pakai, $hargaPembayaranWidth).' |';
-
-            return "$fasPemberitahuanShow $fasPelunasanShow $fasPembayaranShow$hargaPembayaranShow\n";
-        }
-
-        if($this->status == 'alamat'){
-            $fasPemberitahuanWidth = 29;
-            $fasPemberitahuanShow = str_pad('| '.$this->fasilitas.' : '.$this->harga, $fasPemberitahuanWidth).' |';
-            
-            $fasPelunasanWidth = 29;
-            $fasPelunasanShow = str_pad('| '.$this->fasilitas.' : '.$this->harga, $fasPelunasanWidth).' |';
-
-            $fasPembayaranWidth = 97;
-            $fasPembayaranShow = str_pad('| Alamat   : '.$this->harga, $fasPembayaranWidth).' |';
-
-            return "$fasPemberitahuanShow $fasPelunasanShow $fasPembayaranShow\n";
+            return "$fasilitas$harga\n$awal\n$akhir\n$pakai\n";
         }
     }
 }

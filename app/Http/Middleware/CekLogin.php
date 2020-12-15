@@ -59,6 +59,12 @@ class CekLogin
                 return redirect()->route('keuanganindex')->with('success','Selamat Datang');
             }
             else if ($user->role == 'kasir') {
+                if($agent->isDesktop()){
+                    Session::put('printer','epson');
+                }
+                else{
+                    Session::put('printer','panda');
+                }
                 return redirect()->route('kasirindex','now')->with('success','Selamat Datang');
             }
             else if ($user->role == 'nasabah') {

@@ -216,6 +216,7 @@ Route::get('kasir/penerimaan',[KasirController::class, 'penerimaan']);
 Route::get('kasir/scan/{id}',[KasirController::class, 'scan']);
 Route::get('kasir/rincian/{data}/{id}',[KasirController::class, 'rincian']);
 Route::post('kasir/bayar/store',[KasirController::class, 'bayarStore']);
+Route::get('kasir/printer/choose/{val}',[KasirController::class, 'printer']);
 
 //opsional
 Route::post('tagihan/pedagang/{fasilitas}',[TagihanController::class, 'pedagang']);

@@ -1,8 +1,4 @@
-<?php
-$role = Session::get('role');
-?>
-
-@extends( $role == 'master' ? 'layout.master' : 'layout.admin')
+@extends('layout.master')
 @section('head')
 <!-- Tambah Content Pada Head -->
 @endsection
@@ -111,9 +107,30 @@ $role = Session::get('role');
                                             <option value="{{$air->id}}">{{$air->kode}} - {{$air->nomor}} ({{$air->akhir}})</option>
                                             @endforeach
                                         </select>
+                                        <?php if($dataset->dis_airbersih != NULL){
+                                            $data = json_decode($dataset->dis_airbersih);
+                                        } ?>
                                         <div class="col-sm-12">
                                             <div class="form-check">
                                                 <input
+                                                    <?php if($dataset->dis_airbersih == NULL){ ?>
+                                                    checked
+                                                    <?php } ?>
+                                                    class="form-check-input"
+                                                    type="radio"
+                                                    name="radioAirBersih"
+                                                    id="semua_airbersih"
+                                                    value="semua_airbersih">
+                                                <label class="form-check-label" for="semua_airbersih">
+                                                    Bayar Semua
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input
+                                                    <?php if($dataset->dis_airbersih != NULL){
+                                                        if($data[0]->type == 'diskon'){ ?>
+                                                    checked
+                                                    <?php } }?>
                                                     class="form-check-input"
                                                     type="radio"
                                                     name="radioAirBersih"
@@ -127,6 +144,10 @@ $role = Session::get('role');
                                                 <div class="col-sm-12">
                                                     <div class="input-group">
                                                         <input 
+                                                            <?php if($dataset->dis_airbersih != NULL){
+                                                                if($data[0]->type == 'diskon'){
+                                                                $persen = $data[1]->value; ?> value="{{$persen}}" <?php
+                                                            } }?>
                                                             type="number" 
                                                             autocomplete="off" 
                                                             class="form-control" 
@@ -144,6 +165,10 @@ $role = Session::get('role');
                                             </div>
                                             <div class="form-check">
                                                 <input
+                                                    <?php if($dataset->dis_airbersih != NULL){
+                                                        if($data[0]->type == 'hanya'){ ?>
+                                                    checked
+                                                    <?php } }?>
                                                     class="form-check-input"
                                                     type="radio"
                                                     name="radioAirBersih"
@@ -157,55 +182,90 @@ $role = Session::get('role');
                                                 <div class="col-sm-12">
                                                     <div class="form-check">
                                                         <input
+                                                            <?php if($dataset->dis_airbersih != NULL){
+                                                                if($data[0]->type == 'hanya'){
+                                                                    if(in_array('byr',$data[1]->value)){
+                                                                        ?> checked <?php
+                                                                    }
+                                                                }
+                                                            } ?>
                                                             class="form-check-input"
                                                             type="checkbox"
-                                                            name="hanyaPemakaianAir"
+                                                            name="hanya[]"
                                                             id="hanyaPemakaianAir"
-                                                            value="hanyaPemakaianAir">
+                                                            value="byr">
                                                         <label class="form-check-label" for="hanyaPemakaianAir">
                                                             Pemakaian
                                                         </label>
                                                     </div>
                                                     <div class="form-check">
                                                         <input
+                                                            <?php if($dataset->dis_airbersih != NULL){
+                                                                if($data[0]->type == 'hanya'){
+                                                                    if(in_array('beban',$data[1]->value)){
+                                                                        ?> checked <?php
+                                                                    }
+                                                                }
+                                                            } ?>
                                                             class="form-check-input"
                                                             type="checkbox"
-                                                            name="hanyaBebanAir"
+                                                            name="hanya[]"
                                                             id="hanyaBebanAir"
-                                                            value="hanyaBebanAir">
+                                                            value="beban">
                                                         <label class="form-check-label" for="hanyaBebanAir">
                                                             Beban
                                                         </label>
                                                     </div>
                                                     <div class="form-check">
                                                         <input
+                                                            <?php if($dataset->dis_airbersih != NULL){
+                                                                if($data[0]->type == 'hanya'){
+                                                                    if(in_array('pemeliharaan',$data[1]->value)){
+                                                                        ?> checked <?php
+                                                                    }
+                                                                }
+                                                            } ?>
                                                             class="form-check-input"
                                                             type="checkbox"
-                                                            name="hanyaPemeliharaanAir"
+                                                            name="hanya[]"
                                                             id="hanyaPemeliharaanAir"
-                                                            value="hanyaPemeliharaanAir">
+                                                            value="pemeliharaan">
                                                         <label class="form-check-label" for="hanyaPemeliharaanAir">
                                                             Pemeliharaan
                                                         </label>
                                                     </div>
                                                     <div class="form-check">
                                                         <input
+                                                            <?php if($dataset->dis_airbersih != NULL){
+                                                                if($data[0]->type == 'hanya'){
+                                                                    if(in_array('arkot',$data[1]->value)){
+                                                                        ?> checked <?php
+                                                                    }
+                                                                }
+                                                            } ?>
                                                             class="form-check-input"
                                                             type="checkbox"
-                                                            name="hanyaArkotAir"
+                                                            name="hanya[]"
                                                             id="hanyaArkotAir"
-                                                            value="hanyaArkotAir">
+                                                            value="arkot">
                                                         <label class="form-check-label" for="hanyaArkotAir">
                                                             Air Kotor
                                                         </label>
                                                     </div>
                                                     <div class="form-check">
                                                         <input
+                                                            <?php if($dataset->dis_airbersih != NULL){
+                                                                if($data[0]->type == 'hanya'){
+                                                                    if(is_object($data[1]->value[count($data[1]->value) - 1])){
+                                                                        ?> checked <?php
+                                                                    }
+                                                                }
+                                                            } ?>
                                                             class="form-check-input"
                                                             type="checkbox"
-                                                            name="hanyaChargeAir"
+                                                            name="hanya[]"
                                                             id="hanyaChargeAir"
-                                                            value="hanyaChargeAir"
+                                                            value="charge"
                                                             data-related-item="chargeAir">
                                                         <label class="form-check-label" for="hanyaChargeAir">
                                                             Charge
@@ -215,6 +275,15 @@ $role = Session::get('role');
                                                         <div class="col-sm-12" id="chargeAir">
                                                             <div class="input-group">
                                                                 <input 
+                                                                    <?php if($dataset->dis_airbersih != NULL){
+                                                                        if($data[0]->type == 'hanya'){
+                                                                            if(is_object($data[1]->value[count($data[1]->value) - 1])){
+                                                                                $charge = $data[1]->value[count($data[1]->value) - 1]->charge;
+                                                                                $charge = explode(',',$charge);
+                                                                                ?> value="{{$charge[0]}}" <?php
+                                                                            }
+                                                                        }
+                                                                    } ?>
                                                                     type="number" 
                                                                     autocomplete="off" 
                                                                     class="form-control" 
@@ -228,8 +297,30 @@ $role = Session::get('role');
                                                                     <span class="input-group-text" id="inputGroupPrepend">%</span>
                                                                 </div>
                                                                 <select class="form-control" name="chargeAir">
-                                                                    <option selected value="tagihan">Tagihan</option>
-                                                                    <option value="pemakaian">Pemakaian</option>
+                                                                    <option 
+                                                                    <?php if($dataset->dis_airbersih != NULL){
+                                                                        if($data[0]->type == 'hanya'){
+                                                                            if(is_object($data[1]->value[count($data[1]->value) - 1])){
+                                                                                $charge = $data[1]->value[count($data[1]->value) - 1]->charge;
+                                                                                $charge = explode(',',$charge);
+                                                                                if($charge[1] == 'ttl') {
+                                                                                ?> selected <?php
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    } ?> value="ttl">Tagihan</option>
+                                                                    <option  
+                                                                    <?php if($dataset->dis_airbersih != NULL){
+                                                                        if($data[0]->type == 'hanya'){
+                                                                            if(is_object($data[1]->value[count($data[1]->value) - 1])){
+                                                                                $charge = $data[1]->value[count($data[1]->value) - 1]->charge;
+                                                                                $charge = explode(',',$charge);
+                                                                                if($charge[1] == 'byr') {
+                                                                                ?> selected <?php
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    } ?> value="byr">Pemakaian</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -265,6 +356,9 @@ $role = Session::get('role');
                                         <div class="col-sm-12">
                                             <div class="form-check">
                                                 <input
+                                                    <?php if($dataset->dis_listrik != NULL){ ?>
+                                                    checked
+                                                    <?php } ?>
                                                     class="form-check-input"
                                                     type="checkbox"
                                                     name="dis_listrik"
@@ -279,6 +373,7 @@ $role = Session::get('role');
                                                 <div class="col-sm-12" id="diskonBayarListrik">
                                                     <div class="input-group">
                                                         <input 
+                                                            value="{{$dataset->dis_listrik}}"
                                                             type="number" 
                                                             autocomplete="off" 
                                                             class="form-control" 
@@ -328,6 +423,9 @@ $role = Session::get('role');
                                         <div class="col-sm-12">
                                             <div class="form-check">
                                                 <input
+                                                    <?php if($dataset->dis_keamananipk != NULL){ ?>
+                                                    checked
+                                                    <?php } ?>
                                                     class="form-check-input"
                                                     type="checkbox"
                                                     name="dis_keamananipk"
@@ -345,6 +443,7 @@ $role = Session::get('role');
                                                             <span class="input-group-text" id="inputGroupPrepend">Rp.</span>
                                                         </div>
                                                         <input 
+                                                            value="{{number_format($dataset->dis_keamananipk)}}"
                                                             type="text" 
                                                             autocomplete="off" 
                                                             class="form-control"
@@ -389,6 +488,9 @@ $role = Session::get('role');
                                         <div class="col-sm-12">
                                             <div class="form-check">
                                                 <input
+                                                    <?php if($dataset->dis_keamananipk != NULL){ ?>
+                                                    checked
+                                                    <?php } ?>
                                                     class="form-check-input"
                                                     type="checkbox"
                                                     name="dis_kebersihan"
@@ -406,6 +508,7 @@ $role = Session::get('role');
                                                             <span class="input-group-text" id="inputGroupPrepend">Rp.</span>
                                                         </div>
                                                         <input 
+                                                            value="{{number_format($dataset->dis_kebersihan)}}"
                                                             type="text"
                                                             autocomplete="off" 
                                                             class="form-control"
@@ -472,7 +575,7 @@ $role = Session::get('role');
                             </div>
 
                             <!-- Pembayaran -->
-                            <!-- <div class="form-group row col-lg-12">
+                            <div class="form-group row col-lg-12">
                                 <div class="col-sm-2">Metode</div>
                                 <div class="col-sm-10">
                                     <div class="form-check">
@@ -504,7 +607,7 @@ $role = Session::get('role');
                                         </label>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
 
                             <!-- Status -->
                             <div class="form-group row col-lg-12">

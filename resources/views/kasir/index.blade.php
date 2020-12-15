@@ -23,8 +23,9 @@
             title="Cari Transaksi">
             <i class="mdi mdi-magnify btn-icon-append"></i>
         </a>
-    </div>&nbsp;
-    <div>
+    </div>
+    <!-- &nbsp; -->
+    <!-- <div>
         <a 
             type="button"
             class="btn btn-outline-inverse-info"
@@ -33,7 +34,7 @@
             title="Bayar by Bulanan">
             <i class="mdi mdi-calendar-check btn-icon-append"></i>  
         </a>
-    </div>
+    </div> -->
     @if($platform == 'mobile')
     &nbsp;
     <div>
@@ -57,6 +58,16 @@
         </a>
     </div>
 </div>
+@if($platform == 'mobile')
+<div class="form-group d-flex align-items-center justify-content-center">
+    <div class="col-lg-4 ">
+        <select class="btn btn-inverse-dark" style="width:100%" name="printer" id="printer" onchange="printerChoose()">
+            <option <?php if(Session::get('printer') == 'panda') { ?> selected <?php } ?> value="panda">Panda Printer Mobile 80mm</option>
+            <option <?php if(Session::get('printer') == 'androidpos') { ?> selected <?php } ?> value="androidpos">Android Pos Printer 50mm</option>
+        </select>
+    </div>
+</div>
+@endif
 <div id="container">
     <div id="qr-result" hidden="">
         <input hidden id="outputData"></input>
@@ -91,8 +102,9 @@
                 <tr>
                     @if($platform == 'mobile')
                     <td style="text-align:center;">
+                        <?php $id = $data[3];?>
                         <button
-                            onclick="ajax_print('{{url('/kasir/bayar',[$data[3]])}}',this)"
+                            onclick="ajax_tagihan({{$id}},'{{url('/kasir/rincian',[$index,$id])}}')"
                             class="btn btn-sm btn-warning">Bayar
                         </button>
                     </td>
@@ -352,7 +364,7 @@
                             maxlength="10"
                             class="form-control"
                             id="kode"
-                            placeholder="Masukkan 10 Digit Kode Pembayaran">
+                            placeholder="Masukkan 10 Digit">
                     </div>
                 </div>
                 <div class="modal-footer">

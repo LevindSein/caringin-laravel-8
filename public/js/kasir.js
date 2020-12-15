@@ -282,8 +282,8 @@ document.getElementById("printStruk").onclick = function strukPembayaran() {
 function pc_print(data){
     var socket = new WebSocket("ws://127.0.0.1:40213/");
     socket.bufferType = "arraybuffer";
-    socket.onerror = function(error) {
-        // alert("Aktifkan Plugin RawBT untuk Cetak Struk");
+    socket.onerror = function(error) {  
+        alert("Aktifkan Plugin RawBT untuk Cetak Struk");
     };			
     socket.onopen = function() {
         socket.send(data);
@@ -311,5 +311,12 @@ function ajax_print(url, btn) {
         b.text(b.attr('data-old'));
         const button = document.getElementById('printStruk');
         button.disabled = true;
+    });
+}
+
+function printerChoose(){
+    jQuery.ajax({
+        type: "GET",
+        url: '/kasir/printer/choose/' + document.getElementById('printer').value
     });
 }

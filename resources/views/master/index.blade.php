@@ -150,9 +150,11 @@
                     <h6 class="m-0 font-weight-bold text-primary">Status Tempat Usaha {{number_format($pengguna)}} Unit</h6>
                 </div>
                 <div class="card-body">
+                    <?php if($pengguna == 0){$pengguna = 1;} ?>
                     <h8 class="font-weight-bold">Aktif
-                        <span class="float-right">{{number_format($penggunaAktif)}}
-                            Unit - {{($penggunaAktif / $pengguna) * 100}}%</span>
+                        <span class="float-right">
+                        {{number_format($penggunaAktif)}} Unit - {{($penggunaAktif / $pengguna) * 100}}%
+                        </span>
                     </h8>
                     <div class="progress mb-4">
                         <div
@@ -164,8 +166,8 @@
                             aria-valuemax="100"></div>
                     </div>
                     <h8 class="font-weight-bold">Non-Aktif
-                        <span class="float-right">{{number_format($penggunaNonAktif)}}
-                            Unit - {{($penggunaNonAktif / $pengguna) * 100}}%</span>
+                        <span class="float-right">
+                        {{number_format($penggunaNonAktif)}} Unit - {{($penggunaNonAktif / $pengguna) * 100}}%</span>
                     </h8>
                     <div class="progress mb-4">
                         <div

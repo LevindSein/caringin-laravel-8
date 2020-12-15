@@ -11,6 +11,8 @@ use App\Models\MeteranListrik;
 use App\Models\PasangAlat;
 use App\Models\TarifAirBersih;
 use App\Models\TarifListrik;
+use App\Models\TarifKeamananIpk;
+use App\Models\TarifKebersihan;
 
 class TempatController extends Controller
 {
@@ -65,8 +67,38 @@ class TempatController extends Controller
                 $meteran->stt_bayar = 0;
                 $meteran->save();
 
-                if(empty($request->get('dis_airbersih')) == FALSE){
-                    $tempat->dis_airbersih = 1;
+                if($request->get('radioAirBersih') == 'dis_airbersih'){
+                    if($request->get('persenDiskonAir') != NULL){
+                        $diskon[] = ['type' => 'diskon'];
+                        $diskon[] = ['value' => $request->get('persenDiskonAir')];
+                        $tempat->dis_airbersih = json_encode($diskon);
+                    }
+                }
+                else{
+                    $pilihanDiskon = array('byr','beban','pemeliharaan','arkot','charge');
+                    if($request->get('hanya') != NULL){
+                        $diskon[] = ['type' => 'hanya'];
+                        $hanya = array();
+                        $j = 0;
+                        for($i=0; $i<count($pilihanDiskon); $i++){
+                            if(in_array($pilihanDiskon[$i],$request->get('hanya'))){
+                                if($pilihanDiskon[$i] == 'charge'){
+                                    if($request->get('persenChargeAir') != NULL){
+                                        $persen = $request->get('persenChargeAir');
+                                        $dari = $request->get('chargeAir');
+                                        $value = $persen.','.$dari;
+                                        $hanya[$j] = [$pilihanDiskon[$i] => $value];
+                                    }
+                                }
+                                else{
+                                    $hanya[$j] = $pilihanDiskon[$i];
+                                }
+                                $j++;
+                            }
+                        }
+                        $diskon[] = ['value' => $hanya];
+                        $tempat->dis_airbersih = json_encode($diskon);
+                    }
                 }
 
                 //Tagihan Pasang
@@ -104,7 +136,7 @@ class TempatController extends Controller
                 $meteran->save();
 
                 if(empty($request->get('dis_listrik')) == FALSE){
-                    $tempat->dis_listrik = 1;
+                    $tempat->dis_listrik = $request->get('persenDiskonListrik');
                 }
 
                 //Tagihan Pasang
@@ -129,18 +161,24 @@ class TempatController extends Controller
             }
 
             if(empty($request->get('keamananipk')) == FALSE){
-                $tempat->trf_keamananipk = $request->get('trfKeamananIpk');
+                $tarif = TarifKeamananIpk::where('tarif',$request->get('trfKeamananIpk'))->select('id')->first();
+                $tempat->trf_keamananipk = $tarif->id;
 
                 if(empty($request->get('dis_keamananipk')) == FALSE){
-                    $tempat->dis_keamananipk = 1;
+                    $diskon = explode(',',$request->get('diskonKeamananIpk'));
+                    $diskon = implode('',$diskon);
+                    $tempat->dis_keamananipk = $diskon;
                 }
             }
 
             if(empty($request->get('kebersihan')) == FALSE){
-                $tempat->trf_kebersihan = $request->get('trfKebersihan');
+                $tarif = TarifKebersihan::where('tarif',$request->get('trfKebersihan'))->select('id')->first();
+                $tempat->trf_kebersihan = $tarif->id;
 
                 if(empty($request->get('dis_kebersihan')) == FALSE){
-                    $tempat->dis_kebersihan = 1;
+                    $diskon = explode(',',$request->get('diskonKebersihan'));
+                    $diskon = implode('',$diskon);
+                    $tempat->dis_kebersihan = $diskon;
                 }
             }
 
@@ -279,8 +317,41 @@ class TempatController extends Controller
                 $meteran->stt_bayar = 0;
                 $meteran->save();
 
-                if(empty($request->get('dis_airbersih')) == FALSE){
-                    $tempat->dis_airbersih = 1;
+                if($request->get('radioAirBersih') == 'dis_airbersih'){
+                    if($request->get('persenDiskonAir') != NULL){
+                        $diskon[] = ['type' => 'diskon'];
+                        $diskon[] = ['value' => $request->get('persenDiskonAir')];
+                        $tempat->dis_airbersih = json_encode($diskon);
+                    }
+                }
+                else if($request->get('radioAirBersih') == 'semua_airbersih'){
+                    $tempat->dis_airbersih = NULL;
+                }
+                else{
+                    $pilihanDiskon = array('byr','beban','pemeliharaan','arkot','charge');
+                    if($request->get('hanya') != NULL){
+                        $diskon[] = ['type' => 'hanya'];
+                        $hanya = array();
+                        $j = 0;
+                        for($i=0; $i<count($pilihanDiskon); $i++){
+                            if(in_array($pilihanDiskon[$i],$request->get('hanya'))){
+                                if($pilihanDiskon[$i] == 'charge'){
+                                    if($request->get('persenChargeAir') != NULL){
+                                        $persen = $request->get('persenChargeAir');
+                                        $dari = $request->get('chargeAir');
+                                        $value = $persen.','.$dari;
+                                        $hanya[$j] = [$pilihanDiskon[$i] => $value];
+                                    }
+                                }
+                                else{
+                                    $hanya[$j] = $pilihanDiskon[$i];
+                                }
+                                $j++;
+                            }
+                        }
+                        $diskon[] = ['value' => $hanya];
+                        $tempat->dis_airbersih = json_encode($diskon);
+                    }
                 }
 
                 if($tempat->trf_airbersih == NULL){
@@ -360,7 +431,7 @@ class TempatController extends Controller
                 $meteran->save();
 
                 if(empty($request->get('dis_listrik')) == FALSE){
-                    $tempat->dis_listrik = 1;
+                    $tempat->dis_listrik = $request->get('persenDiskonListrik');
                 }
 
                 
@@ -427,10 +498,13 @@ class TempatController extends Controller
             }
 
             if(empty($request->get('keamananipk')) == FALSE){
-                $tempat->trf_keamananipk = $request->get('trfKeamananIpk');
+                $tarif = TarifKeamananIpk::where('tarif',$request->get('trfKeamananIpk'))->select('id')->first();
+                $tempat->trf_keamananipk = $tarif->id;
 
                 if(empty($request->get('dis_keamananipk')) == FALSE){
-                    $tempat->dis_keamananipk = 1;
+                    $diskon = explode(',',$request->get('diskonKeamananIpk'));
+                    $diskon = implode('',$diskon);
+                    $tempat->dis_keamananipk = $diskon;
                 }
             }
             else{
@@ -439,10 +513,13 @@ class TempatController extends Controller
             }
 
             if(empty($request->get('kebersihan')) == FALSE){
-                $tempat->trf_kebersihan = $request->get('trfKebersihan');
+                $tarif = TarifKebersihan::where('tarif',$request->get('trfKebersihan'))->select('id')->first();
+                $tempat->trf_kebersihan = $tarif->id;
 
                 if(empty($request->get('dis_kebersihan')) == FALSE){
-                    $tempat->dis_kebersihan = 1;
+                    $diskon = explode(',',$request->get('diskonKebersihan'));
+                    $diskon = implode('',$diskon);
+                    $tempat->dis_kebersihan = $diskon;
                 }
             }
             else{
