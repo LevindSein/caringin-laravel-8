@@ -1077,20 +1077,20 @@ class Tagihan extends Model
         $listrik = MeteranListrik::get();
 
         foreach($air as $d){
-            // $tempat = TempatUsaha::where('id_meteran_air',$d->id)->first();
-            // if($tempat == NULL){
+            $tempat = TempatUsaha::where('id_meteran_air',$d->id)->first();
+            if($tempat == NULL){
                 $d->stt_sedia = 0;
                 $d->stt_bayar = 0;
                 $d->save();
-            // }
+            }
         }
         foreach($listrik as $d){
-            // $tempat = TempatUsaha::where('id_meteran_listrik',$d->id)->first();
-            // if($tempat == NULL){
+            $tempat = TempatUsaha::where('id_meteran_listrik',$d->id)->first();
+            if($tempat == NULL){
                 $d->stt_sedia = 0;
                 $d->stt_bayar = 0;
                 $d->save();
-            // }
+            }
         }
     }
 
@@ -1130,14 +1130,14 @@ class Tagihan extends Model
     }
 
     public static function ttlTagihan(){
-        $dataset = Tagihan::get();
+        $dataset = Tagihan::where('bln_pakai','2020-11')->get();
 
         foreach($dataset as $data){
-            if($data->awal_airbersih == NULL){
+            if($data->awal_airbersih === NULL){
                 $data->sub_airbersih = 0;
                 $data->ttl_airbersih = 0;
             }
-            if($data->awal_listrik == NULL){
+            if($data->awal_listrik === NULL){
                 $data->sub_listrik = 0;
                 $data->ttl_listrik = 0;
             }

@@ -210,7 +210,7 @@ class TagihanController extends Controller
                 ->orderBy('kd_kontrol','asc')
                 ->get();
             
-            for($i = 0; $i<1; $i++){
+            for($i = 1; $i<4; $i++){
                 $j = 0;
                 $space = 0;
 
@@ -421,7 +421,7 @@ class TagihanController extends Controller
                 $printer->text("|   tanggal 15, untuk menghindari Denda.   |\n");
                 $printer->text("| - Pemberitahuan ini merupakan edaran     |\n");
                 $printer->text("|   yang sah. Sudah termasuk PPN.          |\n");
-                $printer->text(" ------------------------------------------ \n\n");
+                $printer->text(" ------------------------------------------ \n\n\n");
             }
         } catch (Exception $e) {
             return redirect()->route('tagihandata','now')->with('error','Data Tagihan gagal dicetak');

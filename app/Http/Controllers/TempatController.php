@@ -684,7 +684,10 @@ class TempatController extends Controller
     }
 
     public function rekapdetail($blok){
-        return view('tempat.details-rekap',['dataset'=>TempatUsaha::detailRekap($blok),'blok'=>$blok]);
+        return view('tempat.details-rekap',[
+            'dataset' => TempatUsaha::detailRekap($blok),
+            'blok'=>$blok
+        ]);
     }
 
     public function qr($id){
